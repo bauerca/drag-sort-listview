@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="DragSortListView">
+    <attr name="normal_height" format="dimension" />
+    <attr name="expanded_height" format="dimension" />
+    <attr name="collapsed_height" format="dimension" />
+    <attr name="grabber" format="reference" />
+    <attr name="float_background" format="color" />
+    <attr name="scroll_bound" format="float" />
+    <attr name="max_scroll_speed" format="float" />
+    <attr name="remove_mode">
+      <enum name="none" value="-1" />
+      <enum name="fling" value="0" />
+      <enum name="slide" value="1" />
+      <enum name="slideRight" value="1" />
+      <enum name="slideLeft" value="2" />
+    </attr>
+  </declare-styleable>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="@dimen/drag_list_item_height"
+  android:orientation="horizontal">
+  <TextView
+    android:id="@+id/text"
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/drag_list_item_height"
+    android:textAppearance="?android:attr/textAppearanceMedium" />
+  <ImageView
+    android:id="@id/drag"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/drag_list_item_height"
+    android:background="@drawable/drag" />
+</LinearLayout>
