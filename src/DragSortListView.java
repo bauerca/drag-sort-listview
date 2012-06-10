@@ -247,14 +247,14 @@ public class DragSortListView extends ListView {
         v.setTag(child.findViewById(R.id.drag));
       }
 
-			// must be castable to LinearLayout (to use 'gravity' attribute)
-			//LinearLayout v = (LinearLayout) super.getView(position, convertView, parent);
-
 
 			ViewGroup.LayoutParams lp = v.getLayoutParams();
 			final int numHeaders = getHeaderViewsCount();
 
-      boolean itemIsNormal = position != mSrcDragPos && position != mExpDragPos;
+      final int srcAdapter = mSrcDragPos - numHeaders;
+      final int expAdapter = mExpDragPos - numHeaders;
+
+      boolean itemIsNormal = position != srcAdapter && position != expAdapter;
       boolean listHasExpPos = mDragState == SRC_ABOVE || mDragState == SRC_BELOW;
       boolean itemNeedsWC = itemIsNormal || !listHasExpPos;
 
@@ -264,11 +264,10 @@ public class DragSortListView extends ListView {
 				// items that have a user-provided height
         lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
       } else if (listHasExpPos) {
-				if (position == mSrcDragPos - numHeaders &&
-          	lp.height != mItemHeightCollapsed) {
+				if (position == srcAdapter && lp.height != mItemHeightCollapsed) {
 					// collapsed items
         	lp.height = mItemHeightCollapsed;
-				} else if (position == mExpDragPos - numHeaders) {
+				} else if (position == expAdapter) {
 					// what if a previously-expanded wrapper view is used
 					// as a convertView for a different expanded item? 
         	// Always measure child
@@ -298,8 +297,7 @@ public class DragSortListView extends ListView {
 			int oldVis = v.getVisibility();
 			int vis = oldVis;
 
-			if (position == mSrcDragPos - numHeaders && mDragState != NO_DRAG &&
-					vis == View.VISIBLE) {
+			if (position == srcAdapter && mDragState != NO_DRAG && vis == View.VISIBLE) {
 				vis = View.INVISIBLE;
 			} else if (vis == View.INVISIBLE) {
 				vis = View.VISIBLE;
@@ -308,7 +306,6 @@ public class DragSortListView extends ListView {
 			if (vis != oldVis) {
 				v.setVisibility(vis);
 			}
-
 
 			return v;
 		}
