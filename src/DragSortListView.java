@@ -87,7 +87,6 @@ public class DragSortListView extends ListView {
 	private int mDownScrollStartY;
 	private float mDownScrollStartYF;
 	private float mUpScrollStartYF;
-	private int mHeight;
 	private GestureDetector mGestureDetector;
 	private static final int FLING = 0;
 	private static final int SLIDE = 1;
@@ -371,8 +370,8 @@ public class DragSortListView extends ListView {
   private int getFloatPosition(int y, int position, int top) {
 
 		// get midpoint of floating view (constrained to ListView bounds)
-		final int floatViewMidY = Math.max(mFloatViewHeightHalf,
-      Math.min(getHeight() - mFloatViewHeightHalf,
+		final int floatViewMidY = Math.max(mFloatViewHeightHalf + getPaddingTop(),
+      Math.min(getHeight() - getPaddingBottom() - mFloatViewHeightHalf,
         y - mDragPointY + mFloatViewHeightHalf));
 
     int floatPos = position;
@@ -590,17 +589,20 @@ public class DragSortListView extends ListView {
   }
 
   private void updateScrollBounds() {
-		mHeight = getHeight();
-    float heightF = (float) mHeight;
+    final int padTop = getPaddingTop();
+		final int listHeight = getHeight() - padTop - getPaddingBottom();
+    float heightF = (float) listHeight;
 		
-    mUpScrollStartYF = mDragUpScrollBoundFrac * heightF;
-    mDownScrollStartYF = (1.0f - mDragDownScrollBoundFrac) * heightF;
+    mUpScrollStartYF = padTop + mDragUpScrollBoundFrac * heightF;
+    mDownScrollStartYF = padTop + (1.0f - mDragDownScrollBoundFrac) * heightF;
 
 		mUpScrollStartY = (int) mUpScrollStartYF;
 		mDownScrollStartY = (int) mDownScrollStartYF;
+    Log.d("mobeta", "up start="+mUpScrollStartY);
+    Log.d("mobeta", "down start="+mDownScrollStartY);
 		
-		mDragUpScrollHeight = mUpScrollStartYF;
-		mDragDownScrollHeight = mHeight - mDownScrollStartYF;
+		mDragUpScrollHeight = mUpScrollStartYF - padTop;
+		mDragDownScrollHeight = padTop + listHeight - mDownScrollStartYF;
   }
 	
 	
@@ -675,7 +677,7 @@ public class DragSortListView extends ListView {
 			if (mSrcDragPos < firstPos) {
 				// collapsed src item is off screen, no need to expand it; but, we
 				// must adjust the scroll accordingly
-				setSelectionFromTop(firstPos - 1, top);
+				setSelectionFromTop(firstPos - 1, top - getPaddingTop());
 			} else if (mSrcDragPos <= getLastVisiblePosition()) {
 				// collapsed src item is in view, expand it
 				View srcView = getChildAt(mSrcDragPos - firstPos);
@@ -968,11 +970,11 @@ public class DragSortListView extends ListView {
 		final int firstPos = getFirstVisiblePosition();
 		final int lastPos = getLastVisiblePosition();
     //Log.d("mobeta", "nHead="+numHeaders+" nFoot="+numFooters+" first="+firstPos+" last="+lastPos);
-		int limit = 0;
+		int limit = getPaddingTop();
 		if (firstPos < numHeaders) {
 			limit = getChildAt(numHeaders - firstPos - 1).getBottom();
 		}
-		int footerLimit = getHeight();
+		int footerLimit = getHeight() - getPaddingBottom();
 		if (lastPos >= getCount() - numFooters) {
 			// get top-most footer view
       footerLimit = getChildAt(getCount() - numFooters - firstPos).getTop();
@@ -1208,24 +1210,27 @@ public class DragSortListView extends ListView {
 
       final int count = getCount();
 
+      final int listHeight = getHeight() - getPaddingTop() - getPaddingBottom();
+
       int movePosition;
       if (dy > 0) {
         if (first == 0 && getChildAt(0).getTop() == 0) {
           return;
         }
         movePosition = first;
-        dy = Math.min(getHeight(), dy);
+        dy = Math.min(listHeight, dy);
       } else {
         if (last == count - 1 &&
-            getChildAt(last - first).getBottom() <= getHeight()) {
+            getChildAt(last - first).getBottom() <= listHeight) {
           return;
         }
         movePosition = last;
-        dy = Math.max(-getHeight(), dy);
+        dy = Math.max(-listHeight, dy);
       }
       // what if movePosition is a position to be expanded?
 
-      int newTop = getChildAt(movePosition - first).getTop() + dy;
+      final int oldTop = getChildAt(movePosition - first).getTop();
+      int newTop = oldTop + dy;
       //Log.d("mobeta", "movePos="+movePosition+" newTop="+newTop+" oldTop="+(newTop-dy)+" lvheight="+getHeight()+" fvheight="+mFloatViewHeight+" oldBottom="+getChildAt(movePosition-first).getBottom());
 			
       if (!mShuffleRequested) {
@@ -1255,7 +1260,8 @@ public class DragSortListView extends ListView {
 			//int pos = listYToPosition(viewTop);
 			//int itemTop = getItemTop(pos) - viewTop;
 			//Log.d("mobeta", "viewTop=" + viewTop + " pos=" + pos + " itemTop=" + itemTop);
-			setSelectionFromTop(movePosition, newTop);
+      //Log.d("mobeta", "dy="+(newTop - oldTop));
+			setSelectionFromTop(movePosition, newTop - getPaddingTop());
 			
 			mPrevTime += dt;
 			
