@@ -45,3 +45,16 @@ I hope you find it useful! And please, help me improve the thing!
 
 Installation
 ------------
+
+Download and install the Android sdk. Clone/Download/Fork the repo
+through GitHub or via (read-only)
+
+> git clone https://github.com/bauerca/drag-sort-listview.git
+
+Navigate to drag-sort-listview/ and type (assuming
+/path/to/android_sdk/tools is in your PATH)
+
+> android update project --path ./ --subprojects
+
+Then, navigate to drag-sort-listview/demo/, build,
+and try out the examples.
