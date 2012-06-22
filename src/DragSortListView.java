@@ -157,7 +157,7 @@ public class DragSortListView extends ListView {
           mDragUpScrollBoundFrac);
       setDragScrollBounds(frac);
 
-	    mMaxScrollSpeed = a.getFloat(
+			mMaxScrollSpeed = a.getFloat(
         R.styleable.DragSortListView_max_scroll_speed, mMaxScrollSpeed);
 
       a.recycle();
@@ -270,13 +270,13 @@ public class DragSortListView extends ListView {
       } else if (listHasExpPos) {
 				if (position == srcAdapter && lp.height != mItemHeightCollapsed) {
 					// collapsed items
-        	lp.height = mItemHeightCollapsed;
+					lp.height = mItemHeightCollapsed;
 				} else if (position == expAdapter) {
 					// what if a previously-expanded wrapper view is used
 					// as a convertView for a different expanded item? 
-        	// Always measure child
-        	int spec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
-        	child.measure(spec, spec);
+					// Always measure child
+					int spec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+					child.measure(spec, spec);
 
 					mExpandedChildHeight = child.getMeasuredHeight();
 					//Log.d("mobeta", "childh="+mExpandedChildHeight+" pos="+position);
@@ -327,11 +327,11 @@ public class DragSortListView extends ListView {
     } else {
 			//Log.d("mobeta", "getView for height");
 
-    	final ListAdapter adapter = getAdapter();
+			final ListAdapter adapter = getAdapter();
       int type = adapter.getItemViewType(position);
 			
 			// There might be a better place for checking for the following
-		  final int typeCount = adapter.getViewTypeCount();
+			final int typeCount = adapter.getViewTypeCount();
 			if (typeCount != mSampleViewTypes.length) {
 				mSampleViewTypes = new View[typeCount];
 			}
@@ -840,7 +840,7 @@ public class DragSortListView extends ListView {
       }
 
       if (lp.height != oldHeight) {
-			  v.requestLayout();
+				v.requestLayout();
       }
 		}
 
@@ -869,7 +869,7 @@ public class DragSortListView extends ListView {
       }
 
       if (lp.height != oldHeight) {
-			  v.requestLayout();
+				v.requestLayout();
       }
 		}
 
@@ -975,8 +975,8 @@ public class DragSortListView extends ListView {
 						startPos = mExpDragPos;
 						startTop = startView.getTop();
 					}
-					  
-        	//Log.d("mobeta", "move shuffle");
+						
+					//Log.d("mobeta", "move shuffle");
 					boolean shuffled = shuffleItems(getFloatPosition(y, startPos, startTop));
 
 					if (shuffled) {
@@ -1333,7 +1333,7 @@ public class DragSortListView extends ListView {
       // don't bail if dy=0, touch might be at edge of scroll region; but,
       // don't do any work 
       if (dy == 0) {
-			  mPrevTime += dt;
+				mPrevTime += dt;
         post(this);
         return;
       }
