@@ -1,6 +1,11 @@
 package com.mobeta.android.dslv;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.StringBuilder;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -13,6 +18,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
+import android.os.Environment;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -223,7 +229,8 @@ public class DragSortListView extends ListView {
         v = (RelativeLayout) convertView;
         View oldChild = v.getChildAt(0);
 
-        child = super.getView(position, oldChild, v);
+        //child = super.getView(position, oldChild, v);
+        child = mAdapter.getView(position, oldChild, v);
         if (child != oldChild) {
           // shouldn't get here if user is reusing convertViews properly
           v.removeViewAt(0);
@@ -272,6 +279,7 @@ public class DragSortListView extends ListView {
         	child.measure(spec, spec);
 
 					mExpandedChildHeight = child.getMeasuredHeight();
+					//Log.d("mobeta", "childh="+mExpandedChildHeight+" pos="+position);
 					int height = mExpandedChildHeight + mFloatViewHeight;
 					if (lp.height != height) {
 						lp.height = height;
@@ -317,7 +325,7 @@ public class DragSortListView extends ListView {
     if (position >= first && position <= last) {
       return getChildAt(position - first).getHeight();
     } else {
-			Log.d("mobeta", "getView for height");
+			//Log.d("mobeta", "getView for height");
 
     	final ListAdapter adapter = getAdapter();
       int type = adapter.getItemViewType(position);
@@ -355,6 +363,8 @@ public class DragSortListView extends ListView {
 
   }
 
+	//private int getVisualItemTop(int position) {
+	//}
 
 	private int getVisualItemHeight(int position) {
 		final int divHeight = getDividerHeight();
@@ -422,7 +432,7 @@ public class DragSortListView extends ListView {
    * @param top y-coord of top of item at given position
    */
   private int getFloatPosition(int y, int position, int top) {
-		Log.d("mobeta", "pos="+position+" top="+top);
+		//Log.d("mobeta", "pos="+position+" top="+top);
 
 		// get midpoint of floating view (constrained to ListView bounds)
 		final int floatViewMidY = Math.max(mFloatViewHeightHalf + getPaddingTop(),
@@ -466,8 +476,11 @@ public class DragSortListView extends ListView {
 
 		int edge = getDragEdge(visItemPos, visItemTop);
 
+		//Log.d("mobeta", "float mid="+floatViewMidY);
 		if (floatViewMidY < edge) {
 			// scanning up for float position
+			//Log.d("mobeta", "scan up, exp="+mExpDragPos);
+			//Log.d("mobeta", "  edge="+edge);
 			while (visItemPos >= 0) {
 				visItemPos--;
 
@@ -478,6 +491,7 @@ public class DragSortListView extends ListView {
 
 				visItemTop -= getVisualItemHeight(visItemPos);
 				edge = getDragEdge(visItemPos, visItemTop);
+				//Log.d("mobeta", "  edge="+edge);
 				
 				if (floatViewMidY >= edge) {
 					break;
@@ -485,6 +499,8 @@ public class DragSortListView extends ListView {
 			}
 		} else {
 			// scanning down for float position
+			//Log.d("mobeta", "scan down, exp="+mExpDragPos);
+			//Log.d("mobeta", "  edge="+edge);
       final int count = getCount();
 			while (visItemPos < count) {
 				if (visItemPos == count - 1) {
@@ -493,6 +509,7 @@ public class DragSortListView extends ListView {
 
 				visItemTop += getVisualItemHeight(visItemPos);
 				edge = getDragEdge(visItemPos + 1, visItemTop);
+				//Log.d("mobeta", "  edge="+edge);
 
 				// test for hit
 				if (floatViewMidY < edge) {
@@ -502,95 +519,6 @@ public class DragSortListView extends ListView {
 				visItemPos++;
 			}
 		}
-
-
-/*
-		// Initialize scan over drag item delimiters.
-		// First drag item delimiter is determined from top of above
-		// selected visual item.
-		// 2 cases:
-		//   1. visItemTop is below blank item
-		//   2. visItemTop is above blank item
-
-		int edge;
-		int newHeight; //height of visual item below edge
-		boolean startedBelow = false;
-		if (visItemPos == 0) {
-			edge = visItemTop;
-      newHeight = getVisualItemHeight(0);
-		} else if (visItemPos <= mExpDragPos) {
-			// visItemTop above blank visual item
-			newHeight = getVisualItemHeight(visItemPos - 1);
-			edge = visItemTop + (mFloatViewHeight - newHeight) / 2;
-		} else {
-			// visItemTop below blank visual item
-			newHeight = getVisualItemHeight(visItemPos);
-			edge = visItemTop + (newHeight - mFloatViewHeight) / 2;
-			startedBelow = true;
-		}	
-
-		int lastHeight;
-		if (floatViewMidY < edge) {
-			// scanning up for float position
-			Log.d("mobeta", "scan up, exp="+mExpDragPos);
-			Log.d("mobeta", "  edge="+edge);
-			while (visItemPos >= 0) {
-				visItemPos--;
-
-				if (visItemPos <= 0) {
-					visItemPos = 0;
-					break;
-				}
-
-				lastHeight = newHeight;
-				if (visItemPos > mExpDragPos) {
-					newHeight = getVisualItemHeight(visItemPos);
-				} else {
-					if (startedBelow && visItemPos == mExpDragPos) {
-						lastHeight = getVisualItemHeight(visItemPos);
-					}
-					newHeight = getVisualItemHeight(visItemPos - 1);
-				}
-				edge -= (lastHeight + newHeight) / 2;
-				Log.d("mobeta", "  edge="+edge+" lastH="+lastHeight+" newH="+newHeight);
-				
-				if (floatViewMidY >= edge) {
-					break;
-				}
-			}
-		} else {
-			// scanning down for float position
-      final int count = getCount();
-			Log.d("mobeta", "scan down, exp="+mExpDragPos);
-			Log.d("mobeta", "  edge="+edge);
-			while (visItemPos < count) {
-				if (visItemPos == count - 1) {
-					break;
-				}
-
-				// get edge for bottom of visual item
-				lastHeight = newHeight;
-				if (visItemPos < mExpDragPos) {
-					newHeight = getVisualItemHeight(visItemPos);
-				} else {
-					if (!startedBelow && visItemPos == mExpDragPos) {
-						lastHeight = getVisualItemHeight(visItemPos);
-					}
-					newHeight = getVisualItemHeight(visItemPos + 1);
-				}
-				edge += (lastHeight + newHeight) / 2;
-				Log.d("mobeta", "  edge="+edge+" lastH="+lastHeight+" newH="+newHeight);
-
-				// test for hit
-				if (floatViewMidY < edge) {
-					break;
-				}
-
-				// if no hit, increment
-				visItemPos++;
-			}
-		}
-*/
 		
 		//Log.d("mobeta", "edge="+edge);
 
@@ -603,98 +531,10 @@ public class DragSortListView extends ListView {
 			return getCount() - numFooters - 1;
 		}
 
-		Log.d("mobeta", "float pos="+visItemPos+" exp="+mExpDragPos);
+		//Log.d("mobeta", "float pos="+visItemPos+" exp="+mExpDragPos+" last="+getLastVisiblePosition());
 		return visItemPos;
 
 	}
-
-  private int oldGetFloatPosition(int y, int position, int top) {
-
-		// get midpoint of floating view (constrained to ListView bounds)
-		final int floatViewMidY = Math.max(mFloatViewHeightHalf + getPaddingTop(),
-      Math.min(getHeight() - getPaddingBottom() - mFloatViewHeightHalf,
-        y - mDragPointY + mFloatViewHeightHalf));
-
-    int floatPos = position;
-
-    int itemTop = top;
-    int itemBottom = top;
-
-		
-
-    // go up only if touch y is above requested top
-    if (floatViewMidY < top && position > 0) {
-      for (int i = position - 1; i >= 0; --i) {
-        itemBottom = itemTop;
-        itemTop -= getItemHeight(i) + getDividerHeight();
-
-        if (floatViewMidY >= itemTop || i == 0) {
-          floatPos = i;
-          break;
-        }
-      }
-    } else {
-      final int count = getCount();
-      for (int i = position; i < count; ++i) {
-        itemTop = itemBottom;
-        itemBottom += getItemHeight(i) + getDividerHeight();
-
-        if (floatViewMidY < itemBottom || i == count - 1) {
-          floatPos = i;
-          break;
-        }
-      }
-    }
-
-    Log.d("mobeta", "  getFloatPos: pre correct="+floatPos);
-
-		final int numHeaders = getHeaderViewsCount();
-		final int numFooters = getFooterViewsCount();
-		
-		if (floatPos < numHeaders) {
-			return numHeaders;
-		} else if (floatPos >= getCount() - numFooters) {
-			return getCount() - numFooters - 1;
-		}
-
-
-    // fix float position when between src and expanded positions
-    switch (mDragState) {
-      case SRC_ABOVE: //expanded up
-        if (floatPos == mExpDragPos) {
-					//int threshold = itemTop + mFloatViewHeight;
-					//if (mExpDragPos == mSrcDragPos + 1) {
-					//	threshold -= mItemHeightCollapsed;
-					//}
-					int threshold = itemBottom - mFloatViewHeight;
-          if (floatViewMidY < threshold) {
-            //Log.d("mobeta", "float in upper part of expanded item");
-            floatPos -= 1;
-          }
-        } else if (floatPos < mExpDragPos && floatPos > mSrcDragPos) {
-          floatPos -= 1;
-        }
-        break;
-      case SRC_BELOW:
-        if (floatPos == mExpDragPos) {
-          //if (floatViewMidY >= itemBottom - mFloatViewHeight) {
-          if (floatViewMidY >= itemTop + mFloatViewHeight) {
-            floatPos += 1;
-          }
-        } else if (floatPos > mExpDragPos && floatPos < mSrcDragPos) {
-          floatPos += 1;
-        }
-        break;
-      case SRC_EXP:
-      case NO_DRAG:
-      default:
-    }
-    Log.d("mobeta", "  getFloatPos: post correct="+floatPos);
-
-    return floatPos;
-
-  }
-
 	
 
 	@Override
@@ -896,6 +736,7 @@ public class DragSortListView extends ListView {
 
 
 	private void dropFloatView(boolean removeSrcItem) {
+
 		mDragScroller.stopScrolling(true);
 		
 		if (removeSrcItem) {
@@ -1417,14 +1258,27 @@ public class DragSortListView extends ListView {
 		
 		private int mLastHeader;
 		private int mFirstFooter;
+
+		private StateTracker mStateTracker;
+		private boolean mTrack = false;
 		
 		public boolean isScrolling() {
 			return mScrolling;
+		}
+
+		public DragScroller() {
+			if (mTrack) {
+				mStateTracker = new StateTracker();
+			}
 		}
 		
 		public void startScrolling(int dir) {
 			if (!mScrolling) {
         //Debug.startMethodTracing("dslv-scroll");
+				if (mTrack) {
+					mStateTracker.startTracking();
+					Log.d("mobeta", "scroll tracking started");
+				}
 
 				mAbort = false;
 				mScrolling = true;
@@ -1445,6 +1299,9 @@ public class DragSortListView extends ListView {
 				mAbort = true;
 			}
 
+			if (mTrack) {
+				mStateTracker.stopTracking();
+			}
       //Debug.stopMethodTracing();
 		}
 		
@@ -1454,6 +1311,10 @@ public class DragSortListView extends ListView {
 			if (mAbort) {
 				mScrolling = false;
 				return;
+			}
+
+			if (mTrack) {
+				mStateTracker.appendState();
 			}
 			
 			if (scrollDir == UP) {
@@ -1511,15 +1372,26 @@ public class DragSortListView extends ListView {
 			// Where will floating view end up given current list state?
 			int newFloatPos = getFloatPosition(mLastY, movePosition, newTop);
 			
+/*
       if (newFloatPos >= mSrcDragPos && newFloatPos != mExpDragPos) {
         if (newFloatPos == movePosition && scrollDir == DragScroller.DOWN) {
           // adjust scroll distance for item expansion
-          newTop -= mFloatViewHeight;
+          newTop -= mFloatViewHeight + getDividerHeight();
         } else if (newFloatPos < movePosition && scrollDir == DragScroller.UP) {
           // adjust scroll distance for item collapse
-          newTop += mFloatViewHeight;
+          newTop += mFloatViewHeight + getDividerHeight();
         }
       }
+*/
+
+			if (newFloatPos != mExpDragPos) {
+				if (newFloatPos == movePosition && scrollDir == DragScroller.DOWN) {
+					newTop -= mFloatViewHeight + getDividerHeight();
+				}
+				if (newFloatPos < movePosition && newFloatPos >= mSrcDragPos && scrollDir == DragScroller.UP) {
+					newTop += mFloatViewHeight + getDividerHeight();
+				}
+			}
 			
 			// Schedule expand/collapse where needed and update list state.
 			// Important that this goes before the following underscroll move.
@@ -1569,5 +1441,118 @@ public class DragSortListView extends ListView {
 		public void onScrollStateChanged(AbsListView view, int scrollState) {}
 
 	}
+
+	private class StateTracker {
+		StringBuilder mBuilder = new StringBuilder();
+
+		File mFile;
+		
+		private int mNumInBuffer = 0;
+		private int mNumFlushes = 0;
+
+		private boolean mTracking = false;
+
+		private HashMap<String, Integer> mInts = new HashMap<String, Integer>();
+
+		public StateTracker() {
+			File root = Environment.getExternalStorageDirectory();
+      mFile = new File(root, "dslv_state.txt");
+
+			if (!mFile.exists()) {
+				try {
+					mFile.createNewFile();
+				} catch (IOException e) {}
+			}
+
+		}
+		
+		public void startTracking() {
+			mBuilder.append("<DSLVStates>\n");
+			mNumFlushes = 0;
+			mTracking = true;
+		}
+
+		public void putInt(String name, int val) {
+			mInts.put(name, val);
+		}
+
+		public void appendState() {
+			if (!mTracking) {
+				return;
+			}
+
+			mBuilder.append("<DSLVState>\n");
+			final int children = getChildCount();
+			final int first = getFirstVisiblePosition();
+			mBuilder.append("  <Positions>");
+			for (int i = 0; i < children; ++i) {
+				mBuilder.append(first + i).append(",");
+			}
+			mBuilder.append("</Positions>\n");
+			
+			mBuilder.append("  <Tops>");
+			for (int i = 0; i < children; ++i) {
+				mBuilder.append(getChildAt(i).getTop()).append(",");
+			}
+			mBuilder.append("</Tops>\n");
+			mBuilder.append("  <Bottoms>");
+			for (int i = 0; i < children; ++i) {
+				mBuilder.append(getChildAt(i).getBottom()).append(",");
+			}
+			mBuilder.append("</Bottoms>\n");
+
+			mBuilder.append("  <ExpPos>").append(mExpDragPos).append("</ExpPos>\n");
+			mBuilder.append("  <SrcPos>").append(mSrcDragPos).append("</SrcPos>\n");
+			mBuilder.append("  <DragState>").append(mDragState).append("</DragState>\n");
+			mBuilder.append("  <SrcHeight>").append(mFloatViewHeight + getDividerHeight()).append("</SrcHeight>\n");
+			mBuilder.append("  <ViewHeight>").append(getHeight()).append("</ViewHeight>\n");
+			mBuilder.append("  <LastY>").append(mLastY).append("</LastY>\n");
+			
+			mBuilder.append("</DSLVState>\n");
+			mNumInBuffer++;
+
+			if (mNumInBuffer > 1000) {
+				flush();
+				mNumInBuffer = 0;
+			}
+		}
+		
+		public void flush() {
+			if (!mTracking) {
+				return;
+			}
+
+			// save to file on sdcard
+			try {
+				boolean append = true;
+				if (mNumFlushes == 0) {
+					append = false;
+				}
+				FileWriter writer = new FileWriter(mFile, append);
+
+				writer.write(mBuilder.toString());
+				mBuilder.delete(0, mBuilder.length());
+
+				writer.flush();
+				writer.close();
+
+				mNumFlushes++;
+			} catch (IOException e) {
+				// do nothing
+			}
+		}
+
+		public void stopTracking() {
+			if (mTracking) {
+				mBuilder.append("</DSLVStates>\n");
+				flush();
+				mTracking = false;
+			}
+		}
+		
+
+	}
+
+
 
 }
