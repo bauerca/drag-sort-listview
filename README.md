@@ -30,7 +30,8 @@ etc.).
 an issue, mostly asthetic).
 
 The above shortcomings caused a major reworking of the
-TI implementation details, resulting in DragSortListView. I see a
+TI implementation details, resulting in DragSortListView (DSLV).
+I see a
 lot of potential in a clean drag-sort list; any app with
 a user-created list (e.g. "favorites") should benefit.
 
