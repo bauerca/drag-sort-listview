@@ -23,11 +23,11 @@ this is a user-expected behavior.
 (e.g. shuffle occurs only after large overlap of floating View
 with visible list items, last/first item in list does not shuffle,
 etc.).
-4. Dropping the floating View can cause the list to unexpectedly
-``scroll.''
+4. The list view sometimes jumps unexpectedly when dropping the
+floating View.
 5. Region for item drag initiation is hard-coded in the TI.
 6. Floating View is not bounded to ListView (maybe not such
-an issue, mostly asthetic).
+an issue, mostly aesthetic).
 
 The above shortcomings caused a major reworking of the
 TI implementation details, resulting in DragSortListView (DSLV).
