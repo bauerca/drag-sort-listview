@@ -1372,17 +1372,6 @@ public class DragSortListView extends ListView {
 			// Where will floating view end up given current list state?
 			int newFloatPos = getFloatPosition(mLastY, movePosition, newTop);
 			
-/*
-      if (newFloatPos >= mSrcDragPos && newFloatPos != mExpDragPos) {
-        if (newFloatPos == movePosition && scrollDir == DragScroller.DOWN) {
-          // adjust scroll distance for item expansion
-          newTop -= mFloatViewHeight + getDividerHeight();
-        } else if (newFloatPos < movePosition && scrollDir == DragScroller.UP) {
-          // adjust scroll distance for item collapse
-          newTop += mFloatViewHeight + getDividerHeight();
-        }
-      }
-*/
 
 			if (newFloatPos != mExpDragPos) {
 				if (newFloatPos == movePosition && scrollDir == DragScroller.DOWN) {
@@ -1398,8 +1387,6 @@ public class DragSortListView extends ListView {
 			shuffleItems(newFloatPos);
 			
 			// Do underscroll (assumes/uses new list state)
-			//int pos = listYToPosition(viewTop);
-			//int itemTop = getItemTop(pos) - viewTop;
 			//Log.d("mobeta", "viewTop=" + viewTop + " pos=" + pos + " itemTop=" + itemTop);
       //Log.d("mobeta", "dy="+(newTop - oldTop));
 			setSelectionFromTop(movePosition, newTop - getPaddingTop());

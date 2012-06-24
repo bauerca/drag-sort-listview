@@ -24,7 +24,6 @@ public class HeadFootDSLV extends ListActivity {
         public void drop(int from, int to) {
           String item = adapter.getItem(from);
 
-          adapter.notifyDataSetChanged();
           adapter.remove(item);
           adapter.insert(item, to);
         }
@@ -52,7 +51,7 @@ public class HeadFootDSLV extends ListActivity {
         tv.setText("Header View");
         lv.addHeaderView(tv);
 
-        // Add header view
+        // Add footer view
         tv = (TextView) getLayoutInflater().inflate(R.layout.list_headfoot, null);
         tv.setText("Footer View");
         lv.addFooterView(tv);
@@ -61,7 +60,7 @@ public class HeadFootDSLV extends ListActivity {
         lv.setDropListener(onDrop);
         lv.setRemoveListener(onRemove);
 
-        array = getResources().getStringArray(R.array.countries);
+        array = getResources().getStringArray(R.array.jazz_artist_names);
         list = new ArrayList<String>(Arrays.asList(array));
 
         adapter = new ArrayAdapter<String>(this, R.layout.list_item1, R.id.text1, list);

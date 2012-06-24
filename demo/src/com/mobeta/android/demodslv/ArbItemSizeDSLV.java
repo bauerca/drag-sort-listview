@@ -13,8 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.util.Log;
 
-//import com.mobeta.android.demodslv.R;
-
 
 public class ArbItemSizeDSLV extends ListActivity {
 
@@ -32,7 +30,6 @@ public class ArbItemSizeDSLV extends ListActivity {
         public void drop(int from, int to) {
           JazzArtist item = adapter.getItem(from);
 
-          adapter.notifyDataSetChanged();
           adapter.remove(item);
           adapter.insert(item, to);
         }
@@ -55,9 +52,6 @@ public class ArbItemSizeDSLV extends ListActivity {
         setContentView(R.layout.dslv_main);
 
         DragSortListView lv = (DragSortListView) getListView(); 
-        //TextView tv = (TextView) getLayoutInflater().inflate(R.layout.list_item1, null);
-        //tv.setText("Header View");
-        //lv.addHeaderView(tv);
         lv.setDropListener(onDrop);
         lv.setRemoveListener(onRemove);
 
@@ -121,11 +115,6 @@ public class ArbItemSizeDSLV extends ListActivity {
         String albums = getItem(position).albums;
 
         holder.albumsView.setText(albums);
-        //if (albums == null) {
-        //  holder.albumsView.setVisibility(View.GONE);
-        //} else {
-        //  holder.albumsView.setText(getItem(position).albums);
-        //}
 
         return v;
       }

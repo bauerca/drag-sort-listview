@@ -10,8 +10,6 @@ import com.mobeta.android.dslv.DragSortListView;
 import android.widget.TextView;
 import android.util.Log;
 
-//import com.mobeta.android.demodslv.R;
-
 
 public class BasicDSLV extends ListActivity {
 
@@ -24,9 +22,8 @@ public class BasicDSLV extends ListActivity {
       new DragSortListView.DropListener() {
         @Override
         public void drop(int from, int to) {
-          String item=adapter.getItem(from);
+          String item = adapter.getItem(from);
 
-          adapter.notifyDataSetChanged();
           adapter.remove(item);
           adapter.insert(item, to);
         }
@@ -49,10 +46,6 @@ public class BasicDSLV extends ListActivity {
         setContentView(R.layout.dslv_main);
 
         DragSortListView lv = (DragSortListView) getListView(); 
-        //FlingListView lv = (FlingListView) getListView(); 
-        //TextView tv = (TextView) getLayoutInflater().inflate(R.layout.list_item1, null);
-        //tv.setText("Header View");
-        //lv.addHeaderView(tv);
         lv.setDropListener(onDrop);
         lv.setRemoveListener(onRemove);
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:dslv="http://schemas.android.com/apk/res/com.mobeta.android.dslv"
   android:layout_width="fill_parent"
   android:layout_height="@dimen/item1_height"
   android:orientation="horizontal">

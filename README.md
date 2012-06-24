@@ -45,6 +45,11 @@ customizable.
 
 I hope you find it useful! And please, help me improve the thing!
 
+Usage
+-----
+
+The best place to learn DSLV semantics is in the demo/ directory.
+
 
 Installation
 ------------
