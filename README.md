@@ -54,8 +54,38 @@ So, as a first step, I recommend building the examples, playing with
 them, and then exploring `demo/src/` and `demo/res/` for the
 details. That said, the following is a brief overview of DSLV usage.
 
-The DSLV can be delared in an XML layout file just like the ListView.
-Here is an example that also shows the available attributes.
+The DSLV can be declared in an XML layout file just like the ListView.
+Here is the example [from the demo](https://github.com/bauerca/drag-sort-listview/blob/master/demo/res/layout/dslv_main.xml)
+that shows all available attributes.
+
+    <?xml version="1.0" encoding="utf-8"?>
+    <com.mobeta.android.dslv.DragSortListView
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:dslv="http://schemas.android.com/apk/res/com.mobeta.android.demodslv"
+      android:id="@android:id/list"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:paddingTop="20dp"
+      android:paddingBottom="20dp"
+      dslv:collapsed_height="1dp"
+      dslv:drag_scroll_start="0.33"
+      dslv:max_drag_scroll_speed="0.3"
+      dslv:float_background_color="#000000"
+      dslv:remove_mode="none"
+      dslv:track_drag_scroll="false" />
+
+The attributes are
+
+* `collapsed_height`: (dimension) Height of placeholder at original
+drag position.
+* `drag_scroll_start`: (float) Start of drag-scroll regions (defined by a
+fraction of the total DSLV height).
+* `max_drag_scroll_speed`: (float) Maximum drag-scroll speed for
+default linear drag-scroll profile. Units of pixels/millisecond.
+* `float_background_color`: (color) Background color of floating View.
+* `remove_mode`: (enum) One of "none" "fling", "slide", "slideRight",
+"slideLeft". This is inherited from the TI and may change.
+* `track_drag_scroll`: (bool) Debugging option; explained below.
 
 Drag-sorting in the DSLV is enabled when:
 
@@ -133,7 +163,9 @@ file OR copy `res/values/ids.xml` to your project and use `@id/drag`.
 2. Change the package name declaration line at the top of
 DragSortListView.java to your package name.
 3. Copy `res/values/dslv_attrs.xml` to your project
-
+4. In the XML layout file that declares the DSLV, make sure to use
+your package name (as opposed to `com.mobeta.android.(demo)dslv` in the
+example above)
 
 Installation
 ------------

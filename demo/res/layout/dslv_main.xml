@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.mobeta.android.dslv.DragSortListView
   xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:dslv="http://schemas.android.com/apk/res/com.mobeta.android.demodslv"
   android:id="@android:id/list"
   android:layout_width="fill_parent"
   android:layout_height="fill_parent"
   android:paddingTop="20dp"
-  android:paddingBottom="20dp" />
+  android:paddingBottom="20dp"
+  dslv:collapsed_height="10dp"
+  dslv:drag_scroll_start="0.33"
+  dslv:max_drag_scroll_speed="0.3"
+  dslv:float_background_color="#000000"
+  dslv:remove_mode="none"
+  dslv:track_drag_scroll="false" />

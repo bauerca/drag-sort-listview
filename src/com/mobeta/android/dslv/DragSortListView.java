@@ -116,12 +116,14 @@ public class DragSortListView extends ListView {
   private int mFootersTotalHeight = 0;
 	
 	private DragScroller mDragScroller;
-	private float mDragUpScrollBoundFrac = 1.0f / 3.0f;
-	private float mDragDownScrollBoundFrac = 1.0f / 3.0f;
+	private float mDragUpScrollStartFrac = 1.0f / 3.0f;
+	private float mDragDownScrollStartFrac = 1.0f / 3.0f;
   private float mDragUpScrollHeight;
 	private float mDragDownScrollHeight;
 	
-	private float mMaxScrollSpeed = 0.2f; // pixels per millisec
+	private float mMaxScrollSpeed = 0.3f; // pixels per millisec
+
+  private boolean mTrackDragScroll = false;
 	
 	private DragScrollProfile mScrollProfile = new DragScrollProfile() {
 		@Override
@@ -148,17 +150,20 @@ public class DragSortListView extends ListView {
       mItemHeightCollapsed = a.getDimensionPixelSize(
         R.styleable.DragSortListView_collapsed_height, mItemHeightCollapsed);
 
-      mFloatBGColor = a.getColor(R.styleable.DragSortListView_float_background,
+      mTrackDragScroll = a.getBoolean(
+        R.styleable.DragSortListView_track_drag_scroll, false);
+
+      mFloatBGColor = a.getColor(R.styleable.DragSortListView_float_background_color,
         0x00000000);
 
       mRemoveMode = a.getInt(R.styleable.DragSortListView_remove_mode, -1);
 
-      float frac = a.getFloat(R.styleable.DragSortListView_scroll_bound,
-          mDragUpScrollBoundFrac);
-      setDragScrollBounds(frac);
+      float frac = a.getFloat(R.styleable.DragSortListView_drag_scroll_start,
+          mDragUpScrollStartFrac);
+      setDragScrollStart(frac);
 
 			mMaxScrollSpeed = a.getFloat(
-        R.styleable.DragSortListView_max_scroll_speed, mMaxScrollSpeed);
+        R.styleable.DragSortListView_max_drag_scroll_speed, mMaxScrollSpeed);
 
       a.recycle();
     }
@@ -643,8 +648,8 @@ public class DragSortListView extends ListView {
    * 0.5f.
    * 
    */
-	public void setDragScrollBounds(float heightFraction) {
-    setDragScrollBounds(heightFraction, heightFraction);
+	public void setDragScrollStart(float heightFraction) {
+    setDragScrollStarts(heightFraction, heightFraction);
 	}
 	
 	
@@ -658,31 +663,31 @@ public class DragSortListView extends ListView {
    * Capped at 0.5f.
    * 
    */
-	public void setDragScrollBounds(float upperFrac, float lowerFrac) {
+	public void setDragScrollStarts(float upperFrac, float lowerFrac) {
     if (lowerFrac > 0.5f) {
-      mDragDownScrollBoundFrac = 0.5f;
+      mDragDownScrollStartFrac = 0.5f;
     } else {
-      mDragDownScrollBoundFrac = lowerFrac;
+      mDragDownScrollStartFrac = lowerFrac;
     }
 
     if (upperFrac > 0.5f) {
-      mDragUpScrollBoundFrac = 0.5f;
+      mDragUpScrollStartFrac = 0.5f;
     } else {
-      mDragUpScrollBoundFrac = upperFrac;
+      mDragUpScrollStartFrac = upperFrac;
     }
 
     if (getHeight() != 0) {
-      updateScrollBounds();
+      updateScrollStarts();
     }
   }
 
-  private void updateScrollBounds() {
+  private void updateScrollStarts() {
     final int padTop = getPaddingTop();
 		final int listHeight = getHeight() - padTop - getPaddingBottom();
     float heightF = (float) listHeight;
 		
-    mUpScrollStartYF = padTop + mDragUpScrollBoundFrac * heightF;
-    mDownScrollStartYF = padTop + (1.0f - mDragDownScrollBoundFrac) * heightF;
+    mUpScrollStartYF = padTop + mDragUpScrollStartFrac * heightF;
+    mDownScrollStartYF = padTop + (1.0f - mDragDownScrollStartFrac) * heightF;
 
 		mUpScrollStartY = (int) mUpScrollStartYF;
 		mDownScrollStartY = (int) mDownScrollStartYF;
@@ -697,7 +702,7 @@ public class DragSortListView extends ListView {
   @Override
   protected void onSizeChanged(int w, int h, int oldw, int oldh) {
     super.onSizeChanged(w, h, oldw, oldh);
-    updateScrollBounds();
+    updateScrollStarts();
   }
 
 	private int getViewHeight(View v) {
@@ -1046,7 +1051,7 @@ public class DragSortListView extends ListView {
 		Context context = getContext();
 		ImageView v = new ImageView(context);
 		//int backGroundColor = context.getResources().getColor(R.color.dragndrop_background);
-		//v.setBackgroundColor(mFloatBGColor);
+		v.setBackgroundColor(mFloatBGColor);
 		//v.setBackgroundResource(R.drawable.playlist_tile_drag);
 		v.setPadding(0, 0, 0, 0);
 		v.setImageBitmap(bm);
@@ -1260,14 +1265,13 @@ public class DragSortListView extends ListView {
 		private int mFirstFooter;
 
 		private StateTracker mStateTracker;
-		private boolean mTrack = false;
 		
 		public boolean isScrolling() {
 			return mScrolling;
 		}
 
 		public DragScroller() {
-			if (mTrack) {
+			if (mTrackDragScroll) {
 				mStateTracker = new StateTracker();
 			}
 		}
@@ -1275,7 +1279,7 @@ public class DragSortListView extends ListView {
 		public void startScrolling(int dir) {
 			if (!mScrolling) {
         //Debug.startMethodTracing("dslv-scroll");
-				if (mTrack) {
+				if (mTrackDragScroll) {
 					mStateTracker.startTracking();
 					Log.d("mobeta", "scroll tracking started");
 				}
@@ -1299,7 +1303,7 @@ public class DragSortListView extends ListView {
 				mAbort = true;
 			}
 
-			if (mTrack) {
+			if (mTrackDragScroll) {
 				mStateTracker.stopTracking();
 			}
       //Debug.stopMethodTracing();
@@ -1313,7 +1317,7 @@ public class DragSortListView extends ListView {
 				return;
 			}
 
-			if (mTrack) {
+			if (mTrackDragScroll) {
 				mStateTracker.appendState();
 			}
 			
