@@ -149,11 +149,15 @@ Okay, so all of the above is just fluff except for the line
 which tells DSLV which child View is responsible for initiating the
 item drag. You will notice that `@id` is used rather than `@+id`.
 This is because the demo project references the DSLV as an external
-Android library, in which case the id named `drag` is already defined.
+Android library, in which the id named `drag` is already defined.
+In fact, when used as a standalone library, the DSLV cannot access
+ids defined by the dependent app.
 
 Okay, maybe not all fluff; the above layout file is an example of how 
 DSLV can handle arbitrary list item heights! Notice that the enclosing
-LinearLayout uses `"wrap_content"` as its layout_height.
+LinearLayout uses `"wrap_content"` as its layout_height. This means
+the height of the list item is determined by how much text is in
+there. Check out the demo!
 
 Another way to use the DSLV is by copying the DragSortListView.java
 file directly into your project. In this case, you must also:
