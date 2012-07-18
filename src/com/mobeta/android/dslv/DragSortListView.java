@@ -1,3 +1,24 @@
+/*
+ * DragSortListView.
+ *
+ * A subclass of the Android ListView component that enables drag
+ * and drop re-ordering of list items.
+ *
+ * Copyright 2012 Carl Bauer
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.mobeta.android.dslv;
 
 import java.util.ArrayList;
@@ -250,7 +271,7 @@ public class DragSortListView extends ListView {
             ViewGroup.LayoutParams.WRAP_CONTENT);
         v = new RelativeLayout(getContext());
         v.setLayoutParams(params);
-				child = super.getView(position, null, v);
+				child = mAdapter.getView(position, null, v);
         v.addView(child);
 
         v.setTag(child.findViewById(R.id.drag));
@@ -467,10 +488,11 @@ public class DragSortListView extends ListView {
 					visItemTop += mItemHeightCollapsed + divHeight;
 				}
 
-				visItemPos = position;
-				if (position > mExpDragPos) {
-					visItemPos += 1;
-				}
+				if (position < mSrcDragPos && position >= mExpDragPos) {
+					visItemPos = position + 1;
+				} else {
+					visItemPos = position;
+        }
 				break;
 			default:
 				visItemTop = top;
