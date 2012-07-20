@@ -197,7 +197,7 @@ is dragged to the edge of the ListView, causing a scroll). This script
 is found in the project tools/ directory.
 
 To enable, just set the `dslv:track_drag_scroll` attribute to
-`"false"` in XML. While drag scrolling on your emulator or device,
+`"true"` in XML. While drag scrolling on your emulator or device,
 this tracking causes the DSLV to periodically dump its state to
 a file called dslv_state.xml in the device/emulator /sdcard/ directory. 
 
