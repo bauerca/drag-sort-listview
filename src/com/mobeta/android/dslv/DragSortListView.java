@@ -488,7 +488,7 @@ public class DragSortListView extends ListView {
 					visItemTop += mItemHeightCollapsed + divHeight;
 				}
 
-				if (position < mSrcDragPos && position >= mExpDragPos) {
+				if (position <= mSrcDragPos && position > mExpDragPos) {
 					visItemPos = position + 1;
 				} else {
 					visItemPos = position;
