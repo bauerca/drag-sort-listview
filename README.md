@@ -196,21 +196,18 @@ to debug drag scroll behavior (a drag scroll occurs when a list item
 is dragged to the edge of the ListView, causing a scroll). This script
 is found in the project tools/ directory.
 
-To enable, change the member
-variable mTrack to true in the inner class DragScroller.
-While drag scrolling is occurring
-on your emulator or device, this tracking causes
-the DSLV to periodically dump its state to a file called
-dslv_state.xml in the
-device/emulator /sdcard/ directory. 
+To enable, just set the `dslv:track_drag_scroll` attribute to
+`"false"` in XML. While drag scrolling on your emulator or device,
+this tracking causes the DSLV to periodically dump its state to
+a file called dslv_state.xml in the device/emulator /sdcard/ directory. 
 
 Navigate to the location of dslv.py, and do 
 
-> adb [-e|-d|-s device] pull /sdcard/dslv_state.xml
+    adb [-e|-d|-s device] pull /sdcard/dslv_state.xml
 
 then simply run
 
-> python dslv.py
+    python dslv.py
 
 An image should appear that represents the DSLV in the final
 recorded state. Right and left keys allow stepping
