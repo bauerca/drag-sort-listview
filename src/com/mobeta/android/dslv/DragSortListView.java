@@ -485,6 +485,16 @@ public class DragSortListView extends ListView {
 			case SRC_BELOW:
 				visItemTop = top;
 				if (position == mSrcDragPos) { 
+					if (position == getCount() - 1) {
+						int aboveHeight = getItemHeight(position - 1);
+						if (position - 1 == mExpDragPos) {
+							visItemTop -= aboveHeight - mFloatViewHeight;
+						} else {
+							visItemTop -= aboveHeight + divHeight;
+						}
+						visItemPos = position;
+						break;
+					}
 					visItemTop += mItemHeightCollapsed + divHeight;
 				}
 
@@ -630,6 +640,7 @@ public class DragSortListView extends ListView {
         }
 
         if (dragHit) {
+					//item.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 					item.setDrawingCacheEnabled(true);
 					// Create a copy of the drawing cache so that it does not get recycled
 					// by the framework when the list tries to clean up memory
@@ -1294,6 +1305,7 @@ public class DragSortListView extends ListView {
 
 		public DragScroller() {
 			if (mTrackDragScroll) {
+				Log.d("mobeta", "state tracker created");
 				mStateTracker = new StateTracker();
 			}
 		}
@@ -1396,16 +1408,20 @@ public class DragSortListView extends ListView {
       //Log.d("mobeta", "movePos="+movePosition+" newTop="+newTop+" oldTop="+(newTop-dy)+" lvheight="+getHeight()+" fvheight="+mFloatViewHeight+" oldBottom="+getChildAt(movePosition-first).getBottom());
 			
 			// Where will floating view end up given current list state?
+			// newFloatPos is a visual position
 			int newFloatPos = getFloatPosition(mLastY, movePosition, newTop);
-			
 
 			if (newFloatPos != mExpDragPos) {
-				if (newFloatPos == movePosition && scrollDir == DragScroller.DOWN) {
+				// scroll induces shuffle; adjust scroll for smoothness
+
+				if (scrollDir == DOWN && newFloatPos == movePosition) {
 					newTop -= mFloatViewHeight + getDividerHeight();
+				} else if (newFloatPos < movePosition) {
+					if (scrollDir == UP || (scrollDir == DOWN && movePosition == mExpDragPos)) {
+						newTop += mFloatViewHeight + getDividerHeight();
+					}
 				}
-				if (newFloatPos < movePosition && newFloatPos >= mSrcDragPos && scrollDir == DragScroller.UP) {
-					newTop += mFloatViewHeight + getDividerHeight();
-				}
+
 			}
 			
 			// Schedule expand/collapse where needed and update list state.
@@ -1474,7 +1490,11 @@ public class DragSortListView extends ListView {
 			if (!mFile.exists()) {
 				try {
 					mFile.createNewFile();
-				} catch (IOException e) {}
+					Log.d("mobeta", "file created");
+				} catch (IOException e) {
+					Log.w("mobeta", "Could not create dslv_state.txt");
+          Log.d("mobeta", e.getMessage());
+				}
 			}
 
 		}

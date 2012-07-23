@@ -199,11 +199,11 @@ is found in the project tools/ directory.
 To enable, just set the `dslv:track_drag_scroll` attribute to
 `"true"` in XML. While drag scrolling on your emulator or device,
 this tracking causes the DSLV to periodically dump its state to
-a file called dslv_state.xml in the device/emulator /sdcard/ directory. 
+a file called dslv_state.txt in the device/emulator /sdcard/ directory. 
 
 Navigate to the location of dslv.py, and do 
 
-    adb [-e|-d|-s device] pull /sdcard/dslv_state.xml
+    adb [-e|-d|-s device] pull /sdcard/dslv_state.txt
 
 then simply run
 

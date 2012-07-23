@@ -3,6 +3,7 @@
       package="com.mobeta.android.demodslv"
       android:versionCode="1"
       android:versionName="1.0">
+    <uses-sdk android:minSdkVersion="4" />
     <application android:label="@string/app_name" >
         <activity android:name="Launcher"
                   android:label="@string/app_name">
@@ -21,4 +22,5 @@
                   android:label="Arbitrary Item Size DSLV" />
     </application>
     <uses-library android:name="com.mobeta.android.dslv" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 </manifest> 
