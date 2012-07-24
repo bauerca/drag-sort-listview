@@ -440,12 +440,20 @@ public class DragSortListView extends ListView {
 			return vtop;
 		}
 
+		int edge;
 		if (vposition <= mExpDragPos) {
-			return vtop + (mFloatViewHeight - getVisualItemHeight(vposition - 1)) / 2;
+			edge = vtop + (mFloatViewHeight - getVisualItemHeight(vposition - 1)) / 2;
+			if (mDragState == SRC_EXP) {
+				edge -= mItemHeightCollapsed;
+			}
 		} else {
-			return vtop + (getVisualItemHeight(vposition) - mFloatViewHeight) / 2;
+			edge = vtop + (getVisualItemHeight(vposition) - mFloatViewHeight) / 2;
+			if (mDragState == SRC_EXP) {
+				edge += mItemHeightCollapsed;
+			}
 		}
 
+		return edge;
 	}
 
   /**
