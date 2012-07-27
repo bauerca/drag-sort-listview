@@ -13,5 +13,6 @@
       <enum name="slideLeft" value="2" />
     </attr>
     <attr name="track_drag_scroll" format="boolean"/>
+    <attr name="long_press_enabled" format="boolean"/>
   </declare-styleable>
 </resources>
