@@ -248,7 +248,7 @@ public class DragSortListView extends ListView {
 
       } else {
         AbsListView.LayoutParams params =
-          new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+          new AbsListView.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT);
         v = new RelativeLayout(getContext());
         v.setLayoutParams(params);
