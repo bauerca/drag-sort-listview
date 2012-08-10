@@ -248,7 +248,7 @@ public class DragSortListView extends ListView {
 
       } else {
         AbsListView.LayoutParams params =
-          new AbsListView.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
+          new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT);
         v = new RelativeLayout(getContext());
         v.setLayoutParams(params);
@@ -954,7 +954,11 @@ public class DragSortListView extends ListView {
 			mGestureDetector.onTouchEvent(ev);
 		}
 		if ((mDragListener != null || mDropListener != null) && mFloatView != null) {
-			int action = ev.getAction(); 
+			int action = ev.getAction();
+
+			final int x = (int) ev.getX();
+			final int y = (int) ev.getY();
+
 			switch (action & MotionEvent.ACTION_MASK) {
 			case MotionEvent.ACTION_UP:
 			case MotionEvent.ACTION_CANCEL:
@@ -974,9 +978,7 @@ public class DragSortListView extends ListView {
 				//doExpansion();
 				break;
 			case MotionEvent.ACTION_MOVE:
-				int x = (int) ev.getX();
-				int y = (int) ev.getY();
-				
+
 				// make src item invisible on first move away from pickup
 				// point. Reduces flicker.
 				if (mLastY == mDownY) {
@@ -1010,41 +1012,43 @@ public class DragSortListView extends ListView {
 						super.layoutChildren();
 					}
 				}
-				
-        //Log.d("mobeta", "down scroll start="+mDownScrollStartY);
-        //Log.d("mobeta", "up scroll start="+mUpScrollStartY);
-				// start or stop drag scrolling
-				if (y > mDownScrollStartY) {
 
-					if (mLastY <= mDownScrollStartY) {
-						if (mDragScroller.isScrolling()) {
-							// moved directly from upscroll to down scroll
-							mDragScroller.stopScrolling(true);
-						}
-						//Log.d("mobeta", "start drag scrolling down");
-						// just entered lower drag-scroll region
-						mLastY = y;
-						mDragScroller.startScrolling(DragScroller.DOWN);
+				// get the current scroll direction
+				int currentScrollDir = mDragScroller.getScrollDir();
+
+				if (y > mLastY && y > mDownScrollStartY && currentScrollDir != DragScroller.DOWN) {
+					// dragged down, it is below the down scroll start and it is not scrolling up
+
+					if (currentScrollDir != DragScroller.STOP) {
+						// moved directly from up scroll to down scroll
+						mDragScroller.stopScrolling(true);
 					}
-				} else if (y < mUpScrollStartY) {
-					if (mLastY >= mUpScrollStartY) {
-						// just entered upper drag-scroll region
-						if (mDragScroller.isScrolling()) {
-							// moved directly from down-scroll to up-scroll
-							mDragScroller.stopScrolling(true);
-						}
-						mLastY = y;
-						mDragScroller.startScrolling(DragScroller.UP);
+
+					// start scrolling down
+					mDragScroller.startScrolling(DragScroller.DOWN);
+				}
+				else if (y < mLastY && y < mUpScrollStartY && currentScrollDir != DragScroller.UP) {
+					// dragged up, it is above the up scroll start and it is not scrolling up
+
+					if (currentScrollDir != DragScroller.STOP) {
+						// moved directly from down scroll to up scroll
+						mDragScroller.stopScrolling(true);
 					}
-				} else if (mLastY > mDownScrollStartY || mLastY < mUpScrollStartY) {
-					//mDragScroller.stopScrolling(false);
+
+					// start scrolling up
+					mDragScroller.startScrolling(DragScroller.UP);
+				}
+				else if (y >= mUpScrollStartY && y <= mDownScrollStartY && mDragScroller.isScrolling()) {
+					// not in the upper nor in the lower drag-scroll regions but it is still scrolling
+
 					mDragScroller.stopScrolling(true);
 				}
-				
-				mLastX = x;
-				mLastY = y;
 				break;
 			}
+
+			mLastX = x;
+			mLastY = y;
+
 			return true;
 		}
 		return super.onTouchEvent(ev);
@@ -1278,7 +1282,8 @@ public class DragSortListView extends ListView {
 		private float dt;
 		private long tStart;
 		private int scrollDir;
-		
+
+		public final static int STOP = -1;
 		public final static int UP = 0;
 		public final static int DOWN = 1;
 		
@@ -1293,6 +1298,10 @@ public class DragSortListView extends ListView {
 		
 		public boolean isScrolling() {
 			return mScrolling;
+		}
+
+		public int getScrollDir() {
+			return mScrolling ? scrollDir : STOP;
 		}
 
 		public DragScroller() {
