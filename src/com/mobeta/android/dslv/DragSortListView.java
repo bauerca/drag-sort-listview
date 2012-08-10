@@ -21,46 +21,25 @@
 
 package com.mobeta.android.dslv;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.StringBuilder;
-
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.database.DataSetObservable;
-import android.database.DataSetObserver;
-import android.graphics.Canvas;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.SystemClock;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.Gravity;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewConfiguration;
-import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.*;
 import android.view.GestureDetector.SimpleOnGestureListener;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.HeaderViewListAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.AbsListView;
+import android.widget.*;
 
-import android.os.Debug;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -1072,6 +1051,9 @@ public class DragSortListView extends ListView {
 	}
 
 	private void startDragging(Bitmap bm, int x, int y) {
+		if(getParent() != null)
+			getParent().requestDisallowInterceptTouchEvent(true);
+
 		//removeFloatView();
 
 		mWindowParams = new WindowManager.LayoutParams();
