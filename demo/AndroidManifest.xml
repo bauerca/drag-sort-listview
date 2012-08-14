@@ -14,6 +14,8 @@
         </activity>
         <activity android:name="BasicDSLV"
                   android:label="Basic DSLV" />
+        <activity android:name="ShortListDSLV"
+                  android:label="Short List DSLV" />
         <activity android:name="WarpDSLV"
                   android:label="Warp DSLV" />
         <activity android:name="HeadFootDSLV"
