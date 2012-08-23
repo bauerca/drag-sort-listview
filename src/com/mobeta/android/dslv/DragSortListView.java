@@ -1107,7 +1107,7 @@ public class DragSortListView extends ListView {
 		if (mRemoveMode == FLING || mRemoveMode == TRASH) {
 			mWindowParams.x = x - mDragPointX + mXOffset;
 		} else {
-			mWindowParams.x = 0;
+			mWindowParams.x = mXOffset + getPaddingLeft();
 		}
 		
 		
