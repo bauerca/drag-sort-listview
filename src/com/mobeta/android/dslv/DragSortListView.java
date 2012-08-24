@@ -309,8 +309,10 @@ public class DragSortListView extends ListView {
 			int oldVis = v.getVisibility();
 			int vis = oldVis;
 
-			if (position == srcAdapter && mDragState != NO_DRAG && vis == View.VISIBLE) {
-				vis = View.INVISIBLE;
+			if (position == srcAdapter && mDragState != NO_DRAG) {
+				if (vis == View.VISIBLE) {
+					vis = View.INVISIBLE;
+				}
 			} else if (vis == View.INVISIBLE) {
 				vis = View.VISIBLE;
 			}
