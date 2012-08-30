@@ -27,6 +27,7 @@ import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.graphics.Canvas;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.util.AttributeSet;
@@ -287,7 +288,7 @@ public class DragSortListView extends ListView {
 
 					mExpandedChildHeight = child.getMeasuredHeight();
 					//Log.d("mobeta", "childh="+mExpandedChildHeight+" pos="+position);
-					int height = mExpandedChildHeight + mFloatViewHeight;
+					int height = mExpandedChildHeight + mFloatViewHeight + getDividerHeight();
 					if (lp.height != height) {
 						lp.height = height;
 					}
@@ -324,6 +325,40 @@ public class DragSortListView extends ListView {
 			return v;
 		}
 		
+	}
+
+	@Override
+	protected void dispatchDraw(Canvas canvas) {
+		super.dispatchDraw(canvas);
+
+		if (mFloatView != null && mDragState != NO_DRAG && mDragState != SRC_EXP) {
+			// draw the divider over the expanded item
+
+			final Drawable divider = getDivider();
+			final int dividerHeight = getDividerHeight();
+			
+			if (divider != null && dividerHeight != 0) {
+				final View expItem = getChildAt(mExpDragPos - getFirstVisiblePosition());
+				if (expItem != null) {
+					final int l = getPaddingLeft();
+					final int r = getWidth() - getPaddingRight();
+					final int t;
+					final int b;
+					if (mDragState == SRC_ABOVE) {
+						b = expItem.getBottom() - mFloatViewHeight;
+						t = b - dividerHeight;
+					} else {
+						t = expItem.getTop() + mFloatViewHeight;
+						b = t + dividerHeight;
+					}
+
+					divider.setBounds(l, t, r, b);
+					divider.draw(canvas);
+					Log.d("mobeta", "drawing divider");
+				}
+			}
+		}
+
 	}
 
   private int getItemHeight(int position) {
@@ -850,7 +885,7 @@ public class DragSortListView extends ListView {
 				lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 			} else if (lp.height == ViewGroup.LayoutParams.WRAP_CONTENT && position != mExpDragPos) {
 				// expanding normal item
-				lp.height = v.getHeight() + mFloatViewHeight;
+				lp.height = v.getHeight() + mFloatViewHeight + getDividerHeight();
 				
 				// must set gravity in this case
 				if (position > mSrcDragPos) {
