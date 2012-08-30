@@ -354,7 +354,6 @@ public class DragSortListView extends ListView {
 
 					divider.setBounds(l, t, r, b);
 					divider.draw(canvas);
-					Log.d("mobeta", "drawing divider");
 				}
 			}
 		}
