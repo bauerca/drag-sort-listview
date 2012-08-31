@@ -814,7 +814,13 @@ public class DragSortListView extends ListView {
 			}
 
 			//Log.d("mobeta", "unexpand views called");
-			int top = getChildAt(0).getTop();
+
+			View v = getChildAt(0);
+			int top = 0;
+			if (v != null) {
+				top = v.getTop();
+			}
+
 			int firstPos = getFirstVisiblePosition();
 
 			View expView = getChildAt(mExpDragPos - firstPos);
@@ -1005,6 +1011,8 @@ public class DragSortListView extends ListView {
 				
 				if (mRemoveMode == SLIDE && ev.getX() > r.right * 3 / 4) {
 					dropFloatView(true);
+				} else if (mRemoveMode == SLIDELEFT && ev.getX() < r.right * 1 / 4) {
+					dropFloatView(true);
 				} else {
 					dropFloatView(false);
 				}
@@ -1137,6 +1145,15 @@ public class DragSortListView extends ListView {
 			int width = mFloatView.getWidth();
 			if (x > width / 2) {
 				alpha = ((float)(width - x)) / (width / 2);
+			}
+			mWindowParams.alpha = alpha;
+		}
+		
+		if (mRemoveMode == SLIDELEFT) {
+			float alpha = 1.0f;
+			int width = mFloatView.getWidth();
+			if (x < width / 2) {
+				alpha = ((float) (x)) / (width / 2);
 			}
 			mWindowParams.alpha = alpha;
 		}
