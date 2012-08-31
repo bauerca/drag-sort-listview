@@ -97,7 +97,8 @@ public class DragSortListView extends ListView {
 	private GestureDetector mGestureDetector;
 	private static final int FLING = 0;
 	private static final int SLIDE = 1;
-	private static final int TRASH = 2;
+	private static final int SLIDELEFT = 2;
+	private static final int TRASH = 3;
 	private int mRemoveMode = -1;
 	private Rect mTempRect = new Rect();
   private int[] mTempLoc = new int[2];
