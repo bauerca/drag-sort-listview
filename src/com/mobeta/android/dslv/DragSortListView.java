@@ -97,7 +97,8 @@ public class DragSortListView extends ListView {
 	private GestureDetector mGestureDetector;
 	private static final int FLING = 0;
 	private static final int SLIDE = 1;
-	private static final int TRASH = 2;
+	private static final int SLIDELEFT = 2;
+	private static final int TRASH = 3;
 	private int mRemoveMode = -1;
 	private Rect mTempRect = new Rect();
   private int[] mTempLoc = new int[2];
@@ -813,7 +814,8 @@ public class DragSortListView extends ListView {
 			}
 
 			//Log.d("mobeta", "unexpand views called");
-			int top = getChildAt(0).getTop();
+
+
 			int firstPos = getFirstVisiblePosition();
 
 			View expView = getChildAt(mExpDragPos - firstPos);
@@ -829,6 +831,11 @@ public class DragSortListView extends ListView {
 			if (mSrcDragPos < firstPos) {
 				// collapsed src item is off screen, no need to expand it; but, we
 				// must adjust the scroll accordingly
+				View v = getChildAt(0);
+				int top = 0;
+				if (v != null) {
+					top = v.getTop();
+				}
 				setSelectionFromTop(firstPos - 1, top - getPaddingTop());
 			} else if (mSrcDragPos <= getLastVisiblePosition()) {
 				// collapsed src item is in view, expand it
@@ -1004,6 +1011,8 @@ public class DragSortListView extends ListView {
 				
 				if (mRemoveMode == SLIDE && ev.getX() > r.right * 3 / 4) {
 					dropFloatView(true);
+				} else if (mRemoveMode == SLIDELEFT && ev.getX() < r.right * 1 / 4) {
+					dropFloatView(true);
 				} else {
 					dropFloatView(false);
 				}
@@ -1136,6 +1145,15 @@ public class DragSortListView extends ListView {
 			int width = mFloatView.getWidth();
 			if (x > width / 2) {
 				alpha = ((float)(width - x)) / (width / 2);
+			}
+			mWindowParams.alpha = alpha;
+		}
+		
+		if (mRemoveMode == SLIDELEFT) {
+			float alpha = 1.0f;
+			int width = mFloatView.getWidth();
+			if (x < width / 2) {
+				alpha = ((float) (x)) / (width / 2);
 			}
 			mWindowParams.alpha = alpha;
 		}
