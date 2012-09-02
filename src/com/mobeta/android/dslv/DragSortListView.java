@@ -815,11 +815,6 @@ public class DragSortListView extends ListView {
 
 			//Log.d("mobeta", "unexpand views called");
 
-			View v = getChildAt(0);
-			int top = 0;
-			if (v != null) {
-				top = v.getTop();
-			}
 
 			int firstPos = getFirstVisiblePosition();
 
@@ -836,6 +831,11 @@ public class DragSortListView extends ListView {
 			if (mSrcDragPos < firstPos) {
 				// collapsed src item is off screen, no need to expand it; but, we
 				// must adjust the scroll accordingly
+				View v = getChildAt(0);
+				int top = 0;
+				if (v != null) {
+					top = v.getTop();
+				}
 				setSelectionFromTop(firstPos - 1, top - getPaddingTop());
 			} else if (mSrcDragPos <= getLastVisiblePosition()) {
 				// collapsed src item is in view, expand it
