@@ -1441,9 +1441,10 @@ public class DragSortListView extends ListView {
 
       int movePosition;
       if (dy > 0) {
-        if (first == 0 && getChildAt(0).getTop() == padTop) {
-					mScrolling = false;
-          return;
+		View v = getChildAt(0);
+		if ((v == null) || (first == 0 && v.getTop() == padTop)) {
+			mScrolling = false;
+			return;
         }
         movePosition = first;
         dy = Math.min(listHeight, dy);
