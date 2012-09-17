@@ -79,6 +79,7 @@ public class DragSortListView extends ListView {
 	 * mDragPos = 1, then mDragPos points to the first list item after the header.
 	 */
 	private int mExpDragPos;
+	private int mFloatAlpha;
 	/**
 	 * At which position was the item being dragged originally
 	 */
@@ -157,6 +158,9 @@ public class DragSortListView extends ListView {
 
       mFloatBGColor = a.getColor(R.styleable.DragSortListView_float_background_color,
         0x00000000);
+
+      // alpha between 0 and 255, 0=transparent, 255=opaque
+      mFloatAlpha = a.getInt(R.styleable.DragSortListView_float_alpha, 255);
 
       mRemoveMode = a.getInt(R.styleable.DragSortListView_remove_mode, -1);
 
@@ -1126,6 +1130,7 @@ public class DragSortListView extends ListView {
 		ImageView v = new ImageView(context);
 		//int backGroundColor = context.getResources().getColor(R.color.dragndrop_background);
 		v.setBackgroundColor(mFloatBGColor);
+		v.setAlpha(mFloatAlpha);
 		//v.setBackgroundResource(R.drawable.playlist_tile_drag);
 		v.setPadding(0, 0, 0, 0);
 		v.setImageBitmap(bm);
