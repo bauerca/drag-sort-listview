@@ -145,6 +145,25 @@ public class DragSortListView extends ListView {
 	private int mDownY;
 
 	private float mSlideFrac = 0.3f;
+
+	/**
+	 * Number between 0 and 1 indicating the location of
+	 * an item during a slide (only used if drag-sort animations
+	 * are turned on). Nearly 1 means the item is 
+	 * at the top of the slide region (nearly full blank item
+	 * is directly below).
+	 */
+	private float mSlideAmount = 0.0f;
+
+	/**
+	 * Shuffle edge over which the dragged item is floating.
+	 * For N list items, there are N+1 shuffle edges (with the
+	 * first and last edges being practically meaningless).
+	 * Only used when drag-sort animations are on; works with
+	 * mSlideAmount. A value of -1 means there is no slide
+	 * animation in progress.
+	 */
+	private int mShuffleEdge = -1;
 	
 	private AdapterWrapper mAdapterWrapper;
 
@@ -617,7 +636,7 @@ public class DragSortListView extends ListView {
 			while (itemPos >= 0) {
 				itemPos--;
 
-				//if (itemPos <= 0) {
+				//if (itemPos <= 0)
 				if (itemPos == 0) {
 					edge = itemTop - getItemHeight(itemPos);
 					//itemPos = 0;
@@ -1178,6 +1197,83 @@ public class DragSortListView extends ListView {
 		}
 
 	}
+
+	private void setItemHeight(int position, int height) {
+		View v = getChildAt(position - getFirstVisiblePosition());
+
+		if (v != null) {
+			ViewGroup.LayoutParams lp = v.getLayoutParams();
+
+			int oldHeight = lp.height;
+			lp.height = height;
+
+      if (lp.height != oldHeight) {
+				v.requestLayout();
+      }
+		}
+	}
+
+	private void adjustItemHeight(int position) {
+		View v = getChildAt(position - getFirstVisiblePosition());
+
+		if (v != null) {
+			adjustItemHeight(position, v);
+		}
+	}
+
+	private void adjustItemHeight(int position, View v) {
+
+		ViewGroup.LayoutParams lp = v.getLayoutParams();
+		int oldHeight = lp.height;
+		int height = oldHeight;
+
+		switch (mDragState) {
+			case SRC_BELOW: {
+				if (position == mSrcPos) {
+					if (mAnimate) {
+
+					} else if (oldHeight ) {
+
+
+					}
+
+				}
+				break;
+			}
+
+
+		}
+
+	}
+
+	private void shuffleItems2() {
+		
+		int oldShuffleEdge = mShuffleEdge;
+		int oldSlideAmount = mSlideAmount;
+
+		// updates the above if drag-sort animation
+		findFloatPosition();
+
+		if (mAnimate) {
+			if (oldShuffleEdge != mShuffleEdge) {
+
+			} else if (mSlideAmount != oldSlideAmount) {
+				// on same shuffle edge, continue slide
+					
+				switch (mDragState) {
+
+				}
+				int firstHeight = getItemHeight(mFirstExpPos, true) + ((int) 
+
+				setItemHeight
+
+					
+			}
+		}
+
+
+
+	}
 	
 	/**
 	 * Shuffle list items given new float position.
@@ -1189,6 +1285,14 @@ public class DragSortListView extends ListView {
 		//Log.d("mobeta", "float position: " + floatPos);
 		//Log.d("mobeta", "exp position: " + mExpDragPos);
 		//Log.d("mobeta", "first position: " + getFirstVisiblePosition() + " height: " + getChildAt(0).getHeight());
+
+		if (mAnimate) {
+			if (mLastShuffleEdge != mShuffleEdge || mSlideAmount != mLastSlideAmount) {
+				// collapse stage
+				
+			}
+
+		}
 
 		if (floatPos != mExpDragPos) {
 			// if we get here, the ListView is inconsistent with the
