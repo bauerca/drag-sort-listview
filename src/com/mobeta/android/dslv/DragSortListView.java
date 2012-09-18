@@ -79,7 +79,7 @@ public class DragSortListView extends ListView {
 	 * mDragPos = 1, then mDragPos points to the first list item after the header.
 	 */
 	private int mExpDragPos;
-	private int mFloatAlpha;
+	private float mFloatAlpha;
 	/**
 	 * At which position was the item being dragged originally
 	 */
@@ -160,7 +160,7 @@ public class DragSortListView extends ListView {
         0x00000000);
 
       // alpha between 0 and 255, 0=transparent, 255=opaque
-      mFloatAlpha = a.getInt(R.styleable.DragSortListView_float_alpha, 255);
+      mFloatAlpha = a.getFloat(R.styleable.DragSortListView_float_alpha, 1.0f);
 
       mRemoveMode = a.getInt(R.styleable.DragSortListView_remove_mode, -1);
 
@@ -1125,12 +1125,13 @@ public class DragSortListView extends ListView {
 		| WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
 		mWindowParams.format = PixelFormat.TRANSLUCENT;
 		mWindowParams.windowAnimations = 0;
+		mWindowParams.alpha = mFloatAlpha;
 
 		Context context = getContext();
 		ImageView v = new ImageView(context);
 		//int backGroundColor = context.getResources().getColor(R.color.dragndrop_background);
 		v.setBackgroundColor(mFloatBGColor);
-		v.setAlpha(mFloatAlpha);
+		//v.setAlpha(mFloatAlpha);
 		//v.setBackgroundResource(R.drawable.playlist_tile_drag);
 		v.setPadding(0, 0, 0, 0);
 		v.setImageBitmap(bm);
@@ -1146,19 +1147,19 @@ public class DragSortListView extends ListView {
 	private void dragView(int x, int y) {
     //Log.d("mobeta", "float view pure x=" + x + " y=" + y);
 		if (mRemoveMode == SLIDE) {
-			float alpha = 1.0f;
+			float alpha = mFloatAlpha;
 			int width = mFloatView.getWidth();
 			if (x > width / 2) {
-				alpha = ((float)(width - x)) / (width / 2);
+				alpha = mFloatAlpha * (((float)(width - x)) / (width / 2));
 			}
 			mWindowParams.alpha = alpha;
 		}
 		
 		if (mRemoveMode == SLIDELEFT) {
-			float alpha = 1.0f;
+			float alpha = mFloatAlpha;
 			int width = mFloatView.getWidth();
 			if (x < width / 2) {
-				alpha = ((float) (x)) / (width / 2);
+				alpha = mFloatAlpha * (((float) (x)) / (width / 2));
 			}
 			mWindowParams.alpha = alpha;
 		}

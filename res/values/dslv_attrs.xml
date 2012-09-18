@@ -13,6 +13,6 @@
       <enum name="slideLeft" value="2" />
     </attr>
     <attr name="track_drag_scroll" format="boolean"/>
-    <attr name="float_alpha" format="integer"/>
+    <attr name="float_alpha" format="float"/>
   </declare-styleable>
 </resources>

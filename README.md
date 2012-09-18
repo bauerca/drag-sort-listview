@@ -71,6 +71,7 @@ that shows all available attributes.
       dslv:drag_scroll_start="0.33"
       dslv:max_drag_scroll_speed="0.3"
       dslv:float_background_color="#000000"
+      dslv:float_alpha="0.6"
       dslv:remove_mode="none"
       dslv:track_drag_scroll="false" />
 
@@ -83,6 +84,8 @@ fraction of the total DSLV height).
 * `max_drag_scroll_speed`: (float) Maximum drag-scroll speed for
 default linear drag-scroll profile. Units of pixels/millisecond.
 * `float_background_color`: (color) Background color of floating View.
+* `float_alpha`: (float) Transparency of floating View. Value from
+0 to 1 where 1 is opaque.
 * `remove_mode`: (enum) One of "none" "fling", "slide", "slideRight",
 "slideLeft". This is inherited from the TI and may change.
 * `track_drag_scroll`: (bool) Debugging option; explained below.

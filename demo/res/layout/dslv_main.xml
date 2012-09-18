@@ -17,5 +17,6 @@
 	  dslv:max_drag_scroll_speed="0.5"
 	  dslv:float_background_color="#000000"
 	  dslv:remove_mode="none"
+    dslv:float_alpha="0.6"
 	  dslv:track_drag_scroll="false" />
 </RelativeLayout>
