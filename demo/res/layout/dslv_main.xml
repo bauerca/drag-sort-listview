@@ -18,5 +18,6 @@
 	  dslv:float_background_color="#000000"
 	  dslv:remove_mode="slideLeft"
     dslv:float_alpha="0.6"
+    dslv:animate="true"
 	  dslv:track_drag_scroll="false" />
 </RelativeLayout>
