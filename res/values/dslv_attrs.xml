@@ -12,7 +12,7 @@
       <enum name="slideRight" value="1" />
       <enum name="slideLeft" value="2" />
     </attr>
-    <attr name="track_drag_scroll" format="boolean"/>
+    <attr name="track_drag_sort" format="boolean"/>
     <attr name="float_alpha" format="float"/>
     <attr name="animate" format="boolean"/>
   </declare-styleable>

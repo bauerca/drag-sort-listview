@@ -16,14 +16,19 @@ class State:
     self.tops = map(int, element.find("Tops").text.split(",")[:-1])
     self.bottoms = map(int, element.find("Bottoms").text.split(",")[:-1])
     self.count = len(self.positions)
+    self.edges = map(int, element.find("ShuffleEdges").text.split(",")[:-1])
 
     self.src = int(element.find("SrcPos").text)
     self.src_h = int(element.find("SrcHeight").text)
-    self.exp = int(element.find("ExpPos").text)
+    self.exp1 = int(element.find("FirstExpPos").text)
+    self.exp1_gap = int(element.find("FirstExpBlankHeight").text)
+    self.exp2 = int(element.find("SecondExpPos").text)
+    self.exp2_gap = int(element.find("SecondExpBlankHeight").text)
     self.width = 100
     self.height = int(element.find("ViewHeight").text)
     self.dstate = int(element.find("DragState").text)
     self.lasty = int(element.find("LastY").text)
+    self.floaty = int(element.find("FloatY").text)
   
   def draw(self, axes):
     axes.clear()
@@ -38,11 +43,22 @@ class State:
       axes.add_artist(Text(self.width/2, (top+bottom)/2,
         str(self.positions[i]), va='center', ha='center'))
 
-      if self.positions[i] == self.exp:
-        blank_bottom = bottom
-        if self.dstate == 3: #src below
-          blank_bottom = top - self.src_h
-        axes.add_patch(Rectangle((0,blank_bottom), self.width, self.src_h,
+      if self.positions[i] == self.src:
+        axes.add_patch(Rectangle((0,bottom), self.width, top-bottom,
+          fill=True, ec=None, fc='0.7'))
+      elif self.positions[i] == self.exp1:
+        if self.exp1 < self.src:
+          gap_bottom = top - self.exp1_gap
+        else:
+          gap_bottom = bottom
+        axes.add_patch(Rectangle((0,gap_bottom), self.width, self.exp1_gap,
+          fill=True, ec=None, fc='0.7'))
+      elif self.positions[i] == self.exp2:
+        if self.exp2 < self.src:
+          gap_bottom = top - self.exp2_gap
+        else:
+          gap_bottom = bottom
+        axes.add_patch(Rectangle((0,gap_bottom), self.width, self.exp2_gap,
           fill=True, ec=None, fc='0.7'))
 
       #print "drawing line"
@@ -51,7 +67,12 @@ class State:
       #axes.plot([0,self.width], [top, top], 'k')
       #axes.plot([0,self.width], [bottom, bottom], 'k')
 
-    axes.add_line(Line2D([0,self.width], [-self.lasty,-self.lasty], c='r', lw=2))
+    for edge in self.edges:
+      axes.add_line(Line2D([0,self.width], [-edge, -edge], c='g'))
+      
+
+    axes.add_line(Line2D([0,self.width], [-self.floaty,-self.floaty], c='r', lw=2))
+    #axes.add_line(Line2D([0,self.width], [-self.lasty,-self.lasty], c='r', lw=2))
 
     axes.add_patch(Rectangle((0, -self.height), self.width, self.height,
       fill=False, ls='dashed', ec='0.7'))
