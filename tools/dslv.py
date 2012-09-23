@@ -208,6 +208,8 @@ class State:
 
 
 class StateAnimator:
+  page_frames = 30
+
   def __init__(self, states, startFrame=0):
     self.states = states
     self.count = len(states)
@@ -228,6 +230,10 @@ class StateAnimator:
       self.curr += 1
     elif event.key == 'left':
       self.curr -= 1
+    elif event.key == 'up':
+      self.curr -= self.page_frames
+    elif event.key == 'down':
+      self.curr += self.page_frames
     else:
       return
 

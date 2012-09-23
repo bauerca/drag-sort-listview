@@ -19,5 +19,5 @@
 	  dslv:remove_mode="slideLeft"
     dslv:float_alpha="0.6"
     dslv:animate="true"
-	  dslv:track_drag_sort="true" />
+	  dslv:track_drag_sort="false" />
 </RelativeLayout>
