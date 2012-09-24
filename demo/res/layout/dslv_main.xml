@@ -12,12 +12,12 @@
 	  android:paddingBottom="0dp"
 		android:paddingLeft="10dp"
 		android:layout_margin="10dp"
-	  dslv:collapsed_height="5dp"
+	  dslv:collapsed_height="0dp"
 	  dslv:drag_scroll_start="0.33"
 	  dslv:max_drag_scroll_speed="0.5"
 	  dslv:float_background_color="#000000"
 	  dslv:remove_mode="slideLeft"
     dslv:float_alpha="0.6"
     dslv:animate="true"
-	  dslv:track_drag_sort="false" />
+	  dslv:track_drag_sort="true" />
 </RelativeLayout>

@@ -257,13 +257,14 @@ public class DragSortListView extends ListView {
       RelativeLayout v;
       View child;
 
+			//Log.d("mobeta", "getView; position="+position);
+
       //Log.d("mobeta", "getView: position="+position+" convertView="+convertView);
       if (convertView != null) {
 
         v = (RelativeLayout) convertView;
         View oldChild = v.getChildAt(0);
 
-        //child = super.getView(position, oldChild, v);
         child = mAdapter.getView(position, oldChild, v);
         if (child != oldChild) {
           // shouldn't get here if user is reusing convertViews properly
@@ -272,7 +273,6 @@ public class DragSortListView extends ListView {
           // check that tags are equal too?
           v.setTag(child.findViewById(R.id.drag));
         }
-
       } else {
         AbsListView.LayoutParams params =
           new AbsListView.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
@@ -531,11 +531,12 @@ public class DragSortListView extends ListView {
   private boolean updatePositions() {
 
 
-		//Log.d("mobeta", "mMovePos="+mMovePos+" mMoveTop="+mMoveTop);
+		Log.d("mobeta", "mMovePos="+mMovePos+" mMoveTop="+mMoveTop);
 		int edge = getShuffleEdge(mMovePos, mMoveTop);
 		int lastEdge = edge;
 
 		//Log.d("mobeta", "float mid="+mFloatViewY);
+
 		
 		int itemPos = mMovePos;
 		int itemTop = mMoveTop;
@@ -1271,8 +1272,7 @@ public class DragSortListView extends ListView {
 				// get the current scroll direction
 				int currentScrollDir = mDragScroller.getScrollDir();
 
-				//if (y > mLastY && y > mDownScrollStartY && currentScrollDir != DragScroller.DOWN) {
-				if (y > mLastY && y > mDownScrollStartY && mLastY <= mDownScrollStartY) {
+				if (y > mLastY && y > mDownScrollStartY && currentScrollDir != DragScroller.DOWN) {
 					// dragged down, it is below the down scroll start and it is not scrolling up
 
 					if (currentScrollDir != DragScroller.STOP) {
@@ -1283,8 +1283,7 @@ public class DragSortListView extends ListView {
 					// start scrolling down
 					mDragScroller.startScrolling(DragScroller.DOWN);
 				}
-				//else if (y < mLastY && y < mUpScrollStartY && currentScrollDir != DragScroller.UP) {
-				else if (y < mLastY && y < mUpScrollStartY && mLastY >= mUpScrollStartY) {
+				else if (y < mLastY && y < mUpScrollStartY && currentScrollDir != DragScroller.UP) {
 					// dragged up, it is above the up scroll start and it is not scrolling up
 
 					if (currentScrollDir != DragScroller.STOP) {
@@ -1662,6 +1661,10 @@ public class DragSortListView extends ListView {
 
 			final View moveItem = getChildAt(mMovePos - first);
 			mMoveTop = moveItem.getTop() + dy;
+
+			if (mMovePos == 0 && mMoveTop > getPaddingTop()) {
+				mMoveTop = getPaddingTop();
+			}
 
       //Log.d("mobeta", "movePos="+movePosition+" newTop="+newTop+" oldTop="+(newTop-dy)+" lvheight="+getHeight()+" fvheight="+mFloatViewHeight+" oldBottom="+getChildAt(movePosition-first).getBottom());
 
