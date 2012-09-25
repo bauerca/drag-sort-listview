@@ -166,7 +166,10 @@ Another way to use the DSLV is by copying the DragSortListView.java
 file directly into your project. In this case, you must also:
 
 1. Use `android:id="@+id/drag"` (notice the +) in your list item layout
-file OR copy `res/values/ids.xml` to your project and use `@id/drag`.
+file OR copy `res/values/ids.xml` to your project and use `@id/drag`. 
+(If you don't copy `res/values/ids.xml` DragSortListView.java will have
+errors, as it references `R.id.drag`, whenever there isn't a `DragSortListView`
+in a layout)
 2. Change the package name declaration line at the top of
 DragSortListView.java to your package name.
 3. Copy `res/values/dslv_attrs.xml` to your project
