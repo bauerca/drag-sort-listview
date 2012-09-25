@@ -14,6 +14,6 @@
     </attr>
     <attr name="track_drag_sort" format="boolean"/>
     <attr name="float_alpha" format="float"/>
-    <attr name="animate" format="boolean"/>
+    <attr name="slide_shuffle_speed" format="float"/>
   </declare-styleable>
 </resources>

@@ -141,7 +141,7 @@ public class DragSortListView extends ListView {
 	private int mLastY;
 	private int mDownY;
 
-	private float mSlideRegionFrac = 0.2f;
+	private float mSlideRegionFrac = 0.25f;
 
 	/**
 	 * Number between 0 and 1 indicating the location of
@@ -180,8 +180,8 @@ public class DragSortListView extends ListView {
       // alpha between 0 and 255, 0=transparent, 255=opaque
       mFloatAlpha = a.getFloat(R.styleable.DragSortListView_float_alpha, 1.0f);
 
-			mAnimate = a.getBoolean(
-        R.styleable.DragSortListView_animate, false);
+			mSlideRegionFrac = Math.max(0.0f, Math.min(1.0f, 1.0f - a.getFloat(R.styleable.DragSortListView_slide_shuffle_speed, 0.75f)));
+			mAnimate = mSlideRegionFrac > 0.0f;
 
       mRemoveMode = a.getInt(R.styleable.DragSortListView_remove_mode, -1);
 
@@ -448,31 +448,6 @@ public class DragSortListView extends ListView {
 		}
 
 		int divHeight = getDividerHeight();
-
-/*
-		int posAbove;
-		int posBelow;
-		int srcPos;
-		int firstExpPos;
-		int secondExpPos;
-
-		if (mInvertDragState) {
-			posAbove = position;
-			position--;
-			posBelow = position - 1;
-			srcPos = 2 * position - mSrcPos;
-			firstExpPos = 2 * position - mFirstExpPos;
-			secondExpPos = 2 * position - mSecondExpPos;
-
-			//top += getItemHeight(position);
-		} else {
-			posAbove = position - 1;
-			posBelow = position + 1;
-			srcPos = mSrcPos;
-			firstExpPos = mFirstExpPos;
-			secondExpPos = mSecondExpPos;
-		}
-*/
 
 		int edge;
 
