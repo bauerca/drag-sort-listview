@@ -52,76 +52,216 @@ import java.util.HashMap;
  */
 public class DragSortListView extends ListView {
 	
-	// Drag states
-	public final static int NO_DRAG = 0;
 	
-	private int mDragState = NO_DRAG;
-	
+	/**
+	 * The View that floats above the ListView and represents
+	 * the dragged item.
+	 */
 	private ImageView mFloatView;
+
+	/**
+	 * The middle (in the y-direction) of the floating View.
+	 */
 	private int mFloatViewY;
+
+
   private int mFloatBGColor;
+
+	/**
+	 * Transparency for the floating View (XML attribute).
+	 */
 	private float mFloatAlpha;
+
+	/**
+	 * While drag-sorting, the current position of the floating
+	 * View. If dropped, the dragged item will land in this position.
+	 */
 	private int mFloatPos;
+
+	/**
+	 * Manages the floating View.
+	 */
 	private WindowManager mWindowManager;
+
+	/**
+	 * LayoutParams for the floating View.
+	 */
 	private WindowManager.LayoutParams mWindowParams;
 
+	/**
+	 * The amount to scroll during the next layout pass. Used only
+	 * for drag-scrolling, not standard ListView scrolling.
+	 */
 	private int mScrollY = 0;
 	
 	/**
-	 * At which position is the item currently being dragged. All drag positions
-	 * are absolute list view positions; e.g. if there is one header view, and
-	 * mDragPos = 1, then mDragPos points to the first list item after the header.
+	 * The first expanded ListView position that helps represent
+	 * the drop slot tracking the floating View.
 	 */
 	private int mFirstExpPos;
+
+	/**
+	 * The second expanded ListView position that helps represent
+	 * the drop slot tracking the floating View. This can equal
+	 * mFirstExpPos if there is no slide shuffle occurring; otherwise
+	 * it is equal to mFirstExpPos + 1.
+	 */
 	private int mSecondExpPos;
 
-	private int mMovePos;
-	private int mMoveTop;
-
+	/**
+	 * Flag set if slide shuffling is enabled.
+	 */
 	private boolean mAnimate = false;
 
 	/**
-	 * At which position was the item being dragged originally
+	 * The user dragged from this position.
 	 */
 	private int mSrcPos;
-	private int mDragPointX;    // at what x offset inside the item did the user grab it
-	private int mDragPointY;    // at what y offset inside the item did the user grab it
-	private int mXOffset;  // the difference between screen coordinates and coordinates in this view
-	private int mYOffset;  // the difference between screen coordinates and coordinates in this view
+
+	/**
+	 * Offset (in x) within the dragged item at which the user
+	 * picked it up (or first touched down with the digitalis).
+	 */
+	private int mDragPointX;
+
+	/**
+	 * Offset (in y) within the dragged item at which the user
+	 * picked it up (or first touched down with the digitalis).
+	 */
+	private int mDragPointY;
+
+
+	/**
+	 * The difference (in x) between screen coordinates and coordinates
+	 * in this view.
+	 */
+	private int mXOffset;
+
+	/**
+	 * The difference (in y) between screen coordinates and coordinates
+	 * in this view.
+	 */
+	private int mYOffset;
+
+	/**
+	 * A listener that receives callbacks whenever the floating View
+	 * hovers over a new position.
+	 */
 	private DragListener mDragListener;
+
+	/**
+	 * A listener that receives a callback when the floating View
+	 * is dropped.
+	 */
 	private DropListener mDropListener;
+
+	/**
+	 * A listener that receives a callback when the floating View
+	 * (or more precisely the originally dragged item) is removed
+	 * by one of the provided gestures.
+	 */
 	private RemoveListener mRemoveListener;
-	private int mUpScrollStartY;
-	private int mDownScrollStartY;
-	private float mDownScrollStartYF;
-	private float mUpScrollStartYF;
+
+	/**
+	 * Used to detect a remove gesture.
+	 */
 	private GestureDetector mGestureDetector;
+
+	/**
+	 * Remove mode enum.
+	 */
 	private static final int FLING = 0;
 	private static final int SLIDE = 1;
 	private static final int SLIDELEFT = 2;
 	private static final int TRASH = 3;
+
+	/**
+	 * The current remove mode.
+	 */
 	private int mRemoveMode = -1;
+
 	private Rect mTempRect = new Rect();
   private int[] mTempLoc = new int[2];
 	private Bitmap mDragBitmap;
 	private final int mTouchSlop;
+
+	/**
+	 * Height in pixels to which the originally dragged item
+	 * is collapsed during a drag-sort. Currently, this value
+	 * must be greater than zero.
+	 */
 	private int mItemHeightCollapsed = 1;
+
+	/**
+	 * Height of the floating View. Stored for the purpose of
+	 * providing the tracking drop slot.
+	 */
   private int mFloatViewHeight;
+
+	/**
+	 * Convenience member. See above.
+	 */
   private int mFloatViewHeightHalf;
+
+
 	private Drawable mTrashcan;
 
+	/**
+	 * Sample Views ultimately used for calculating the height
+	 * of ListView items that are off-screen.
+	 */
 	private View[] mSampleViewTypes = new View[1];
 
+	/**
+	 * Drag-scroll encapsulator!
+	 */
 	private DragScroller mDragScroller;
-	private float mDragUpScrollStartFrac = 1.0f / 3.0f;
-	private float mDragDownScrollStartFrac = 1.0f / 3.0f;
-  private float mDragUpScrollHeight;
-	private float mDragDownScrollHeight;
-	
-	private float mMaxScrollSpeed = 0.3f; // pixels per millisec
 
-  private boolean mTrackDragSort = false;
+	/**
+	 * Determines the start of the upward drag-scroll region
+	 * at the top of the ListView. Specified by a fraction
+	 * of the ListView height, thus screen resolution agnostic.
+	 */
+	private float mDragUpScrollStartFrac = 1.0f / 3.0f;
+
+	/**
+	 * Determines the start of the downward drag-scroll region
+	 * at the bottom of the ListView. Specified by a fraction
+	 * of the ListView height, thus screen resolution agnostic.
+	 */
+	private float mDragDownScrollStartFrac = 1.0f / 3.0f;
+
+	/**
+	 * The following are calculated from the above fracs.
+	 */
+	private int mUpScrollStartY;
+	private int mDownScrollStartY;
+	private float mDownScrollStartYF;
+	private float mUpScrollStartYF;
+
+	/**
+	 * Calculated from above above and current ListView height.
+	 */
+  private float mDragUpScrollHeight;
+
+	/**
+	 * Calculated from above above and current ListView height.
+	 */
+	private float mDragDownScrollHeight;
+
+
+	/**
+	 * Maximum drag-scroll speed in pixels per ms. Only used with
+	 * default linear drag-scroll profile.
+	 */
+	private float mMaxScrollSpeed = 0.3f;
 	
+	/**
+	 * Defines the scroll speed during a drag-scroll. User can
+	 * provide their own; this default is a simple linear profile
+	 * where scroll speed increases linearly as the floating View
+	 * nears the top/bottom of the ListView.
+	 */
 	private DragScrollProfile mScrollProfile = new DragScrollProfile() {
 		@Override
 		public float getSpeed(float w, long t) {
@@ -129,10 +269,26 @@ public class DragSortListView extends ListView {
 		}
 	};
 	
+	/**
+	 * Last touch x.
+	 */
 	private int mLastX;
+
+	/**
+	 * Last touch y.
+	 */
 	private int mLastY;
+
+	/**
+	 * The touch y-coord that initiated the drag-sort.
+	 */
 	private int mDownY;
 
+	/**
+	 * Determines when a slide shuffle animation starts. That is,
+	 * defines how close to the edge of the drop slot the floating
+	 * View must be to initiate the slide.
+	 */
 	private float mSlideRegionFrac = 0.25f;
 
 	/**
@@ -144,9 +300,25 @@ public class DragSortListView extends ListView {
 	 */
 	private float mSlideFrac = 0.0f;
 	
+	/**
+	 * Wraps the user-provided ListAdapter. This is used to wrap each
+	 * item View given by the user inside another View (currenly
+	 * a RelativeLayout) which
+	 * expands and collapses to simulate the item shuffling.
+	 */
 	private AdapterWrapper mAdapterWrapper;
 
+	/**
+	 * Turn on custom debugger.
+	 */
+  private boolean mTrackDragSort = false;
+
+	/**
+	 * Debugging class.
+	 */
 	private DragSortTracker mDragSortTracker;
+
+
 
 	public DragSortListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -157,8 +329,8 @@ public class DragSortListView extends ListView {
       TypedArray a = getContext().obtainStyledAttributes(attrs,
         R.styleable.DragSortListView, 0, 0);
 
-      mItemHeightCollapsed = a.getDimensionPixelSize(
-        R.styleable.DragSortListView_collapsed_height, mItemHeightCollapsed);
+      mItemHeightCollapsed = Math.max(1, a.getDimensionPixelSize(
+        R.styleable.DragSortListView_collapsed_height, 1));
 
       mTrackDragSort = a.getBoolean(
         R.styleable.DragSortListView_track_drag_sort, false);
@@ -503,8 +675,6 @@ public class DragSortListView extends ListView {
 		}
 		int startTop = startView.getTop() + mScrollY;
 
-		//Log.d("mobeta", "mMovePos="+mMovePos+" mMoveTop="+mMoveTop);
-		//int edge = getShuffleEdge(mMovePos, mMoveTop);
 		int edge = getShuffleEdge(startPos, startTop);
 		int lastEdge = edge;
 
@@ -828,7 +998,6 @@ public class DragSortListView extends ListView {
 
 			int oldSrcPos = mSrcPos;
 
-			mDragState = NO_DRAG;
 			mSrcPos = -1;
 			mFirstExpPos = -1;
 			mSecondExpPos = -1;
@@ -1586,7 +1755,6 @@ public class DragSortListView extends ListView {
 								getItemHeight(mSecondExpPos, true))
 							.append("</SecondExpBlankHeight>\n");
 			mBuilder.append("  <SrcPos>").append(mSrcPos).append("</SrcPos>\n");
-			mBuilder.append("  <DragState>").append(mDragState).append("</DragState>\n");
 			mBuilder.append("  <SrcHeight>").append(mFloatViewHeight + getDividerHeight()).append("</SrcHeight>\n");
 			mBuilder.append("  <ViewHeight>").append(getHeight()).append("</ViewHeight>\n");
 			mBuilder.append("  <LastY>").append(mLastY).append("</LastY>\n");
