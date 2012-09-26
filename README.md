@@ -26,13 +26,6 @@ favorites, playlists, checklists, etc. Would love to hear about
 your use case by email.
 I hope you find it useful; and please, help me improve the thing!
 
-Music app (silly if it weren't!); therefore,
-the essential behavior is the same---list item heights and
-visibilities are adjusted to create an empty slot that tracks
-the item being dragged. User-provided Listener objects are
-informed of drag and drop events; these Listeners perform the actual
-reorderings within the user's [ListAdapter](http://developer.android.com/reference/android/widget/ListAdapter.html).
-
 Usage
 -----
 
@@ -71,7 +64,8 @@ of 1 means items snap from position to position without animation.
 
 ### Drag-sort Listeners
 
-DragSortListView is a ListView, and thus requires a ListAdapter to populate
+DragSortListView is a ListView, and thus requires a [ListAdapter](http://developer.android.com/reference/android/widget/ListAdapter.html)
+to populate
 its items. Drag-sorting additionally implies a reordering of the items
 in the ListAdapter, achieved through callbacks to special Listener
 interfaces
