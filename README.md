@@ -40,8 +40,11 @@ DragSortListView can be declared in an XML layout file just like
 the ListView. An [example layout
 file](https://github.com/bauerca/drag-sort-listview/blob/master/demo/res/layout/dslv_main.xml)
 is provided in the demo. The available attributes (in addition to the usual
-ListView attributes) are given below. Read each bullet as "\<xml attr\>:
-(\<datatype\>, \<default value\>) \<description\>."
+ListView attributes) are given below. Read each bullet as
+
+* `<xml attr>`: (`<datatype>`, `<default value>`) `<description>`.
+
+#### XML attributes
 
 * `collapsed_height`: (dimension, 1px) Height of placeholder at original
 drag position.
