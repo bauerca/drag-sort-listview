@@ -1467,7 +1467,7 @@ public class DragSortListView extends ListView {
 	}
 
 	public interface DragListener {
-		void drag(int from, int to);
+		public void drag(int from, int to);
 	}
 	
 	/**
@@ -1480,7 +1480,7 @@ public class DragSortListView extends ListView {
 	 *
 	 */
 	public interface DropListener {
-		void drop(int from, int to);
+		public void drop(int from, int to);
 	}
 	
 	/**
@@ -1492,7 +1492,15 @@ public class DragSortListView extends ListView {
 	 *
 	 */
 	public interface RemoveListener {
-		void remove(int which);
+		public void remove(int which);
+	}
+
+	public interface DragSortListener extends DropListener, DragListener, RemoveListener {}
+
+	public void setDragSortListener(DragSortListener l) {
+		setDropListener(l);
+		setDragListener(l);
+		setRemoveListener(l);
 	}
 	
 	/**
