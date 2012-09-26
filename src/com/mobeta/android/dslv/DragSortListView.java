@@ -500,15 +500,6 @@ public class DragSortListView extends ListView {
 		}
 	}
 
-	private int getItemChildHeight(View item) {
-		View child = ((ViewGroup) item).getChildAt(0);
-
-		int spec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
-		child.measure(spec, spec);
-		return child.getMeasuredHeight();
-	}
-
-
 
 	private int measureItemAndGetHeight(View item, boolean ofChild) {
 		
@@ -1082,7 +1073,6 @@ public class DragSortListView extends ListView {
 			}
 		} else if (position == mFirstExpPos || position == mSecondExpPos) {
 		
-			//int childHeight = getItemChildHeight(v);
 			int childHeight;
 			if (needsMeasure) {
 				childHeight = measureItemAndGetHeight(v, true);
