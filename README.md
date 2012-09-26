@@ -65,7 +65,7 @@ of 1 means items snap from position to position without animation.
 "slideRight", "slideLeft". This is inherited from the TI and may change.
 * `track_drag_sort`: (bool, false) Debugging option; explained below.
 
-### Drag-sort Listeners
+### Listeners
 
 DragSortListView is a ListView, and thus requires a [ListAdapter](http://developer.android.com/reference/android/widget/ListAdapter.html)
 to populate
@@ -131,11 +131,11 @@ Listener interfaces.
 
 ### Drag initiation
 
-A drag of item *i* is initiated when all the following are true:
+A drag of item **i** is initiated when all the following are true:
 
 * A DragListener or DropListener (or DragSortListener) is
 registered with the DSLV instance.
-* A child View of item *i* has an `android:id` named `drag` (more
+* A child View of item **i** has an `android:id` named `drag` (more
 on this below).
 * The touch screen DOWN event hits the child View with id `drag`.
 
