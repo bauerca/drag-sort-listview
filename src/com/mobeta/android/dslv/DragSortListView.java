@@ -155,7 +155,8 @@ public class DragSortListView extends ListView {
             // alpha between 0 and 255, 0=transparent, 255=opaque
             mDragShadowAlpha = a.getFloat(R.styleable.DragSortListView_float_alpha, 1.0f);
 
-            mSlideInitiationThreshold = Math.max(0.0f, Math.min(1.0f, 1.0f - a.getFloat(R.styleable.DragSortListView_slide_shuffle_speed, 0.75f)));
+            mSlideInitiationThreshold = Math.max(0.0f, Math.min(1.0f, 1.0f 
+                    - a.getFloat(R.styleable.DragSortListView_slide_shuffle_speed, 0.75f)));
             mAnimateSlideShuffle = mSlideInitiationThreshold > 0.0f;
 
             mRemoveGesture = a.getInt(R.styleable.DragSortListView_remove_mode, -1);
@@ -1509,7 +1510,20 @@ public class DragSortListView extends ListView {
      * </ul>
      */
     private static enum RemoveGesture {
-        NONE, FLING, SLIDE_OFF_SCREEN_RIGHT, SLIDE_OFF_SCREEN_LEFT, TRASH
+        NONE(-1), FLING(0), SLIDE_OFF_SCREEN_RIGHT(1), SLIDE_OFF_SCREEN_LEFT(2), TRASH(3);
+
+        private final int _value;
+
+        RemoveGesture(int value) {
+            _value = value;
+        }
+
+        public static RemoveGesture fromValue(int value) {
+            for (RemoveGesture gesture : RemoveGesture.values())
+                if (gesture._value == value)
+                    return gesture;
+            return NONE;
+        }
     }
 
     /**
