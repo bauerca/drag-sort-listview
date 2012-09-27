@@ -742,11 +742,10 @@ public class DragSortListView extends ListView {
 			}
 			//Log.d("mobeta", "edgeTop="+edgeTop+" edgeBot="+edgeBottom);
 
-			int slideRgnHeight = (int) (mSlideRegionFrac * edgeToEdge);
+			int slideRgnHeight = (int) (0.5f * mSlideRegionFrac * edgeToEdge);
 			float slideRgnHeightF = (float) slideRgnHeight;
 			int slideEdgeTop = edgeTop + slideRgnHeight;
 			int slideEdgeBottom = edgeBottom - slideRgnHeight;
-
 
 			// Three regions
 			if (mFloatViewY < slideEdgeTop) {

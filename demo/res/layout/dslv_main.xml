@@ -18,6 +18,6 @@
 	  dslv:float_background_color="#000000"
 	  dslv:remove_mode="slideLeft"
     dslv:float_alpha="0.6"
-    dslv:slide_shuffle_speed="0.7"
+    dslv:slide_shuffle_speed="0.3"
 	  dslv:track_drag_sort="false" />
 </RelativeLayout>

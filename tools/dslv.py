@@ -201,7 +201,6 @@ class State:
     self.exp2 = int(element.find("SecondExpPos").text)
     self.exp2_gap = int(element.find("SecondExpBlankHeight").text)
     self.height = int(element.find("ViewHeight").text)
-    self.dstate = int(element.find("DragState").text)
     self.lasty = int(element.find("LastY").text)
     self.float_y = int(element.find("FloatY").text)
   
