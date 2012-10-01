@@ -419,8 +419,6 @@ public class DragSortListView extends ListView {
       RelativeLayout v;
       View child;
 
-			//Log.d("mobeta", "getView; position="+position);
-
       //Log.d("mobeta", "getView: position="+position+" convertView="+convertView);
       if (convertView != null) {
 
@@ -500,43 +498,59 @@ public class DragSortListView extends ListView {
 		}
 	}
 
+	private class ItemHeights {
+		int item;
+		int child;
+	}
 
-	private int measureItemAndGetHeight(View item, boolean ofChild) {
-		
-		ViewGroup.LayoutParams lp;
-		if (ofChild) {
-			item = ((ViewGroup) item).getChildAt(0);
-			lp = item.getLayoutParams();
-		} else {
-			lp = item.getLayoutParams();
-		}
+	private void measureItemAndGetHeights(View item, ItemHeights heights) {
+		ViewGroup.LayoutParams lp = item.getLayoutParams();
 
-		final int height = lp == null ? 0 : lp.height;
+		int height = lp == null ? 0 : lp.height;
 		if (height > 0) {
-		  return height;
+			heights.item = height;
+
+			// get height of child, measure if we have to
+			View child = ((ViewGroup) item).getChildAt(0);
+			lp = child.getLayoutParams();
+			height = lp == null ? 0 : lp.height;
+			if (height > 0) {
+				heights.child = height;
+			} else {
+				// we have to measure child
+		  	int hspec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+				int wspec = ViewGroup.getChildMeasureSpec(mWidthMeasureSpec, getListPaddingLeft() + getListPaddingRight(), lp.width);
+		  	child.measure(wspec, hspec);
+				heights.child = child.getMeasuredHeight();
+			}
 		} else {
-		  int spec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
-		  item.measure(spec, spec);
-			return item.getMeasuredHeight();
+			// do measure on item
+		  int hspec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+			int wspec = ViewGroup.getChildMeasureSpec(mWidthMeasureSpec, getListPaddingLeft() + getListPaddingRight(), lp.width);
+		  item.measure(wspec, hspec);
+
+			heights.item = item.getMeasuredHeight();
+			// child gets measured in the process
+			heights.child = ((ViewGroup) item).getChildAt(0).getMeasuredHeight();
 		}
 	}
 
-	private int getItemHeight(int position) {
-		return getItemHeight(position, false);
+
+	private ItemHeights getItemHeights(int position) {
+		ItemHeights heights = new ItemHeights();
+		getItemHeights(position, heights);
+		return heights;
 	}
 
-  private int getItemHeight(int position, boolean ofChild) {
+  private void getItemHeights(int position, ItemHeights heights) {
 
     final int first = getFirstVisiblePosition();
     final int last = getLastVisiblePosition();
 
     if (position >= first && position <= last) {
-			if (ofChild) {
-				ViewGroup item = (ViewGroup) getChildAt(position - first);
-				return item.getChildAt(0).getHeight();
-			} else {
-      	return getChildAt(position - first).getHeight();
-			}
+			ViewGroup item = (ViewGroup) getChildAt(position - first);
+			heights.item = item.getHeight();
+			heights.child = item.getChildAt(0).getHeight();
     } else {
 			//Log.d("mobeta", "getView for height");
 
@@ -562,7 +576,7 @@ public class DragSortListView extends ListView {
         v = adapter.getView(position, null, this);
       }
 
-			return measureItemAndGetHeight(v, ofChild);
+			measureItemAndGetHeights(v, heights);
     }
 
   }
@@ -571,12 +585,18 @@ public class DragSortListView extends ListView {
 		Log.d("mobeta", "mSrcPos="+mSrcPos+" mFirstExpPos="+mFirstExpPos+" mSecondExpPos="+mSecondExpPos);
 	}
 
+	private int getShuffleEdge(int position, int top) {
+		return getShuffleEdge(position, top, null);
+	}
+
 	/**
 	 * Get the shuffle edge for item at position when top of
 	 * item is at y-coord top
 	 *
 	 * @param position 
 	 * @param top
+	 * @param height Height of item at position. If -1, this function
+	 * calculates this height.
 	 *
 	 * @return Shuffle line between position-1 and position (for
 	 * the given view of the list; that is, for when top of item at
@@ -585,7 +605,7 @@ public class DragSortListView extends ListView {
 	 * immediately above this line, it lands in position-1. If
 	 * dropped immediately below this line, it lands in position.
 	 */
-	private int getShuffleEdge(int position, int top) {
+	private int getShuffleEdge(int position, int top, ItemHeights heights) {
 
 		final int numHeaders = getHeaderViewsCount();
 		final int numFooters = getFooterViewsCount();
@@ -602,55 +622,51 @@ public class DragSortListView extends ListView {
 
 		int edge;
 
+		int maxBlankHeight = mFloatViewHeight - mItemHeightCollapsed;
+
+		if (heights == null) {
+			heights = new ItemHeights();
+			getItemHeights(position, heights);
+		}
+
+		// first calculate top of item given that floating View is
+		// centered over src position
+		int otop = top;
 		if (mSecondExpPos <= mSrcPos) {
 			// items are expanded on and/or above the source position
 
-			if (position <= mFirstExpPos) {
-				edge = top + (mFloatViewHeight - divHeight - getItemHeight(position - 1)) / 2;
-			} else if (position == mSecondExpPos) {
+			if (position == mSecondExpPos && mFirstExpPos != mSecondExpPos) {
 				if (position == mSrcPos) {
-					edge = top + getItemHeight(position) - (2*divHeight + getItemHeight(position - 1, true) + mFloatViewHeight) / 2;
+					otop = top + heights.item - mFloatViewHeight;
 				} else {
-					int blankHeight = getItemHeight(position) - getItemHeight(position, true) - divHeight;
-					edge = top + (blankHeight - getItemHeight(position - 1)) / 2;
+					int blankHeight = heights.item - heights.child;
+					otop = top + blankHeight - maxBlankHeight;
 				}
-			} else if (position < mSrcPos) {
-				int childHeight = getItemHeight(position - 1, true);
-				edge = top - (childHeight + 2*divHeight + mFloatViewHeight) / 2;
-			} else if (position == mSrcPos) {
-				int childHeight = getItemHeight(position - 1, true);
-				edge = top + mItemHeightCollapsed - (2*divHeight + childHeight + mFloatViewHeight) / 2;
-			} else {
-				edge = top + (getItemHeight(position) - mFloatViewHeight) / 2;
+			} else if (position > mSecondExpPos && position <= mSrcPos) {
+				otop = top - maxBlankHeight;
 			}
+
 		} else {
 			// items are expanded on and/or below the source position
 
-			if (position <= mSrcPos) {
-				edge = top + (mFloatViewHeight - getItemHeight(position - 1) - divHeight) / 2;
-			} else if (position <= mFirstExpPos) {
-				edge = top + (getItemHeight(position, true) + divHeight + mFloatViewHeight) / 2;
-				if (position - 1 == mSrcPos) {
-					edge -= mItemHeightCollapsed + divHeight;
-				}
-			} else if (position == mSecondExpPos) {
-				int blankAbove;
-				if (position - 1 == mSrcPos) {
-					blankAbove = getItemHeight(position - 1);
-				} else {
-					blankAbove = getItemHeight(position - 1) - getItemHeight(position - 1, true) - divHeight;
-				}
-				edge = top - blankAbove - divHeight + (getItemHeight(position, true) + divHeight + mFloatViewHeight) / 2;
-				//int height = getItemHeight(position);
-				//int blankHeight = height - getItemHeight(position, true) - divHeight;
-				//edge = top + (height - (mFloatViewHeight - blankHeight)) / 2;
-			} else {
-				edge = top + (getItemHeight(position) - mFloatViewHeight) / 2;
+			if (position > mSrcPos && position <= mFirstExpPos) {
+				otop = top + maxBlankHeight;
+			} else if (position == mSecondExpPos && mFirstExpPos != mSecondExpPos) {
+				int blankHeight = heights.item - heights.child;
+				otop = top + blankHeight;
 			}
 		}
 
-		return edge;
+		// otop is set
+		if (position <= mSrcPos) {
+			ItemHeights tmpHeights = new ItemHeights();
+			getItemHeights(position - 1, tmpHeights);
+			edge = otop + (mFloatViewHeight - divHeight - tmpHeights.child) / 2;
+		} else {
+			edge = otop + (heights.child - divHeight - mFloatViewHeight) / 2;
+		}
 
+		return edge;
 	}
 
 
@@ -666,8 +682,18 @@ public class DragSortListView extends ListView {
 		}
 		int startTop = startView.getTop() + mScrollY;
 
-		int edge = getShuffleEdge(startPos, startTop);
+		ItemHeights itemHeights = new ItemHeights();
+		itemHeights.item = startView.getHeight();
+		//if (startPos == mSrcPos) {	
+		//	itemHeights.child = mFloatViewHeight;
+		//} else {
+		//	itemHeights.child = ((ViewGroup) startView).getChildAt(0).getHeight();
+		//}
+		itemHeights.child = ((ViewGroup) startView).getChildAt(0).getHeight();
+		int edge = getShuffleEdge(startPos, startTop, itemHeights);
 		int lastEdge = edge;
+
+		int divHeight = getDividerHeight();
 
 		//Log.d("mobeta", "float mid="+mFloatViewY);
 
@@ -678,16 +704,17 @@ public class DragSortListView extends ListView {
 			//Log.d("mobeta", "  edge="+edge);
 			while (itemPos >= 0) {
 				itemPos--;
+				getItemHeights(itemPos, itemHeights);
 
 				//if (itemPos <= 0)
 				if (itemPos == 0) {
-					edge = itemTop - getItemHeight(itemPos);
+					edge = itemTop - divHeight - itemHeights.item;
 					//itemPos = 0;
 					break;
 				}
 
-				itemTop -= getItemHeight(itemPos);
-				edge = getShuffleEdge(itemPos, itemTop);
+				itemTop -= itemHeights.item + divHeight;
+				edge = getShuffleEdge(itemPos, itemTop, itemHeights);
 				//Log.d("mobeta", "  edge="+edge);
 				
 				if (mFloatViewY >= edge) {
@@ -702,12 +729,13 @@ public class DragSortListView extends ListView {
       final int count = getCount();
 			while (itemPos < count) {
 				if (itemPos == count - 1) {
-					edge = itemTop + getItemHeight(itemPos);
+					edge = itemTop + divHeight + itemHeights.item;
 					break;
 				}
 
-				itemTop += getItemHeight(itemPos);
-				edge = getShuffleEdge(itemPos + 1, itemTop);
+				itemTop += divHeight + itemHeights.item;
+				getItemHeights(itemPos + 1, itemHeights);
+				edge = getShuffleEdge(itemPos + 1, itemTop, itemHeights);
 				//Log.d("mobeta", "  edge="+edge);
 
 				// test for hit
@@ -1006,7 +1034,6 @@ public class DragSortListView extends ListView {
 				}
 				//Log.d("mobeta", "top="+top+" fvh="+mFloatViewHeight);
 				setSelectionFromTop(firstPos - 1, top - getPaddingTop());
-
 			}
 
 			removeFloatView();
@@ -1056,40 +1083,41 @@ public class DragSortListView extends ListView {
 		int divHeight = getDividerHeight();
 
 		boolean isSliding = mAnimate && mFirstExpPos != mSecondExpPos;
+		int maxNonSrcBlankHeight = mFloatViewHeight - mItemHeightCollapsed;
+		int slideHeight = (int) (mSlideFrac * maxNonSrcBlankHeight);
 
 		if (position == mSrcPos) {
 			if (mSrcPos == mFirstExpPos) {
 				if (isSliding) {
-					height = Math.max((int) (mSlideFrac * mFloatViewHeight), mItemHeightCollapsed);
+					height = slideHeight + mItemHeightCollapsed;
 				} else {
 					height = mFloatViewHeight;
 				}
 			} else if (mSrcPos == mSecondExpPos) {
 				// if gets here, we know an item is sliding
-				height = Math.max(mFloatViewHeight - (int) (mSlideFrac * mFloatViewHeight), mItemHeightCollapsed);
+				height = mFloatViewHeight - slideHeight;
 			} else {
 				height = mItemHeightCollapsed;
 			}
 		} else if (position == mFirstExpPos || position == mSecondExpPos) {
+			// position is not src
 		
-			int childHeight;
+			ItemHeights itemHeights = new ItemHeights();
 			if (needsMeasure) {
-				childHeight = measureItemAndGetHeight(v, true);
+				measureItemAndGetHeights(v, itemHeights);
 			} else {
-				childHeight = ((ViewGroup) v).getChildAt(0).getHeight();
+				itemHeights.child = ((ViewGroup) v).getChildAt(0).getHeight();
 			}
 
 			if (position == mFirstExpPos) {
 				if (isSliding) {
-					int blankHeight = (int) (mSlideFrac * mFloatViewHeight);
-					height = childHeight + divHeight + blankHeight;
+					height = itemHeights.child + slideHeight;
 				} else {
-					height = childHeight + divHeight + mFloatViewHeight;
+					height = itemHeights.child + maxNonSrcBlankHeight;
 				}
 			} else { //position=mSecondExpPos
 				// we know an item is sliding (b/c 2ndPos != 1stPos)
-				int blankHeight = mFloatViewHeight - (int) (mSlideFrac * mFloatViewHeight);
-				height = childHeight + divHeight + blankHeight;
+				height = itemHeights.child + maxNonSrcBlankHeight - slideHeight;
 			}
 		} else {
 			height = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -1136,7 +1164,7 @@ public class DragSortListView extends ListView {
 		}
 	}
 
-	private void doDragScroll(int oldFirstExpPos) {
+	private void doDragScroll(int oldFirstExpPos, int oldSecondExpPos) {
 		if (mScrollY == 0) {
 			return;
 		}
@@ -1164,19 +1192,55 @@ public class DragSortListView extends ListView {
 		}
 
 		int moveHeightBefore = moveItem.getHeight();
-		int moveHeightAfter = measureItemAndGetHeight(moveItem, false);
-		
-		if (moveHeightBefore != moveHeightAfter) {
-			// some item height must change above move position
-			// for adjustment to be required
-			if (movePos > oldFirstExpPos || movePos > mFirstExpPos) {
+		int moveBlankBefore;
+		if (movePos == mSrcPos) {
+			moveBlankBefore = moveHeightBefore;
+		} else {
+			moveBlankBefore = moveHeightBefore - ((ViewGroup) moveItem).getChildAt(0).getHeight();
+		}
+
+		ItemHeights itemHeights = new ItemHeights();
+		measureItemAndGetHeights(moveItem, itemHeights);
+		int moveHeightAfter = itemHeights.item;
+		int moveBlankAfter;
+		if (movePos == mSrcPos) {
+			moveBlankAfter = itemHeights.item;
+		} else {
+			moveBlankAfter = itemHeights.item - itemHeights.child;
+		}
+
+		if (movePos <= oldFirstExpPos) {
+			if (movePos > mFirstExpPos) {
+				top += mFloatViewHeight - moveBlankAfter;
+			}
+		} else if (movePos == oldSecondExpPos) {
+			if (movePos <= mFirstExpPos) {
+				top += moveBlankBefore - mFloatViewHeight;
+			} else if (movePos == mSecondExpPos) {
 				top += moveHeightBefore - moveHeightAfter;
+			} else {
+				top += moveBlankBefore;
+			}
+		} else {
+			if (movePos <= mFirstExpPos) {
+				top -= mFloatViewHeight;
+			} else if (movePos == mSecondExpPos) {
+				top -= moveBlankAfter;
 			}
 		}
 
 		setSelectionFromTop(movePos, top - padTop);
 
 		mScrollY = 0;
+	}
+
+	private int mWidthMeasureSpec = 0;
+
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+		mWidthMeasureSpec = widthMeasureSpec;
 	}
 	
   @Override
@@ -1185,6 +1249,7 @@ public class DragSortListView extends ListView {
 		if (mFloatView != null) {
 			//Log.d("mobeta", "layout children");
 			int oldFirstExpPos = mFirstExpPos;
+			int oldSecondExpPos = mSecondExpPos;
 
 			mBlockLayoutRequests = true;
 
@@ -1193,7 +1258,7 @@ public class DragSortListView extends ListView {
 			}
 
 			if (mScrollY != 0) {
-				doDragScroll(oldFirstExpPos);
+				doDragScroll(oldFirstExpPos, oldSecondExpPos);
 			}
 
 			mBlockLayoutRequests = false;
@@ -1396,7 +1461,7 @@ public class DragSortListView extends ListView {
 		}
 		// get midpoint of floating view (constrained to ListView bounds)
 		mFloatViewY = mWindowParams.y + mFloatViewHeightHalf - mYOffset;
-    //Log.d("mobeta", "float view taint x=" + mWindowParams.x + " y=" + mWindowParams.y);
+
 		mWindowManager.updateViewLayout(mFloatView, mWindowParams);
 
 		if (mTrashcan != null) {
@@ -1724,6 +1789,7 @@ public class DragSortListView extends ListView {
 			mBuilder.append("<DSLVState>\n");
 			final int children = getChildCount();
 			final int first = getFirstVisiblePosition();
+			ItemHeights itemHeights = new ItemHeights();
 			mBuilder.append("  <Positions>");
 			for (int i = 0; i < children; ++i) {
 				mBuilder.append(first + i).append(",");
@@ -1742,14 +1808,14 @@ public class DragSortListView extends ListView {
 			mBuilder.append("</Bottoms>\n");
 
 			mBuilder.append("  <FirstExpPos>").append(mFirstExpPos).append("</FirstExpPos>\n");
+			getItemHeights(mFirstExpPos, itemHeights);
 			mBuilder.append("  <FirstExpBlankHeight>")
-			        .append(getItemHeight(mFirstExpPos, false) -
-								getItemHeight(mFirstExpPos, true))
+			        .append(itemHeights.item - itemHeights.child)
 							.append("</FirstExpBlankHeight>\n");
 			mBuilder.append("  <SecondExpPos>").append(mSecondExpPos).append("</SecondExpPos>\n");
+			getItemHeights(mSecondExpPos, itemHeights);
 			mBuilder.append("  <SecondExpBlankHeight>")
-			        .append(getItemHeight(mSecondExpPos, false) -
-								getItemHeight(mSecondExpPos, true))
+			        .append(itemHeights.item - itemHeights.child)
 							.append("</SecondExpBlankHeight>\n");
 			mBuilder.append("  <SrcPos>").append(mSrcPos).append("</SrcPos>\n");
 			mBuilder.append("  <SrcHeight>").append(mFloatViewHeight + getDividerHeight()).append("</SrcHeight>\n");

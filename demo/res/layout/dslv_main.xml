@@ -12,6 +12,7 @@
 	  android:paddingBottom="0dp"
 		android:paddingLeft="10dp"
 		android:layout_margin="10dp"
+    android:dividerHeight="5dp"
 	  dslv:collapsed_height="2dp"
 	  dslv:drag_scroll_start="0.33"
 	  dslv:max_drag_scroll_speed="0.5"
