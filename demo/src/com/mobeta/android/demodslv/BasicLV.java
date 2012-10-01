@@ -10,7 +10,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.util.Log;
 
-
 public class BasicLV extends ListActivity {
 
     private ArrayAdapter<String> adapter;
@@ -18,8 +17,9 @@ public class BasicLV extends ListActivity {
     private String[] array;
     private ArrayList<String> list;
 
-
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

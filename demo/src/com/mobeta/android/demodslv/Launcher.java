@@ -19,7 +19,6 @@ import android.content.ComponentName;
 
 //import com.mobeta.android.demodslv.R;
 
-
 public class Launcher extends ListActivity {
 
     //private ArrayAdapter<ActivityInfo> adapter;
@@ -27,19 +26,21 @@ public class Launcher extends ListActivity {
 
     private ArrayList<ActivityInfo> mActivities = null;
 
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.launcher);
 
         try {
-          PackageInfo pi = getPackageManager().getPackageInfo(
-            "com.mobeta.android.demodslv", PackageManager.GET_ACTIVITIES);
+            PackageInfo pi = getPackageManager().getPackageInfo("com.mobeta.android.demodslv",
+                    PackageManager.GET_ACTIVITIES);
 
-          mActivities = new ArrayList<ActivityInfo>(Arrays.asList(pi.activities));
-        } catch (PackageManager.NameNotFoundException e) {
-          // Do nothing. Adapter will be empty.
+            mActivities = new ArrayList<ActivityInfo>(Arrays.asList(pi.activities));
+        } catch(PackageManager.NameNotFoundException e) {
+            // Do nothing. Adapter will be empty.
         }
 
         //adapter = new ArrayAdapter<ActivityInfo>(this,
@@ -51,26 +52,26 @@ public class Launcher extends ListActivity {
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-      Intent intent = new Intent();
+        Intent intent = new Intent();
 
-      if (position > 0) {
-        intent.setClassName(this, mActivities.get(position).name);
-        startActivity(intent);
-      }
+        if(position > 0) {
+            intent.setClassName(this, mActivities.get(position).name);
+            startActivity(intent);
+        }
 
     }
 
     private class MyAdapter extends ArrayAdapter<ActivityInfo> {
-      MyAdapter() {
-        super(Launcher.this, R.layout.launcher_item, R.id.text, mActivities);
-      }
+        MyAdapter() {
+            super(Launcher.this, R.layout.launcher_item, R.id.text, mActivities);
+        }
 
-      @Override
-      public View getView(int position, View convertView, ViewGroup parent) {
-        TextView v = (TextView) super.getView(position, convertView, parent);
-        v.setText(mActivities.get(position).loadLabel(getPackageManager()));
-        return v;
-      }
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            TextView v = (TextView) super.getView(position, convertView, parent);
+            v.setText(mActivities.get(position).loadLabel(getPackageManager()));
+            return v;
+        }
 
     }
 

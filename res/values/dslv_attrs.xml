@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <declare-styleable name="DragSortListView">
-    <attr name="collapsed_height" format="dimension" />
-    <attr name="drag_scroll_start" format="float" />
-    <attr name="max_drag_scroll_speed" format="float" />
-    <attr name="float_background_color" format="color" />
-    <attr name="remove_mode">
-      <enum name="none" value="-1" />
-      <enum name="fling" value="0" />
-      <enum name="slide" value="1" />
-      <enum name="slideRight" value="1" />
-      <enum name="slideLeft" value="2" />
-    </attr>
-    <attr name="track_drag_sort" format="boolean"/>
-    <attr name="float_alpha" format="float"/>
-    <attr name="slide_shuffle_speed" format="float"/>
-  </declare-styleable>
+    <declare-styleable name="DragSortListView">
+        <attr name="collapsed_height"
+              format="dimension"/>
+        <attr name="drag_scroll_start"
+              format="float"/>
+        <attr name="max_drag_scroll_speed"
+              format="float"/>
+        <attr name="float_background_color"
+              format="color"/>
+        <attr name="remove_mode">
+            <enum name="none"
+                  value="-1"/>
+            <enum name="fling"
+                  value="0"/>
+            <enum name="slide"
+                  value="1"/>
+            <enum name="slideRight"
+                  value="1"/>
+            <enum name="slideLeft"
+                  value="2"/>
+        </attr>
+        <attr name="track_drag_sort"
+              format="boolean"/>
+        <attr name="float_alpha"
+              format="float"/>
+        <attr name="slide_shuffle_speed"
+              format="float"/>
+    </declare-styleable>
 </resources>

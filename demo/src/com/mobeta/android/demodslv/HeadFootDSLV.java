@@ -10,7 +10,6 @@ import com.mobeta.android.dslv.DragSortListView;
 import android.widget.TextView;
 import android.util.Log;
 
-
 public class HeadFootDSLV extends ListActivity {
 
     private ArrayAdapter<String> adapter;
@@ -18,33 +17,32 @@ public class HeadFootDSLV extends ListActivity {
     private String[] array;
     private ArrayList<String> list;
 
-    private DragSortListView.DropListener onDrop =
-      new DragSortListView.DropListener() {
+    private DragSortListView.DropListener onDrop = new DragSortListView.DropListener() {
         @Override
         public void drop(int from, int to) {
-          String item = adapter.getItem(from);
+            String item = adapter.getItem(from);
 
-          adapter.remove(item);
-          adapter.insert(item, to);
+            adapter.remove(item);
+            adapter.insert(item, to);
         }
-      };
+    };
 
-    private DragSortListView.RemoveListener onRemove = 
-      new DragSortListView.RemoveListener() {
+    private DragSortListView.RemoveListener onRemove = new DragSortListView.RemoveListener() {
         @Override
         public void remove(int which) {
-          adapter.remove(adapter.getItem(which));
+            adapter.remove(adapter.getItem(which));
         }
-      };
+    };
 
-
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dslv_main);
 
-        DragSortListView lv = (DragSortListView) getListView(); 
+        DragSortListView lv = (DragSortListView) getListView();
 
         // Add header view
         TextView tv = (TextView) getLayoutInflater().inflate(R.layout.list_headfoot, null);
