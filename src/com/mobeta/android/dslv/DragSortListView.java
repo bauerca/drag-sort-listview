@@ -429,6 +429,7 @@ public class DragSortListView extends ListView {
             View child;
 
             //Log.d("mobeta", "getView: position="+position+" convertView="+convertView);
+            Log.d("mobeta", "getView: position="+position+" convertView="+convertView);
             if (convertView != null) {
 
                 v = (RelativeLayout) convertView;
@@ -513,54 +514,95 @@ public class DragSortListView extends ListView {
         int child;
     }
 
-    private void measureItemAndGetHeights(View item, ItemHeights heights) {
+    private void measureItemAndGetHeights(int position, View item, ItemHeights heights) {
         ViewGroup.LayoutParams lp = item.getLayoutParams();
+
+        boolean isHeadFoot = position < getHeaderViewsCount() || position >= getCount() - getFooterViewsCount();
 
         int height = lp == null ? 0 : lp.height;
         if (height > 0) {
             heights.item = height;
 
             // get height of child, measure if we have to
-            View child = ((ViewGroup) item).getChildAt(0);
-            lp = child.getLayoutParams();
-            height = lp == null ? 0 : lp.height;
-            if (height > 0) {
-                heights.child = height;
+            if (isHeadFoot) {
+                heights.child = heights.item;
+            } else if (position == mSrcPos) {
+                heights.child = 0;
             } else {
-                // we have to measure child
-                int hspec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
-                int wspec = ViewGroup.getChildMeasureSpec(mWidthMeasureSpec, getListPaddingLeft() + getListPaddingRight(), lp.width);
-                child.measure(wspec, hspec);
-                heights.child = child.getMeasuredHeight();
+                View child = ((ViewGroup) item).getChildAt(0);
+                lp = child.getLayoutParams();
+                height = lp == null ? 0 : lp.height;
+                if (height > 0) {
+                    heights.child = height;
+                } else {
+                    // we have to measure child
+                    int hspec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+                    int wspec = ViewGroup.getChildMeasureSpec(mWidthMeasureSpec, getListPaddingLeft() + getListPaddingRight(), lp.width);
+                    Log.d("mobeta", "measure child");
+                    child.measure(wspec, hspec);
+                    heights.child = child.getMeasuredHeight();
+                }
             }
         } else {
             // do measure on item
             int hspec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
-            int wspec = ViewGroup.getChildMeasureSpec(mWidthMeasureSpec, getListPaddingLeft() + getListPaddingRight(), lp.width);
+            int wspec = ViewGroup.getChildMeasureSpec(mWidthMeasureSpec,
+                    getListPaddingLeft() + getListPaddingRight(),
+                    lp == null ? ViewGroup.LayoutParams.FILL_PARENT : lp.width);
+            Log.d("mobeta", "measure item");
             item.measure(wspec, hspec);
 
             heights.item = item.getMeasuredHeight();
             // child gets measured in the process
-            heights.child = ((ViewGroup) item).getChildAt(0).getMeasuredHeight();
+            if (isHeadFoot) {
+                heights.child = heights.item;
+            } else if (position == mSrcPos) {
+                heights.child = 0;
+            } else {
+                heights.child = ((ViewGroup) item).getChildAt(0).getMeasuredHeight();
+            }
         }
     }
 
 
-    private ItemHeights getItemHeights(int position) {
-        ItemHeights heights = new ItemHeights();
-        getItemHeights(position, heights);
-        return heights;
+    /**
+     * Get the height of the given wrapped item and its child.
+     *
+     * @param position Position from which item was obtained.
+     * @param item List item (usually obtained from {@link ListView#getChildAt()}).
+     * @param heights Object to fill with heights of item.
+     */
+    private void getItemHeights(int position, View item, ItemHeights heights) {
+        boolean isHeadFoot = position < getHeaderViewsCount() || position >= getCount() - getFooterViewsCount();
+        
+        heights.item = item.getHeight();
+
+        if (isHeadFoot) {
+            heights.child = heights.item;
+        } else if (position == mSrcPos) {
+            heights.child = 0;
+        } else {
+            heights.child = ((ViewGroup) item).getChildAt(0).getHeight();
+        }
     }
 
+
+    /**
+     * This function works for arbitrary positions (could be
+     * off-screen). If requested position is off-screen, this
+     * function calls <code>getView</code> to get height information.
+     *
+     * @param position ListView position.
+     * @param heights Object to fill with heights of item at
+     * <code>position</code>.
+     */
     private void getItemHeights(int position, ItemHeights heights) {
 
         final int first = getFirstVisiblePosition();
         final int last = getLastVisiblePosition();
 
         if (position >= first && position <= last) {
-            ViewGroup item = (ViewGroup) getChildAt(position - first);
-            heights.item = item.getHeight();
-            heights.child = item.getChildAt(0).getHeight();
+            getItemHeights(position, getChildAt(position - first), heights);
         } else {
             //Log.d("mobeta", "getView for height");
 
@@ -586,7 +628,7 @@ public class DragSortListView extends ListView {
                 v = adapter.getView(position, null, this);
             }
 
-            measureItemAndGetHeights(v, heights);
+            measureItemAndGetHeights(position, v, heights);
         }
 
     }
@@ -693,13 +735,8 @@ public class DragSortListView extends ListView {
         int startTop = startView.getTop() + mScrollY;
 
         ItemHeights itemHeights = new ItemHeights();
-        itemHeights.item = startView.getHeight();
-        //if (startPos == mSrcPos) {    
-        //    itemHeights.child = mFloatViewHeight;
-        //} else {
-        //    itemHeights.child = ((ViewGroup) startView).getChildAt(0).getHeight();
-        //}
-        itemHeights.child = ((ViewGroup) startView).getChildAt(0).getHeight();
+        getItemHeights(startPos, startView, itemHeights);
+
         int edge = getShuffleEdge(startPos, startTop, itemHeights);
         int lastEdge = edge;
 
@@ -1114,9 +1151,9 @@ public class DragSortListView extends ListView {
         
             ItemHeights itemHeights = new ItemHeights();
             if (needsMeasure) {
-                measureItemAndGetHeights(v, itemHeights);
+                measureItemAndGetHeights(position, v, itemHeights);
             } else {
-                itemHeights.child = ((ViewGroup) v).getChildAt(0).getHeight();
+                getItemHeights(position, v, itemHeights);
             }
 
             if (position == mFirstExpPos) {
@@ -1201,23 +1238,15 @@ public class DragSortListView extends ListView {
             top = padTop;
         }
 
-        int moveHeightBefore = moveItem.getHeight();
-        int moveBlankBefore;
-        if (movePos == mSrcPos) {
-            moveBlankBefore = moveHeightBefore;
-        } else {
-            moveBlankBefore = moveHeightBefore - ((ViewGroup) moveItem).getChildAt(0).getHeight();
-        }
+        ItemHeights itemHeightsBefore = new ItemHeights();
+        getItemHeights(movePos, moveItem, itemHeightsBefore);
+        int moveHeightBefore = itemHeightsBefore.item;
+        int moveBlankBefore = moveHeightBefore - itemHeightsBefore.child;
 
-        ItemHeights itemHeights = new ItemHeights();
-        measureItemAndGetHeights(moveItem, itemHeights);
-        int moveHeightAfter = itemHeights.item;
-        int moveBlankAfter;
-        if (movePos == mSrcPos) {
-            moveBlankAfter = itemHeights.item;
-        } else {
-            moveBlankAfter = itemHeights.item - itemHeights.child;
-        }
+        ItemHeights itemHeightsAfter = new ItemHeights();
+        measureItemAndGetHeights(movePos, moveItem, itemHeightsAfter);
+        int moveHeightAfter = itemHeightsAfter.item;
+        int moveBlankAfter = moveHeightAfter - itemHeightsAfter.child;
 
         if (movePos <= oldFirstExpPos) {
             if (movePos > mFirstExpPos) {
