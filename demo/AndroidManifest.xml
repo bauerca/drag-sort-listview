@@ -25,5 +25,7 @@
                   android:label="Arbitrary Item Size DSLV" />
         <activity android:name="Fling"
             	  android:label="Fling to remove DSLV" />
+        <activity android:name="ClickHandler"
+            	  android:label="Handle item clicks" />
     </application>
 </manifest> 
