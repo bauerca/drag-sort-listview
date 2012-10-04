@@ -35,13 +35,20 @@ public class BasicDSLV extends ListActivity {
         }
       };
 
+    protected int getLayout() {
+        return R.layout.dslv_main;
+    }
+    
+    protected int getItemLayout() {
+        return R.layout.list_item1;
+    }
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.main_fling);
-        setContentView(R.layout.dslv_main);
+        setContentView(getLayout());
 
         DragSortListView lv = (DragSortListView) getListView(); 
         lv.setDropListener(onDrop);
@@ -50,7 +57,7 @@ public class BasicDSLV extends ListActivity {
         array = getResources().getStringArray(R.array.jazz_artist_names);
         list = new ArrayList<String>(Arrays.asList(array));
 
-        adapter = new ArrayAdapter<String>(this, R.layout.list_item1, R.id.text1, list);
+        adapter = new ArrayAdapter<String>(this, getItemLayout(), R.id.text1, list);
         setListAdapter(adapter);
 
     }
