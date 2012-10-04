@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import com.mobeta.android.dslv.DragSortListView;
 import android.widget.TextView;
-import android.util.Log;
 
 
 public class HeadFootDSLV extends ListActivity {

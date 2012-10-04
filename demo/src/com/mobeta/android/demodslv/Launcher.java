@@ -10,12 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.util.Log;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.Intent;
-import android.content.ComponentName;
 
 //import com.mobeta.android.demodslv.R;
 
