@@ -7,7 +7,6 @@ News
 **Sept. 26, 2012**: Drag-sorting is now animated! (optional, of course)
 Items slide around underneath the floating (dragged) View.
 
-
 Overview
 --------
 
@@ -63,6 +62,11 @@ of 0 means a shuffle animation is always in progress, whereas a value
 of 1 means items snap from position to position without animation.
 * `remove_mode`: (enum, "none") One of "none" "fling", "slide",
 "slideRight", "slideLeft". This is inherited from the TI and may change.
+* `sort_mode`: (enum, "press") One of "none", "press", "longPress". Sets
+how a sort is started. The default, "press" means you just press and
+drag an item to sort it. "longPress" means you have to long-press a
+drag-handle to start sorting it: a normal drag just scrolls the list.
+"none" disables sorting. 
 * `track_drag_sort`: (bool, false) Debugging option; explained below.
 
 ### Listeners
@@ -134,11 +138,33 @@ Listener interfaces.
 A drag of item **i** is initiated when all the following are true:
 
 * A DragListener or DropListener (or DragSortListener) is
-registered with the DSLV instance.
-* A child View of item **i** has an `android:id` named `drag` (more
-on this below).
-* The touch screen DOWN event hits the child View with id `drag`.
+registered with the DSLV instance;
+* Item **i** contains a **drag handle** (defined below);
+* If the sort mode is `press`, there is a DOWN event on the drag handle
+followed by MOVE events;
+* If the sort mode is `longPress`, there is a DOWN event on the drag
+handle, followed by a pause long enough to be a long-press, followed by
+MOVE events. 
+* The touch screen DOWN event hits the drag handle.
 
+The "drag handle" referred to above is a child View of the item layout,
+with the `android:id` set to `@id/drag`. It can be any kind of View, but
+an ImageView is common. It can even be the root of the item layout if
+you like, but you then have to consider these interactions between
+different gestures:
+
+* If dragging is enabled and the sort mode is `press`, you won't be able
+to drag the list unless you make the padding wide enough to touch. You
+will still be able to click on and long-click on list items in the usual
+way: those actions take precedence over dragging. 
+* If dragging is enabled and the sort mode is `longPress`, you can click
+on list items, and drag the list in the usual way, but you won't be able
+to long-click on list items: in this mode, a long-press immediately
+floats the list item to give visual feedback to the user.
+
+These actually apply to any gesture that starts on a drag handle, but
+they're only really important when the whole item is the drag handle.
+ 
 An [example XML layout](https://github.com/bauerca/drag-sort-listview/blob/master/demo/res/layout/jazz_artist_list_item.xml)
 for a drag-sort-enabled ListView item can be found in the demo.
 The key line to note in the example is

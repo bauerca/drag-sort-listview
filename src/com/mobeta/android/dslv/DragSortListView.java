@@ -168,6 +168,17 @@ public class DragSortListView extends ListView {
     private GestureDetector mGestureDetector;
 
     /**
+     * Drag state enum.
+     */
+    private static final int IDLE = 0;
+    private static final int VERTICAL = 1;
+    private static final int HORIZONTAL = 2;
+    /** A drag is definitely going on but we're not sure which way yet. */
+    private static final int GRABBED = 3;
+    
+    private int mDragState = IDLE;
+    
+    /**
      * Remove mode enum.
      */
     private static final int FLING = 0;
@@ -178,12 +189,22 @@ public class DragSortListView extends ListView {
     /**
      * The current remove mode.
      */
-    private int mRemoveMode = -1;
+    private int mRemoveMode = FLING;
 
+    /**
+     * Drag mode enum.
+     */
+    private static final int PRESS = 0;
+    private static final int LONGPRESS = 1;
+    
+    /**
+     * The current drag mode.
+     */
+    private int mSortMode = PRESS;
+    
     private Rect mTempRect = new Rect();
     private int[] mTempLoc = new int[2];
     private Bitmap mDragBitmap;
-    private final int mTouchSlop;
 
     /**
      * Height in pixels to which the originally dragged item
@@ -322,8 +343,6 @@ public class DragSortListView extends ListView {
 
     public DragSortListView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mRemoveMode = FLING;
-        mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs,
@@ -354,6 +373,8 @@ public class DragSortListView extends ListView {
 
             mRemoveMode = a.getInt(R.styleable.DragSortListView_remove_mode, -1);
 
+            mSortMode = a.getInt(R.styleable.DragSortListView_sort_mode, PRESS);
+            
             float frac = a.getFloat(
                     R.styleable.DragSortListView_drag_scroll_start,
                     mDragUpScrollStartFrac);
@@ -904,7 +925,6 @@ public class DragSortListView extends ListView {
     private class DragAndFlingDetector extends FlingRemoveDetector {
         private int itemnum;
         private View item;
-        private boolean isDragging;
         
         private DragAndFlingDetector(int position, View draggedView) {
             itemnum = position;
@@ -912,6 +932,7 @@ public class DragSortListView extends ListView {
         }
         
         private void startScroll(MotionEvent startEvent) {
+            item.setPressed(false);
             //item.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
             item.setDrawingCacheEnabled(true);
             // Create a copy of the drawing cache so that it does not get recycled
@@ -937,58 +958,44 @@ public class DragSortListView extends ListView {
             item.setVisibility(INVISIBLE);
         }
         
-        private void continueScroll(int x, int y) {
-            //Log.d("mobeta", "move");
-            dragView(x, y);
-
-            //if (mTrackDragSort) {
-            //    mDragSortTracker.appendState();
-            //}
-
-            requestLayout();
-
-            // get the current scroll direction
-            int currentScrollDir = mDragScroller.getScrollDir();
-
-            if (y > mLastY && y > mDownScrollStartY && currentScrollDir != DragScroller.DOWN) {
-                // dragged down, it is below the down scroll start and it is not scrolling up
-
-                if (currentScrollDir != DragScroller.STOP) {
-                    // moved directly from up scroll to down scroll
-                    mDragScroller.stopScrolling(true);
-                }
-
-                // start scrolling down
-                mDragScroller.startScrolling(DragScroller.DOWN);
-            }
-            else if (y < mLastY && y < mUpScrollStartY && currentScrollDir != DragScroller.UP) {
-                // dragged up, it is above the up scroll start and it is not scrolling up
-
-                if (currentScrollDir != DragScroller.STOP) {
-                    // moved directly from down scroll to up scroll
-                    mDragScroller.stopScrolling(true);
-                }
-                
-                // start scrolling up
-                mDragScroller.startScrolling(DragScroller.UP);
-            }
-            else if (y >= mUpScrollStartY && y <= mDownScrollStartY && mDragScroller.isScrolling()) {
-                // not in the upper nor in the lower drag-scroll regions but it is still scrolling
-
-                mDragScroller.stopScrolling(true);
-            }
-        }
-        
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2,
                 float distanceX, float distanceY) {
-            if (!isDragging) {
-                isDragging = true;
-                startScroll(e1);
-            } else {
-                continueScroll((int) e2.getX(), (int) e2.getY());
+            if (mDragState == IDLE) {
+                /* If remove is enabled, we need to distinguish between horizontal and vertical drags. */
+                if (mRemoveListener != null && mRemoveMode >= 0) {
+                    if (distanceY > distanceX) {
+                        if (mSortMode == PRESS && (mDragListener != null || mDropListener != null)) {
+                            mDragState = VERTICAL;
+                            startScroll(e1);
+                            return true;
+                        }
+                    } else {
+                        mDragState = HORIZONTAL;
+                        startScroll(e1);
+                        return true;
+                    }
+                } else if (mSortMode == PRESS) {
+                    mDragState = GRABBED;
+                    startScroll(e1);
+                    return true;
+                }
             }
-            return true;
+            /* If it is a scroll and we didn't claim it, give up. */
+            mGestureDetector = null;
+            return false;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            if (mDragState == IDLE) {
+                if (mSortMode == LONGPRESS) {
+                    mDragState = GRABBED;
+                    startScroll(e);
+                    /* The GestureDetector won't detect anything else after a long-press, so get rid of it. */
+                    mGestureDetector = null;
+                }
+            }
         }
 
         @Override
@@ -1002,13 +1009,21 @@ public class DragSortListView extends ListView {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         /* First, offer the event to the ListView. */
         boolean eventConsumed = super.onInterceptTouchEvent(ev);
+        int action = ev.getAction() & MotionEvent.ACTION_MASK;
         if (!eventConsumed) {
             if (mGestureDetector != null) {
                 eventConsumed = mGestureDetector.onTouchEvent(ev);
-                if ((ev.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_UP) {
+                if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
+                    // then the action finished, delete the detector
+                    mGestureDetector = null;
+                    mDragState = IDLE;
+                }
+                if (mDragState != IDLE) {
+                    // then the detector has done its work. We'll take it from here.
+                    eventConsumed = true;
                     mGestureDetector = null;
                 }
-            } else if ((ev.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
+            } else if (action == MotionEvent.ACTION_DOWN) {
                 /* DOWN is the start of a new gesture. Check if we want to detect a gesture starting here. */
                 if (mDragListener != null || mDropListener != null) {
                     /* then we're interested in dragging list items, but only if the drag starts from an item's 'drag' view. */
@@ -1048,6 +1063,7 @@ public class DragSortListView extends ListView {
                         if (dragHit) {
                             /* then the event is in the 'drag' view, create a detector */
                             mGestureDetector = new GestureDetector(getContext(), new DragAndFlingDetector(itemnum, item));
+                            mGestureDetector.setIsLongpressEnabled(mSortMode == LONGPRESS || this.getOnItemLongClickListener() != null);
                             eventConsumed = mGestureDetector.onTouchEvent(ev);
                         }
                         removeFloatView();
@@ -1056,6 +1072,7 @@ public class DragSortListView extends ListView {
                 /* If the above block didn't create a detector, and fling-to-remove is enabled, create one here. */ 
                 if (mGestureDetector == null && mRemoveListener != null && mRemoveMode == FLING) {
                     mGestureDetector = new GestureDetector(getContext(), new FlingRemoveDetector());
+                    mGestureDetector.setIsLongpressEnabled(mSortMode == LONGPRESS || this.getOnItemLongClickListener() != null);
                     eventConsumed = mGestureDetector.onTouchEvent(ev);
                 }
             }
@@ -1104,6 +1121,48 @@ public class DragSortListView extends ListView {
         }
     }
 
+    private void continueScroll(int x, int y) {
+        //Log.d("mobeta", "move");
+        dragView(x, y);
+
+        //if (mTrackDragSort) {
+        //    mDragSortTracker.appendState();
+        //}
+
+        requestLayout();
+
+        // get the current scroll direction
+        int currentScrollDir = mDragScroller.getScrollDir();
+
+        if (y > mLastY && y > mDownScrollStartY && currentScrollDir != DragScroller.DOWN) {
+            // dragged down, it is below the down scroll start and it is not scrolling up
+
+            if (currentScrollDir != DragScroller.STOP) {
+                // moved directly from up scroll to down scroll
+                mDragScroller.stopScrolling(true);
+            }
+
+            // start scrolling down
+            mDragScroller.startScrolling(DragScroller.DOWN);
+        }
+        else if (y < mLastY && y < mUpScrollStartY && currentScrollDir != DragScroller.UP) {
+            // dragged up, it is above the up scroll start and it is not scrolling up
+
+            if (currentScrollDir != DragScroller.STOP) {
+                // moved directly from down scroll to up scroll
+                mDragScroller.stopScrolling(true);
+            }
+            
+            // start scrolling up
+            mDragScroller.startScrolling(DragScroller.UP);
+        }
+        else if (y >= mUpScrollStartY && y <= mDownScrollStartY && mDragScroller.isScrolling()) {
+            // not in the upper nor in the lower drag-scroll regions but it is still scrolling
+
+            mDragScroller.stopScrolling(true);
+        }
+    }
+    
     private void updateScrollStarts() {
         final int padTop = getPaddingTop();
         final int listHeight = getHeight() - padTop - getPaddingBottom();
@@ -1394,36 +1453,45 @@ public class DragSortListView extends ListView {
         boolean eventConsumed = false;
         if (mGestureDetector != null) {
             eventConsumed = mGestureDetector.onTouchEvent(ev);
+        }
+
+        switch (ev.getAction() & MotionEvent.ACTION_MASK) {
+        case MotionEvent.ACTION_CANCEL:
+            if (mFloatView != null) {
+                dropFloatView(false);
+                eventConsumed = true;
+            }
+            mGestureDetector = null;
+            mDragState = IDLE;
+            break;
+        case MotionEvent.ACTION_UP:
+            if (mFloatView != null) {
+                Rect r = mTempRect;
+                mFloatView.getDrawingRect(r);
+                //mDragScroller.stopScrolling(true);
+                
+                if (mRemoveMode == SLIDE && mDragState == HORIZONTAL && ev.getX() > r.right * 3 / 4) {
+                    dropFloatView(true);
+                } else if (mRemoveMode == SLIDELEFT && mDragState == HORIZONTAL && ev.getX() < r.right * 1 / 4) {
+                    dropFloatView(true);
+                } else {
+                    dropFloatView(false);
+                }
+                eventConsumed = true;
+            }
+            mGestureDetector = null;
+            mDragState = IDLE;
+            break;
+        case MotionEvent.ACTION_MOVE:
+            if (mGestureDetector == null && (mDragState != IDLE)) {
+                continueScroll((int) ev.getX(), (int) ev.getY());
+                eventConsumed = true;
+            }
+            break;
+        }
+        if (mDragState != IDLE) {
             mLastX = (int) ev.getX();
             mLastY = (int) ev.getY();
-
-            switch (ev.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_CANCEL:
-                if (mFloatView != null) {
-                    dropFloatView(false);
-                    eventConsumed = true;
-                }
-                mGestureDetector = null;
-                break;
-            case MotionEvent.ACTION_UP:
-                if (mFloatView != null) {
-                    Rect r = mTempRect;
-                    mFloatView.getDrawingRect(r);
-                    //mDragScroller.stopScrolling(true);
-                    
-                    // XXX I think this will fire if the drag started on the right and was only vertical, duh
-                    if (mRemoveMode == SLIDE && ev.getX() > r.right * 3 / 4) {
-                        dropFloatView(true);
-                    } else if (mRemoveMode == SLIDELEFT && ev.getX() < r.right * 1 / 4) {
-                        dropFloatView(true);
-                    } else {
-                        dropFloatView(false);
-                    }
-                    eventConsumed = true;
-                }
-                mGestureDetector = null;
-                break;
-            }
         }
         /* If we consumed the event, cancel whatever the ListView was doing. */
         if (eventConsumed) {
