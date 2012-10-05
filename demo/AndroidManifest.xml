@@ -4,6 +4,7 @@
       android:versionCode="1"
       android:versionName="1.0">
     <uses-sdk android:minSdkVersion="4" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application android:label="@string/app_name" >
         <activity android:name="Launcher"
                   android:label="@string/app_name">
@@ -22,7 +23,11 @@
                   android:label="Header/Footer DSLV" />
         <activity android:name="ArbItemSizeDSLV"
                   android:label="Arbitrary Item Size DSLV" />
+        <activity android:name="Fling"
+            	  android:label="Fling to remove DSLV" />
+        <activity android:name="ClickHandler"
+            	  android:label="Handle item clicks" />
+        <activity android:name="LongPressToDrag"
+            	  android:label="Long-press to drag" />
     </application>
-    <uses-library android:name="com.mobeta.android.dslv" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 </manifest> 

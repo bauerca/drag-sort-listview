@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <resources>
   <declare-styleable name="DragSortListView">
     <attr name="collapsed_height" format="dimension" />
@@ -15,5 +15,10 @@
     <attr name="track_drag_sort" format="boolean"/>
     <attr name="float_alpha" format="float"/>
     <attr name="slide_shuffle_speed" format="float"/>
+    <attr name="sort_mode">
+      <enum name="none" value="-1" />
+      <enum name="press" value="0" />
+      <enum name="longPress" value="1"/>
+    </attr>
   </declare-styleable>
 </resources>

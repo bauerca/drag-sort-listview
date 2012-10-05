@@ -10,12 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.util.Log;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.Intent;
-import android.content.ComponentName;
 
 //import com.mobeta.android.demodslv.R;
 
@@ -38,6 +36,13 @@ public class Launcher extends ListActivity {
             "com.mobeta.android.demodslv", PackageManager.GET_ACTIVITIES);
 
           mActivities = new ArrayList<ActivityInfo>(Arrays.asList(pi.activities));
+          String ourName = getClass().getName();
+          for (int i = 0; i < mActivities.size(); ++i) {
+              if (ourName.equals(mActivities.get(i).name)) {
+                  mActivities.remove(i);
+                  break;
+              }
+          }
         } catch (PackageManager.NameNotFoundException e) {
           // Do nothing. Adapter will be empty.
         }
@@ -51,13 +56,9 @@ public class Launcher extends ListActivity {
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-      Intent intent = new Intent();
-
-      if (position > 0) {
-        intent.setClassName(this, mActivities.get(position).name);
-        startActivity(intent);
-      }
-
+	    Intent intent = new Intent();
+	    intent.setClassName(this, mActivities.get(position).name);
+	    startActivity(intent);
     }
 
     private class MyAdapter extends ArrayAdapter<ActivityInfo> {

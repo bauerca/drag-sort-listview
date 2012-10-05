@@ -1,6 +1,5 @@
 package com.mobeta.android.demodslv;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -11,7 +10,6 @@ import com.mobeta.android.dslv.DragSortListView;
 import android.widget.TextView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.util.Log;
 
 
 public class ArbItemSizeDSLV extends ListActivity {
@@ -88,7 +86,6 @@ public class ArbItemSizeDSLV extends ListActivity {
     }
 
     private class ViewHolder {
-      public TextView nameView;
       public TextView albumsView;
     }
 
