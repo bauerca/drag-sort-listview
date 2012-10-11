@@ -193,9 +193,28 @@ Navigate to drag-sort-listview/ and type (assuming
 Then, navigate to drag-sort-listview/demo/, build,
 and try out the examples.
 
-You can see Issue #1 for a discussion on using
-DSLV in an Eclipse project. [This comment](https://github.com/bauerca/drag-sort-listview/issues/1#issuecomment-6596255)
-might be particularly useful.
+### Installation in Eclipse (Indigo)
+
+The first step is to choose File > Import or right-click in the Project Explorer
+and choose Import. If you don't use E-Git to integrate Eclipse with Git, skip
+the rest of this paragraph. Choose "Projects from Git" as the import source.
+From the Git page, click Clone, and enter the URI of this repository. That's the
+only text box to fill in on that page. On the following pages, choose which
+branches to clone (probably all of them) and where to keep the local checkout,
+and then click Finish. Once the clone has finished, pick your new repository
+from the list, and on the following page select 'Use the New Projects wizard'.
+
+From here the process is the same even if you don't use E-Git. Choose 'Android
+Project from Existing Code' and then browse to where you checked out DSLV. You
+should then see two projects in the list: one named after the directory name,
+and the other called com.mobeta.android.demodslv.Launcher . The top one is the
+library project, and the bottom one the demo project. You probably want both at
+first, so just click Finish.
+
+Finally, to add the library to your application project, right-click your
+project in the Package Explorer and select Properties. Pick the "Android" page,
+and click "Add..." from the bottom half. You should see a list including the
+DSLV project as well as any others in your workspace.
 
 Debugging
 ---------
