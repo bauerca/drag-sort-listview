@@ -6,10 +6,9 @@ import java.util.ArrayList;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
-import com.mobeta.android.dslv.DragSortListView;
-import android.widget.TextView;
-import android.util.Log;
 
+import com.mobeta.android.dslv.DragSortListView;
+import com.mobeta.android.dslv.DragSortController;
 
 public class WarpDSLV extends ListActivity {
 
@@ -19,48 +18,46 @@ public class WarpDSLV extends ListActivity {
     private ArrayList<String> list;
 
     private DragSortListView.DropListener onDrop =
-      new DragSortListView.DropListener() {
-        @Override
-        public void drop(int from, int to) {
-          String item=adapter.getItem(from);
+        new DragSortListView.DropListener() {
+            @Override
+            public void drop(int from, int to) {
+                String item=adapter.getItem(from);
 
-          adapter.notifyDataSetChanged();
-          adapter.remove(item);
-          adapter.insert(item, to);
-        }
-      };
+                adapter.notifyDataSetChanged();
+                adapter.remove(item);
+                adapter.insert(item, to);
+            }
+        };
 
     private DragSortListView.RemoveListener onRemove = 
-      new DragSortListView.RemoveListener() {
-        @Override
-        public void remove(int which) {
-          adapter.remove(adapter.getItem(which));
-        }
-      };
+        new DragSortListView.RemoveListener() {
+            @Override
+            public void remove(int which) {
+                adapter.remove(adapter.getItem(which));
+            }
+        };
 
     private DragSortListView.DragScrollProfile ssProfile =
-      new DragSortListView.DragScrollProfile() {
-        @Override
-        public float getSpeed(float w, long t) {
-          if (w > 0.8f) {
-            // Traverse all views in a millisecond
-            return ((float) adapter.getCount()) / 0.001f;
-          } else {
-            return 10.0f * w;
-          }
-        }
-      };
+        new DragSortListView.DragScrollProfile() {
+            @Override
+            public float getSpeed(float w, long t) {
+                if (w > 0.8f) {
+                    // Traverse all views in a millisecond
+                    return ((float) adapter.getCount()) / 0.001f;
+                } else {
+                    return 10.0f * w;
+                }
+            }
+        };
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dslv_main);
+        setContentView(R.layout.warp_main);
 
         DragSortListView lv = (DragSortListView) getListView(); 
-        //TextView tv = (TextView) getLayoutInflater().inflate(R.layout.list_item1, null);
-        //tv.setText("Header View");
-        //lv.addHeaderView(tv);
+
         lv.setDropListener(onDrop);
         lv.setRemoveListener(onRemove);
         lv.setDragScrollProfile(ssProfile);
@@ -68,9 +65,8 @@ public class WarpDSLV extends ListActivity {
         array = getResources().getStringArray(R.array.countries);
         list = new ArrayList<String>(Arrays.asList(array));
 
-        adapter = new ArrayAdapter<String>(this, R.layout.list_item1, R.id.text1, list);
+        adapter = new ArrayAdapter<String>(this, R.layout.list_item_handle_right, R.id.text, list);
         setListAdapter(adapter);
-
     }
 
 }

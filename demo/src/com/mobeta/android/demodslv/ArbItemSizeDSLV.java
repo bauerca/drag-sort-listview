@@ -1,17 +1,17 @@
 package com.mobeta.android.demodslv;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+
+import com.mobeta.android.dslv.DragSortListView;
+import com.mobeta.android.dslv.DragSortController;
 
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
-import com.mobeta.android.dslv.DragSortListView;
 import android.widget.TextView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.util.Log;
 
 
 public class ArbItemSizeDSLV extends ListActivity {
@@ -23,35 +23,34 @@ public class ArbItemSizeDSLV extends ListActivity {
     private String[] mArtistNames;
     private String[] mArtistAlbums;
 
-
     private DragSortListView.DropListener onDrop =
-      new DragSortListView.DropListener() {
-        @Override
-        public void drop(int from, int to) {
-          JazzArtist item = adapter.getItem(from);
+        new DragSortListView.DropListener() {
+            @Override
+            public void drop(int from, int to) {
+                JazzArtist item = adapter.getItem(from);
 
-          adapter.remove(item);
-          adapter.insert(item, to);
-        }
-      };
+                adapter.remove(item);
+                adapter.insert(item, to);
+            }
+        };
 
     private DragSortListView.RemoveListener onRemove = 
-      new DragSortListView.RemoveListener() {
-        @Override
-        public void remove(int which) {
-          adapter.remove(adapter.getItem(which));
-        }
-      };
+        new DragSortListView.RemoveListener() {
+            @Override
+            public void remove(int which) {
+                adapter.remove(adapter.getItem(which));
+            }
+        };
 
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.dslv_main);
+        setContentView(R.layout.hetero_main);
 
         DragSortListView lv = (DragSortListView) getListView(); 
+
         lv.setDropListener(onDrop);
         lv.setRemoveListener(onRemove);
 
@@ -88,7 +87,6 @@ public class ArbItemSizeDSLV extends ListActivity {
     }
 
     private class ViewHolder {
-      public TextView nameView;
       public TextView albumsView;
     }
 

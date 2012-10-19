@@ -4,6 +4,7 @@
       android:versionCode="1"
       android:versionName="1.0">
     <uses-sdk android:minSdkVersion="4" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application android:label="@string/app_name" >
         <activity android:name="Launcher"
                   android:label="@string/app_name">
@@ -12,17 +13,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="BasicDSLV"
-                  android:label="Basic DSLV" />
-        <activity android:name="ShortListDSLV"
-                  android:label="Short List DSLV" />
-        <activity android:name="WarpDSLV"
-                  android:label="Warp DSLV" />
-        <activity android:name="HeadFootDSLV"
-                  android:label="Header/Footer DSLV" />
+        <activity android:name="TestBedDSLV"
+                  android:label="Basic usage" />
         <activity android:name="ArbItemSizeDSLV"
-                  android:label="Arbitrary Item Size DSLV" />
+                  android:label="Arbitrary item heights" />
+        <activity android:name="WarpDSLV"
+                  android:label="Warp" />
+        <activity android:name="BGHandle"
+                  android:label="Background handle" />
     </application>
-    <uses-library android:name="com.mobeta.android.dslv" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 </manifest> 
