@@ -1321,6 +1321,8 @@ public class DragSortListView extends ListView {
 
         removeFloatView();
 
+        adjustAllItems();
+
         if (mTrackDragSort) {
             mDragSortTracker.stopTracking();
         }

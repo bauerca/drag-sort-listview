@@ -26,9 +26,11 @@ public class DSLVFragment extends ListFragment {
             new DragSortListView.DropListener() {
                 @Override
                 public void drop(int from, int to) {
-                    String item = adapter.getItem(from);
-                    adapter.remove(item);
-                    adapter.insert(item, to);
+                    if (from != to) {
+                        String item = adapter.getItem(from);
+                        adapter.remove(item);
+                        adapter.insert(item, to);
+                    }
                 }
             };
 
