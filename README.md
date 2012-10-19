@@ -15,7 +15,7 @@ fling-to-remove, etc.). Thanks to @orac for getting all this rolling!
 Check out the extensively updated demos and usage section below.
 
 **Oct. 19, 2012**: Public API documentation is up at
-bauerca.github.com/drag-sort-listview.
+https://bauerca.github.com/drag-sort-listview.
 
 Overview
 --------
