@@ -16,4 +16,5 @@
     dslv:max_drag_scroll_speed="0.5"
     dslv:float_alpha="0.6"
     dslv:slide_shuffle_speed="0.3"
-    dslv:track_drag_sort="false" />
+    dslv:track_drag_sort="false"
+    dslv:use_default_controller="false" />

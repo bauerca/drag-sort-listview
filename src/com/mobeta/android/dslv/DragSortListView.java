@@ -451,7 +451,7 @@ public class DragSortListView extends ListView {
 
             boolean useDefault = a.getBoolean(
                     R.styleable.DragSortListView_use_default_controller,
-                    false);
+                    true);
 
             if (useDefault) {
                 boolean removeEnabled = a.getBoolean(

@@ -6,6 +6,7 @@ News
 
 **Sept. 26, 2012**: Drag-sorting is now animated! (optional, of course)
 Items slide around underneath the floating (dragged) View.
+
 **Oct. 15, 2012**: Refactoring rampage. Backward compatibility is slightly
 broken. New features make it worthwhile :) and include: total floating
 View customization, total control over drag start/stop,
@@ -89,7 +90,7 @@ of 1 means items snap from position to position without animation.
 * `track_drag_sort`: (bool, false) Debugging option; explained below.
 * `use_default_controller`: (bool, true) Have DSLV create a
   DragSortController instance and pass the following xml attributes
-  to it.
+  to it. If you set this to false, ignore the following attributes.
 * `drag_handle_id`: (id, 0) Android resource id that points to a
   child View of a list item (or the root View of the list item
   layout). This identifies the "drag handle," or the View within a
