@@ -7,12 +7,15 @@ News
 **Sept. 26, 2012**: Drag-sorting is now animated! (optional, of course)
 Items slide around underneath the floating (dragged) View.
 
-**Oct. 15, 2012**: Refactoring rampage. Backward compatibility is slightly
+**Oct. 19, 2012**: Refactoring rampage. Backward compatibility is slightly
 broken. New features make it worthwhile :) and include: total floating
 View customization, total control over drag start/stop,
 and a helper class implementing common patterns (long-press to drag,
 fling-to-remove, etc.). Thanks to @orac for getting all this rolling!
-Check out the extensively updated demos and *Usage* section below.
+Check out the extensively updated demos and usage section below.
+
+**Oct. 19, 2012**: Public API documentation is up at
+bauerca.github.com/drag-sort-listview.
 
 Overview
 --------
