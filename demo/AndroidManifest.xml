@@ -13,21 +13,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="BasicDSLV"
-                  android:label="Basic DSLV" />
-        <activity android:name="ShortListDSLV"
-                  android:label="Short List DSLV" />
-        <activity android:name="WarpDSLV"
-                  android:label="Warp DSLV" />
-        <activity android:name="HeadFootDSLV"
-                  android:label="Header/Footer DSLV" />
+        <activity android:name="TestBedDSLV"
+                  android:label="Basic usage" />
         <activity android:name="ArbItemSizeDSLV"
-                  android:label="Arbitrary Item Size DSLV" />
-        <activity android:name="Fling"
-            	  android:label="Fling to remove DSLV" />
-        <activity android:name="ClickHandler"
-            	  android:label="Handle item clicks" />
-        <activity android:name="LongPressToDrag"
-            	  android:label="Long-press to drag" />
+                  android:label="Arbitrary item heights" />
+        <activity android:name="WarpDSLV"
+                  android:label="Warp" />
+        <activity android:name="BGHandle"
+                  android:label="Background handle" />
     </application>
 </manifest> 

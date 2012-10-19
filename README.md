@@ -6,39 +6,67 @@ News
 
 **Sept. 26, 2012**: Drag-sorting is now animated! (optional, of course)
 Items slide around underneath the floating (dragged) View.
+**Oct. 15, 2012**: Refactoring rampage. Backward compatibility is slightly
+broken. New features make it worthwhile :) and include: total floating
+View customization, total control over drag start/stop,
+and a helper class implementing common patterns (long-press to drag,
+fling-to-remove, etc.). Thanks to @orac for getting all this rolling!
+Check out the extensively updated demos and *Usage* section below.
 
 Overview
 --------
 
 DragSortListView (DSLV) is an extension of the Android ListView that enables
-drag-and-drop re-sorting of list items. It is a major overhaul of
+drag-and-drop reordering of list items. It is a ~~major overhaul~~ complete
+rewrite of
 the [TouchInterceptor](https://github.com/android/platform_packages_apps_music/blob/master/src/com/android/music/TouchInterceptor.java) (TI) 
 meant to give drag-sorting a polished feel. Some key features are:
 
 1. Clean drag and drop (no visual glitches; I hope!)
 2. Intuitive and smooth scrolling while dragging.
 3. Support for heterogeneous item heights.
-4. Customizable drag initiation at the per-item level.
+4. Public `startDrag()` and `stopDrag()` methods.
+5. Public interface for customizing the floating View.
 
 DragSortListView is useful for all kinds of prioritized lists:
 favorites, playlists, checklists, etc. Would love to hear about
-your use case by email.
+your use case or app by email.
 I hope you find it useful; and please, help me improve the thing!
 
-Usage
------
+Widget usage
+------------
 
-The best place to learn DSLV semantics is in the `demo/` directory.
-So, as a first step, I recommend building the examples, playing with
-them, and then exploring `demo/src/` and `demo/res/` for the
-details. That said, the following is a brief overview of DSLV usage.
+Three major elements define the drag-sort process. Roughly, in
+order of importance, they are:
+
+1. **Data reordering**. Drag-sorts reorder the data
+underlying your list. Since DSLV
+cannot know how you organize your data, the reordering must be
+performed by you using the provided Listener interfaces.
+2. **Drag start/stop**. Drags are started and stopped by
+calling `startDrag()` and
+`stopDrag()` on your DSLV instance; but some help that is.
+The convenience class, DragSortController, provides all kinds of
+boiler-plate for common start/stop/remove drag patterns.
+3. **Floating View**. The floating View appearance and behavior is
+controlled by an
+implementation of the FloatViewManager interface. With this, you
+can display any View you like as the floating View, and update its
+appearance/location on every touch event. The DragSortController
+helper class also implements this interface for convenience.
+
+Number 1 is essential. As mentioned above, 2 and 3 can
+be handled by the DragSortController helper class. Keep reading,
+then head to the
+demo and start studying some examples.
+
 
 ### XML layout declaration
 
 DragSortListView can be declared in an XML layout file just like
-the ListView. An [example layout
-file](https://github.com/bauerca/drag-sort-listview/blob/master/demo/res/layout/dslv_main.xml)
-is provided in the demo. The available attributes (in addition to the usual
+the ListView. Several example layout files are
+[provided in the demo](https://github.com/bauerca/drag-sort-listview/blob/master/demo/res/layout/).
+The available attributes (in addition to the usual
 ListView attributes) are given below. Read each bullet as
 
 * `<xml attr>`: (`<datatype>`, `<default value>`) `<description>`.
@@ -52,22 +80,43 @@ drag position.
 fraction of the total DSLV height; i.e. between 0 and 1).
 * `max_drag_scroll_speed`: (float, 0.3) Maximum drag-scroll speed for
 default linear drag-scroll profile. Units of pixels/millisecond.
-* `float_background_color`: (color, black) Background color of
-floating View.
 * `float_alpha`: (float, 1.0) Transparency of floating View. Value from
 0 to 1 where 1 is opaque.
 * `slide_shuffle_speed`: (float, 0.7) Speed of shuffle animations
 underneath floating View. A value
 of 0 means a shuffle animation is always in progress, whereas a value
 of 1 means items snap from position to position without animation.
-* `remove_mode`: (enum, "none") One of "none" "fling", "slide",
-"slideRight", "slideLeft". This is inherited from the TI and may change.
-* `sort_mode`: (enum, "press") One of "none", "press", "longPress". Sets
-how a sort is started. The default, "press" means you just press and
-drag an item to sort it. "longPress" means you have to long-press a
-drag-handle to start sorting it: a normal drag just scrolls the list.
-"none" disables sorting. 
 * `track_drag_sort`: (bool, false) Debugging option; explained below.
+* `use_default_controller`: (bool, true) Have DSLV create a
+  DragSortController instance and pass the following xml attributes
+  to it.
+* `drag_handle_id`: (id, 0) Android resource id that points to a
+  child View of a list item (or the root View of the list item
+  layout). This identifies the "drag handle," or the View within a
+  list item that must
+  be touched to start a drag-sort of that item.
+  Required if drags are to be enabled using the default
+  DragSortController.
+* `sort_enabled`: (bool, true) Enable sorting of dragged item (disabling
+  is useful when you only want item removal).
+* `drag_start_mode`: (enum, "onDown") Sets the gesture for starting
+  a drag.
+    + "onDown": Drag starts when finger touches down
+      on the drag handle.
+    + "onDrag": Drag starts when finger touches down on drag handle
+      and then drags (allows item clicks and long clicks).
+    + "onLongPress": Drag starts on drag handle long press (allows
+      item clicks).
+* `remove_enabled`: (bool, false) Enable dragged item removal by one
+  of the `remove_mode` options below.
+* `remove_mode`: (enum, "flingRight") Sets the gesture for removing the
+  dragged item.
+    + "flingRight": Fling to the right; get outta here! 
+    + "flingLeft": Fling to the left; sayonara sucker! 
+    + "slideRight": Floating View fades as you slide your finger
+      to the right; lifting while faded removes item.
+    + "slideLeft": Floating View fades as you slide your finger
+      to the right; lifting while faded removes item.
 
 ### Listeners
 
@@ -132,65 +181,59 @@ does not come to mind.
 This is a convenience interface which combines all of the above
 Listener interfaces.
 
+### FloatViewManager
 
-### Drag initiation
+This is the interface that handles creation, updates, and tear-downs
+of the floating View. It is passed to DSLV using the
+`setFloatViewManager()` method. Example usage can be found in
+the SimpleFloatViewManager, which
+is a convenience class
+that simply takes a snapshot of the list item to be dragged.
 
-A drag of item **i** is initiated when all the following are true:
+If you want to spice up the floating View, implement your own
+FloatViewManager. In your
+`onCreateFloatView()` method, you should make sure that the View
+you return has a definite height (do not use MATCH_PARENT! although
+MATCH_PARENT is perfectly okay for the layout width).
+DSLV will measure and layout your floating View according to
+the ViewGroup.LayoutParams attached to it. If no LayoutParams are
+attached, DSLV will use WRAP_CONTENT and MATCH_PARENT as the layout
+height and width.
 
-* A DragListener or DropListener (or DragSortListener) is
-registered with the DSLV instance;
-* Item **i** contains a **drag handle** (defined below);
-* If the sort mode is `press`, there is a DOWN event on the drag handle
-followed by MOVE events;
-* If the sort mode is `longPress`, there is a DOWN event on the drag
-handle, followed by a pause long enough to be a long-press, followed by
-MOVE events. 
-* The touch screen DOWN event hits the drag handle.
+### Drag start/stop
 
-The "drag handle" referred to above is a child View of the item layout,
-with the `android:id` set to `@id/drag`. It can be any kind of View, but
-an ImageView is common. It can even be the root of the item layout if
-you like, but you then have to consider these interactions between
-different gestures:
+As of DragSortListView 0.3.0, drag start and stop behavior is all up
+to you. Feel free to call `startDrag()` or `stopDrag()` on the
+DSLV instance whenever you please. Be aware that if no
+touch event is in progress when `startDrag()` is called, the drag will
+not start. But don't waste too much time working on your own drag
+initiation if it's simple; the DragSortController described below
+will do that for you.
 
-* If dragging is enabled and the sort mode is `press`, you won't be able
-to drag the list unless you make the padding wide enough to touch. You
-will still be able to click on and long-click on list items in the usual
-way: those actions take precedence over dragging. 
-* If dragging is enabled and the sort mode is `longPress`, you can click
-on list items, and drag the list in the usual way, but you won't be able
-to long-click on list items: in this mode, a long-press immediately
-floats the list item to give visual feedback to the user.
+### DragSortController
 
-These actually apply to any gesture that starts on a drag handle, but
-they're only really important when the whole item is the drag handle.
- 
-An [example XML layout](https://github.com/bauerca/drag-sort-listview/blob/master/demo/res/layout/jazz_artist_list_item.xml)
-for a drag-sort-enabled ListView item can be found in the demo.
-The key line to note in the example is
+The DragSortController
+is a convenience class that implements some common
+design patterns for initiating drags or removing the dragged item
+from the list. It implements
+the View.OnTouchListener interface to watch touch events as they are
+dispatched to DSLV. It also implements the FloatViewManager interface
+(by subclassing SimpleFloatViewManager) to handle simple floating View
+creation. If you do not use XML to create
+the default DragSortController, you must pass in your own
+instance of DragSortController
+to both the `setFloatViewManager()` *and* `setOnTouchListener()`
+methods of the DSLV instance.
 
-    android:id="@id/drag"
+The default behavior of the DragSortController expects list items
+that are drag enabled to have a child View called a "drag handle."
+The drag handle View should have an associated android resource id,
+and that id should
+be passed into the DragSortController (the id can be set in XML if
+`use_default_controller` is `true`). If a touch event lands on the
+drag handle of an item, and a gesture is detected that should start a
+drag, the drag starts.
 
-which tells DSLV which child View is responsible for initiating the
-item drag. You will notice that `@id` is used rather than `@+id`.
-This is because the demo project references the DSLV as an external
-Android library, in which the id named `drag` is already defined
-(external libraries cannot access ids defined by dependent
-apps).
-
-Another way to use DSLV is by copying the DragSortListView.java
-file directly into your project. In this case, you must also:
-
-1. Use `android:id="@+id/drag"` (notice the +) in your list item layout
-file OR copy `res/values/ids.xml` to your project and use `@id/drag`
-(If you do not copy res/values/ids.xml, DragSortListView.java will have
-errors, as it always references `R.id.drag`).
-2. Change the package name declaration line at the top of
-DragSortListView.java to your package name.
-3. Copy `res/values/dslv_attrs.xml` to your project
-4. In the XML layout file that declares the DSLV, make sure to use
-your package name (as opposed to `com.mobeta.android.(demo)dslv` in the
-demos)
 
 Additional documentation
 ------------------------

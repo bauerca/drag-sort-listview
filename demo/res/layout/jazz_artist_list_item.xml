@@ -22,7 +22,7 @@
       android:textAppearance="?android:attr/textAppearanceSmall" />
   </LinearLayout>
   <ImageView
-    android:id="@id/drag"
+    android:id="@id/drag_handle"
     android:background="@drawable/drag"
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"

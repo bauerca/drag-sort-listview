@@ -1,6 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">DemoDSLV</string>
+    <string-array name="activity_titles">
+        <item>Basic usage playground</item>
+        <item>Heteroheight</item>
+        <item>Warp</item>
+        <item>Background handle</item>
+    </string-array>
+    <string-array name="activity_descs">
+        <item>
+            Use the menu to adjust settings related to item
+            removal and drag initiation. These options are
+            provided by the DragSortController class.
+        </item>
+        <item>
+            Demonstrates (tests) drag-sorting when list items
+            have varying heights.
+        </item>
+        <item>
+            Demonstrates drag-scroll customization; long lists
+            need fast scrolling.
+        </item>
+        <item>
+            Simple DragSortController customization. In this example,
+            the drag handle is a background drawable; therefore, the
+            drag handle hit detection mechanism needs modification. 
+            Also, the floating View is given some flavor.
+        </item>
+    </string-array>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="select_remove_mode">Remove modes</string>
+    <string name="select_drag_init_mode">Start-drag modes</string>
+    <string name="select_enables">Enable/Disable</string>
+    <string name="add_header">Add header</string>
+    <string name="add_footer">Add footer</string>
+    <string-array name="remove_mode_labels">
+      <item>Fling right</item>
+      <item>Fling left</item>
+      <item>Slide right</item>
+      <item>Slide left</item>
+    </string-array>
+    <string-array name="drag_init_mode_labels">
+      <item>On down</item>
+      <item>On drag</item>
+      <item>On long press</item>
+    </string-array>
+    <string-array name="enables_labels">
+      <item>Enable drag</item>
+      <item>Enable sort</item>
+      <item>Enable remove</item>
+    </string-array>
     <string-array name="jazz_artist_names">
       <item>Brad Mehldau</item>
       <item>Joshua Redman</item>
