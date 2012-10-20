@@ -260,7 +260,7 @@ public class DragSortListView extends ListView {
      * Maximum drag-scroll speed in pixels per ms. Only used with
      * default linear drag-scroll profile.
      */
-    private float mMaxScrollSpeed = 0.3f;
+    private float mMaxScrollSpeed = 0.5f;
     
     /**
      * Defines the scroll speed during a drag-scroll. User can

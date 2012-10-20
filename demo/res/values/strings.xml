@@ -6,6 +6,7 @@
         <item>Heteroheight</item>
         <item>Warp</item>
         <item>Background handle</item>
+        <item>Sections</item>
     </string-array>
     <string-array name="activity_descs">
         <item>
@@ -26,6 +27,10 @@
             the drag handle is a background drawable; therefore, the
             drag handle hit detection mechanism needs modification. 
             Also, the floating View is given some flavor.
+        </item>
+        <item>
+            Demonstrates floating View control from a custom
+            FloatViewManager. Restrict item drags to list sections.
         </item>
     </string-array>
     <string name="ok">OK</string>

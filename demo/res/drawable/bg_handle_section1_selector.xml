@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:constantSize="true" >
+    <item
+        android:drawable="@drawable/bg_handle_section1"
+        android:state_pressed="false" />
+    <item
+        android:drawable="@color/bg_handle_pressed"
+        android:state_pressed="true" />
+</selector>

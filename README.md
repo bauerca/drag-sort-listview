@@ -82,7 +82,7 @@ drag position.
 * `drag_scroll_start`: (float, 0.3) Start of drag-scroll regions
 (defined by a
 fraction of the total DSLV height; i.e. between 0 and 1).
-* `max_drag_scroll_speed`: (float, 0.3) Maximum drag-scroll speed for
+* `max_drag_scroll_speed`: (float, 0.5) Maximum drag-scroll speed for
 default linear drag-scroll profile. Units of pixels/millisecond.
 * `float_alpha`: (float, 1.0) Transparency of floating View. Value from
 0 to 1 where 1 is opaque.
