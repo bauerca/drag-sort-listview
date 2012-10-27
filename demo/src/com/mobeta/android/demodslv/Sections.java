@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.graphics.drawable.Drawable;
 import android.graphics.Point;
+import android.util.Log;
 
 import com.mobeta.android.dslv.DragSortListView;
 import com.mobeta.android.dslv.DragSortController;
@@ -33,6 +34,7 @@ public class Sections extends ListActivity {
         String[] array = getResources().getStringArray(R.array.jazz_artist_names);
         List<String> list = new ArrayList<String>(Arrays.asList(array));
         SectionAdapter adapter = new SectionAdapter(this, list);
+        //SectionAdapterNoDiv adapter = new SectionAdapterNoDiv(this, list);
         dslv.setDropListener(adapter);
 
         // make and set controller on dslv
@@ -50,6 +52,7 @@ public class Sections extends ListActivity {
         private int mDivPos;
 
         private SectionAdapter mAdapter;
+        //private SectionAdapterNoDiv mAdapter;
 
         DragSortListView mDslv;
 
@@ -91,12 +94,27 @@ public class Sections extends ListActivity {
             return v;
         }
 
+        private int origHeight = -1;
+
         @Override
         public void onDragFloatView(View floatView, Point floatPoint, Point touchPoint) {
             final int first = mDslv.getFirstVisiblePosition();
             final int lvDivHeight = mDslv.getDividerHeight();
 
+            if (origHeight == -1) {
+                origHeight = floatView.getHeight();
+            }
+
             View div = mDslv.getChildAt(mDivPos - first);
+
+            if (touchPoint.x > mDslv.getWidth() / 2) {
+                float scale = touchPoint.x - mDslv.getWidth() / 2;
+                scale /= (float) (mDslv.getWidth() / 5);
+                ViewGroup.LayoutParams lp = floatView.getLayoutParams();
+                lp.height = Math.max(origHeight, (int) (scale * origHeight));
+                Log.d("mobeta", "setting height "+lp.height);
+                floatView.setLayoutParams(lp);
+            }
 
             if (div != null) {
                 if (mPos > mDivPos) {
@@ -122,6 +140,109 @@ public class Sections extends ListActivity {
             //do nothing; block super from crashing
         }
 
+    }
+
+    private class SectionAdapterNoDiv extends BaseAdapter implements DragSortListView.DropListener {
+        
+        private final static int SECTION_ONE = 0;
+        private final static int SECTION_TWO = 1;
+
+        private List<String> mData;
+
+        private int mDivPos;
+
+        private LayoutInflater mInflater;
+
+        public SectionAdapterNoDiv(Context context, List<String> names) {
+            super();
+            mInflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+            mData = names;
+            mDivPos = names.size() / 2;
+        }
+
+        @Override
+        public void drop(int from, int to) {
+            if (from != to) {
+                String data = mData.remove(from);
+                mData.add(to, data);
+                notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return mData.size();
+        }
+
+        @Override
+        public boolean areAllItemsEnabled() {
+            return true;
+        }
+
+        @Override
+        public boolean isEnabled(int position) {
+            return true;
+        }
+
+        public int getDivPosition() {
+            return mDivPos;
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return 1;
+        }
+
+        @Override
+        public String getItem(int position) {
+            return mData.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            //if (position <= mDivPos) {
+            if (true) {
+                return SECTION_ONE;
+            } else {
+                return SECTION_TWO;
+            }
+        }
+
+        public Drawable getBGDrawable(int type) {
+            Drawable d;
+            if (type == SECTION_ONE) {
+                d = getResources().getDrawable(R.drawable.bg_handle_section1_selector);
+            } else {
+                d = getResources().getDrawable(R.drawable.bg_handle_section2_selector);
+            }
+            d.setLevel(3000);
+            return d;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final int type = getItemViewType(position);
+
+            View v = null;
+            if (convertView != null) {
+                Log.d("mobeta", "using convertView");
+                v = convertView;
+            } else {
+                Log.d("mobeta", "inflating normal item");
+                v = mInflater.inflate(R.layout.list_item_bg_handle, parent, false);
+                v.setBackgroundDrawable(getBGDrawable(type));
+            }
+
+            // bind data
+            ((TextView) v).setText(mData.get(position));
+
+            return v;
+        }
     }
 
     private class SectionAdapter extends BaseAdapter implements DragSortListView.DropListener {
@@ -179,7 +300,7 @@ public class Sections extends ListActivity {
         @Override
         public String getItem(int position) {
             if (position == mDivPos) {
-                return null;
+                return "Something";
             } else {
                 return mData.get(dataPosition(position));
             }
@@ -222,11 +343,14 @@ public class Sections extends ListActivity {
 
             View v = null;
             if (convertView != null) {
+                Log.d("mobeta", "using convertView");
                 v = convertView;
             } else if (type != SECTION_DIV) {
+                Log.d("mobeta", "inflating normal item");
                 v = mInflater.inflate(R.layout.list_item_bg_handle, parent, false);
                 v.setBackgroundDrawable(getBGDrawable(type));
             } else {
+                Log.d("mobeta", "inflating section divider");
                 v = mInflater.inflate(R.layout.section_div, parent, false);
             }
 
