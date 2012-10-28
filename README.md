@@ -94,6 +94,10 @@ of 1 means items snap from position to position without animation.
 * `use_default_controller`: (bool, true) Have DSLV create a
   DragSortController instance and pass the following xml attributes
   to it. If you set this to false, ignore the following attributes.
+* `float_background_color`: (color, BLACK) Set the background
+  color of the floating View when using the default
+  DragSortController. Floating View in this case is a snapshot of
+  the list item to be dragged.
 * `drag_handle_id`: (id, 0) Android resource id that points to a
   child View of a list item (or the root View of the list item
   layout). This identifies the "drag handle," or the View within a

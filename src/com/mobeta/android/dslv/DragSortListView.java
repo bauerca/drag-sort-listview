@@ -30,6 +30,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Environment;
 import android.os.SystemClock;
@@ -97,12 +98,6 @@ public class DragSortListView extends ListView {
      * View. If dropped, the dragged item will land in this position.
      */
     private int mFloatPos;
-
-    /**
-     * The amount to scroll during the next layout pass. Used only
-     * for drag-scrolling, not standard ListView scrolling.
-     */
-    private int mScrollY = 0;
     
     /**
      * The first expanded ListView position that helps represent
@@ -466,11 +461,15 @@ public class DragSortListView extends ListView {
                 int dragHandleId = a.getResourceId(
                         R.styleable.DragSortListView_drag_handle_id,
                         0);
+                int bgColor = a.getColor(
+                        R.styleable.DragSortListView_float_background_color,
+                        Color.BLACK);
                 
                 DragSortController controller = new DragSortController(
                         this, dragHandleId, dragInitMode, removeMode);
                 controller.setRemoveEnabled(removeEnabled);
                 controller.setSortEnabled(sortEnabled);
+                controller.setBackgroundColor(bgColor);
 
                 mFloatViewManager = controller;
                 setOnTouchListener(controller);
@@ -884,7 +883,7 @@ public class DragSortListView extends ListView {
             startPos = first + getChildCount() / 2;
             startView = getChildAt(startPos - first);
         }
-        int startTop = startView.getTop() + mScrollY;
+        int startTop = startView.getTop();
 
         ItemHeights itemHeights = new ItemHeights();
         getItemHeights(startPos, startView, itemHeights);
@@ -1472,115 +1471,6 @@ public class DragSortListView extends ListView {
         return adjust;
     }
 
-    public void checkScroll(int oldFirstExpPos, int oldSecondExpPos) {
-
-        int movePos = getFirstVisiblePosition() + getChildCount() / 2;
-        View moveItem = getChildAt(getChildCount() / 2);
-        int top = moveItem.getTop();
-        int padTop = getPaddingTop();
-        if (moveItem != null) {
-            ItemHeights itemHeightsBefore = new ItemHeights();
-            getItemHeights(movePos, moveItem, itemHeightsBefore);
-            int moveHeightBefore = itemHeightsBefore.item;
-            int moveBlankBefore = moveHeightBefore - itemHeightsBefore.child;
-
-            ItemHeights itemHeightsAfter = new ItemHeights();
-            measureItemAndGetHeights(movePos, moveItem, itemHeightsAfter);
-            int moveHeightAfter = itemHeightsAfter.item;
-            int moveBlankAfter = moveHeightAfter - itemHeightsAfter.child;
-
-            if (movePos <= oldFirstExpPos) {
-                if (movePos > mFirstExpPos) {
-                    top += mFloatViewHeight - moveBlankAfter;
-                }
-            } else if (movePos == oldSecondExpPos) {
-                if (movePos <= mFirstExpPos) {
-                    top += moveBlankBefore - mFloatViewHeight;
-                } else if (movePos == mSecondExpPos) {
-                    top += moveHeightBefore - moveHeightAfter;
-                } else {
-                    top += moveBlankBefore;
-                }
-            } else {
-                if (movePos <= mFirstExpPos) {
-                    top -= mFloatViewHeight;
-                } else if (movePos == mSecondExpPos) {
-                    top -= moveBlankAfter;
-                }
-            }
-
-            setSelectionFromTop(movePos, top - padTop);
-        }
-    }
-
-    private void doDragScroll(int oldFirstExpPos, int oldSecondExpPos) {
-        if (mScrollY == 0) {
-            return;
-        }
-
-        final int padTop = getPaddingTop();
-        final int listHeight = getHeight() - padTop - getPaddingBottom();
-        final int first = getFirstVisiblePosition();
-        final int last = getLastVisiblePosition();
-
-        int movePos;
-
-        if (mScrollY >= 0) {
-            mScrollY = Math.min(listHeight, mScrollY);
-            movePos = first;
-        } else {
-            mScrollY = Math.max(-listHeight, mScrollY);
-            movePos = last;
-        }
-
-        final View moveItem = getChildAt(movePos - first);
-        int top = moveItem.getTop() + mScrollY;
-
-        if (movePos == 0 && top > padTop) {
-            top = padTop;
-        }
-
-        setSelectionFromTop(movePos, top - padTop);
-
-        mScrollY = 0;
-
-/*
-        ItemHeights itemHeightsBefore = new ItemHeights();
-        getItemHeights(movePos, moveItem, itemHeightsBefore);
-        int moveHeightBefore = itemHeightsBefore.item;
-        int moveBlankBefore = moveHeightBefore - itemHeightsBefore.child;
-
-        ItemHeights itemHeightsAfter = new ItemHeights();
-        measureItemAndGetHeights(movePos, moveItem, itemHeightsAfter);
-        int moveHeightAfter = itemHeightsAfter.item;
-        int moveBlankAfter = moveHeightAfter - itemHeightsAfter.child;
-
-        if (movePos <= oldFirstExpPos) {
-            if (movePos > mFirstExpPos) {
-                top += mFloatViewHeight - moveBlankAfter;
-            }
-        } else if (movePos == oldSecondExpPos) {
-            if (movePos <= mFirstExpPos) {
-                top += moveBlankBefore - mFloatViewHeight;
-            } else if (movePos == mSecondExpPos) {
-                top += moveHeightBefore - moveHeightAfter;
-            } else {
-                top += moveBlankBefore;
-            }
-        } else {
-            if (movePos <= mFirstExpPos) {
-                top -= mFloatViewHeight;
-            } else if (movePos == mSecondExpPos) {
-                top -= moveBlankAfter;
-            }
-        }
-
-        setSelectionFromTop(movePos, top - padTop);
-
-        mScrollY = 0;
-*/
-    }
-
     private void measureFloatView() {
         if (mFloatView != null) {
             ViewGroup.LayoutParams lp = mFloatView.getLayoutParams();
@@ -1612,17 +1502,6 @@ public class DragSortListView extends ListView {
         }
         mWidthMeasureSpec = widthMeasureSpec;
     }
-
-    private Runnable mAdjustItems = new Runnable() {
-        @Override
-        public void run() {
-            adjustAllItems();
-        }
-    };
-
-    private Point mFloatViewDrag = new Point();
-
-    private Point mTouchPoint = new Point();
     
     @Override
     protected void layoutChildren() {
@@ -1640,72 +1519,6 @@ public class DragSortListView extends ListView {
         }
     }
 
-/*
-    @Override
-    protected void layoutChildren() {
-        // may adjust item heights AND scroll items
-        super.layoutChildren();
-
-        if (mFloatView != null) {
-            mBlockLayoutRequests = true;
-
-            if (mScrollY != 0) {
-                doDragScroll(0, 0);
-                super.layoutChildren();
-            }
-
-            mFloatView.layout(0, 0, mFloatView.getMeasuredWidth(), mFloatView.getMeasuredHeight());
-
-            Point touch = new Point(mX, mY);
-            // let manager adjust proposed position first
-            if (mFloatViewManager != null) {
-                mFloatViewManager.onDragFloatView(mFloatView, mFloatLoc, touch);
-                if (mFloatView.isLayoutRequested()) {
-                    // FloatViewManager changed size of float View
-                    Log.d("mobeta", "layout requested");
-                    measureFloatView();
-                    mFloatView.layout(0, 0, mFloatView.getMeasuredWidth(), mFloatView.getMeasuredHeight());
-                }
-            }
-
-            // then we override if manager gives an unsatisfactory
-            // position (e.g. over a header/footer view). Also,
-            // dragFlags override manager adjustments.
-            updateFloatView();
-
-
-            int oldSecondExpPos = mSecondExpPos;
-            int oldFirstExpPos = mFirstExpPos;
-
-            if (updatePositions()) {
-                adjustAllItems();
-                checkScroll(oldFirstExpPos, oldSecondExpPos);
-            }
-
-            mBlockLayoutRequests = false;
-
-//break
-
-            //Log.d("mobeta", "layout children");
-            int oldFirstExpPos = mFirstExpPos;
-            int oldSecondExpPos = mSecondExpPos;
-
-            mBlockLayoutRequests = true;
-
-            if (updatePositions()) {
-                adjustAllItems();
-            }
-
-            if (mScrollY != 0) {
-                doDragScroll(oldFirstExpPos, oldSecondExpPos);
-            }
-
-            mBlockLayoutRequests = false;
-        }
-
-//        super.layoutChildren();
-    }
-*/
 
     protected boolean onDragTouchEvent(MotionEvent ev) {
         // we are in a drag
@@ -1956,6 +1769,7 @@ public class DragSortListView extends ListView {
                 mFloatViewManager.onDestroyFloatView(mFloatView);
             }
             mFloatView = null;
+            invalidate();
         }
     }
 
@@ -2247,9 +2061,6 @@ public class DragSortListView extends ListView {
             // means user is scrolling up (list item moves down the screen, remember
             // y=0 is at top of View).
             dy = (int) Math.round(mScrollSpeed * dt);
-            //mScrollY += dy;
-
-            //requestLayout();
 
             int movePos;
             if (dy >= 0) {
@@ -2263,13 +2074,6 @@ public class DragSortListView extends ListView {
             final View moveItem = getChildAt(movePos - first);
             int top = moveItem.getTop() + dy;
 
-            //Log.d("mobeta", "drag scroll");
-            //Log.d("mobeta", "  dy="+dy);
-            //Log.d("mobeta", "  tNow="+currTime+" tThen="+mPrevTime+" dt="+dt);
-            //Log.d("mobeta", "  orig top="+moveItem.getTop());
-            //Log.d("mobeta", "  scroll top="+top);
-
-
             if (movePos == 0 && top > padTop) {
                 top = padTop;
             }
@@ -2282,8 +2086,6 @@ public class DragSortListView extends ListView {
             invalidate();
 
             mBlockLayoutRequests = false;
-
-            mScrollY = 0;
 
             // scroll means relative float View movement
             doDragFloatView(movePos, moveItem, false);
