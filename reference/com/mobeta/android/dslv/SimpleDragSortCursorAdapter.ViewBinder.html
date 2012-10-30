@@ -57,7 +57,7 @@
 <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.ico" />
 <title>
 
-  DragSortListView.RemoveListener - DragSortListView
+  SimpleDragSortCursorAdapter.ViewBinder - DragSortListView
 
 
 </title>
@@ -155,9 +155,9 @@
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortListView.DragSortListener.html">DragSortListView.DragSortListener</a></li>
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortListView.DropListener.html">DragSortListView.DropListener</a></li>
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortListView.FloatViewManager.html">DragSortListView.FloatViewManager</a></li>
-          <li class="selected api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortListView.RemoveListener.html">DragSortListView.RemoveListener</a></li>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortListView.RemoveListener.html">DragSortListView.RemoveListener</a></li>
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.CursorToStringConverter.html">SimpleDragSortCursorAdapter.CursorToStringConverter</a></li>
-          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.ViewBinder.html">SimpleDragSortCursorAdapter.ViewBinder</a></li>
+          <li class="selected api apilevel-"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.ViewBinder.html">SimpleDragSortCursorAdapter.ViewBinder</a></li>
       </ul>
     </li>
               
@@ -216,25 +216,6 @@
 <div class="sum-details-links">
 
 
-Summary:
-
-
-
-
-
-
-
-
-
-
-
-  <a href="#pubmethods">Methods</a>
-  
-
-
-
-&#124; <a href="#" onclick="return toggleAllClassInherited()" id="toggleAllClassInherited">[Expand All]</a>
-
 </div><!-- end sum-details-links -->
 <div class="api-level">
   
@@ -255,7 +236,7 @@ Summary:
      
     
     interface
-<h1>DragSortListView.RemoveListener</h1>
+<h1>SimpleDragSortCursorAdapter.ViewBinder</h1>
 
 
 
@@ -274,7 +255,7 @@ Summary:
 
     <tr>
          	
-        <td colspan="1" class="jd-inheritance-class-cell">com.mobeta.android.dslv.DragSortListView.RemoveListener</td>
+        <td colspan="1" class="jd-inheritance-class-cell">com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder</td>
     </tr>
     
 
@@ -285,69 +266,26 @@ Summary:
 
 
 
-<table class="jd-sumtable jd-sumtable-subclasses"><tr><td colspan="12" style="border:none;margin:0;padding:0;">
-
-  <a href="#" onclick="return toggleInherited(this, null)" id="subclasses-indirect" class="jd-expando-trigger closed"
-          ><img id="subclasses-indirect-trigger"
-          src="../../../../../assets/images/triangle-closed.png"
-          class="jd-expando-trigger-img" /></a>Known Indirect Subclasses
-
-  <div id="subclasses-indirect">
-      <div id="subclasses-indirect-list"
-              class="jd-inheritedlinks"
-              
-              >
-          
-            
-              <a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html">DragSortCursorAdapter</a>,
-            
-              <a href="../../../../com/mobeta/android/dslv/DragSortListView.DragSortListener.html">DragSortListView.DragSortListener</a>,
-            
-              <a href="../../../../com/mobeta/android/dslv/ResourceDragSortCursorAdapter.html">ResourceDragSortCursorAdapter</a>,
-            
-              <a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html">SimpleDragSortCursorAdapter</a>
-            
-          
-      </div>
-      <div id="subclasses-indirect-summary"
-              style="display: none;"
-              >
-  <table class="jd-sumtable-expando">
-        <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html">DragSortCursorAdapter</a></td>
-              <td class="jd-descrcol" width="100%">A subclass of android.widget.CursorAdapter that provides
- reordering of the elements in the Cursor based on completed
- drag-sort operations.&nbsp;</td>
-          </tr>
-        <tr class=" api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortListView.DragSortListener.html">DragSortListView.DragSortListener</a></td>
-              <td class="jd-descrcol" width="100%">&nbsp;</td>
-          </tr>
-        <tr class="alt-color api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/ResourceDragSortCursorAdapter.html">ResourceDragSortCursorAdapter</a></td>
-              <td class="jd-descrcol" width="100%">Static library support version of the framework's android.widget.ResourceCursorAdapter.&nbsp;</td>
-          </tr>
-        <tr class=" api apilevel-" >
-              <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html">SimpleDragSortCursorAdapter</a></td>
-              <td class="jd-descrcol" width="100%">An easy adapter to map columns from a cursor to TextViews or ImageViews
- defined in an XML file.&nbsp;</td>
-          </tr>
-  </table>
-      </div>
-  </div>
-</td></tr></table>
-
 
 <div class="jd-descr">
 
 
 <h2>Class Overview</h2>
-<p>Make sure to call
- BaseAdapter#notifyDataSetChanged() or something like it
- in your implementation.</p>
+<p>This class can be used by external clients of SimpleCursorAdapter
+ to bind values fom the Cursor to views.
+
+ You should use this class to bind values from the Cursor to views
+ that are not directly supported by SimpleCursorAdapter or to
+ change the way binding occurs for views supported by
+ SimpleCursorAdapter.</p>
 
 
 
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">See Also</h5>
+      <ul class="nolist"><li>SimpleCursorAdapter#bindView(android.view.View, android.content.Context, android.database.Cursor)</li><li>SimpleCursorAdapter#setViewImage(ImageView, String)</li><li>SimpleCursorAdapter#setViewText(TextView, String)</li>
+      </ul>
+  </div>
 
 
 </div><!-- jd-descr -->
@@ -411,11 +349,13 @@ Summary:
             
             
             
-            void
+            boolean
         </td>
         <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.RemoveListener.html#remove(int)">remove</a></span>(int which)
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.ViewBinder.html#setViewValue(View, Cursor, int)">setViewValue</a></span>(View view, Cursor cursor, int columnIndex)
         
+        <div class="jd-descrdiv">Binds the Cursor column defined by the specified index to the specified view.</div>
+  
   </td></tr>
 
 
@@ -467,7 +407,7 @@ Summary:
 
 
 
-<a id="remove(int)"></a>
+<a id="setViewValue(View, Cursor, int)"></a>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -477,10 +417,10 @@ Summary:
          
         abstract 
          
-        void
+        boolean
       </span>
-      <span class="sympad">remove</span>
-      <span class="normal">(int which)</span>
+      <span class="sympad">setViewValue</span>
+      <span class="normal">(View view, Cursor cursor, int columnIndex)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -492,7 +432,33 @@ Summary:
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>Binds the Cursor column defined by the specified index to the specified view.
+
+ When binding is handled by this ViewBinder, this method must return true.
+ If this method returns false, SimpleCursorAdapter will attempts to handle
+ the binding on its own.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>view</th>
+          <td>the view to bind the data to</td>
+        </tr>
+        <tr>
+          <th>cursor</th>
+          <td>the cursor to get the data from</td>
+        </tr>
+        <tr>
+          <th>columnIndex</th>
+          <td>the column at which the data can be found in the cursor</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Returns</h5>
+      <ul class="nolist"><li>true if the data was bound to the view, false otherwise
+</li></ul>
+  </div>
 
     </div>
 </div>

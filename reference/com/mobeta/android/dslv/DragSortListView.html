@@ -57,7 +57,7 @@
 <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.ico" />
 <title>
 
-  DragSortListView
+  DragSortListView - DragSortListView
 
 
 </title>
@@ -156,13 +156,18 @@
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortListView.DropListener.html">DragSortListView.DropListener</a></li>
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortListView.FloatViewManager.html">DragSortListView.FloatViewManager</a></li>
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortListView.RemoveListener.html">DragSortListView.RemoveListener</a></li>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.CursorToStringConverter.html">SimpleDragSortCursorAdapter.CursorToStringConverter</a></li>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.ViewBinder.html">SimpleDragSortCursorAdapter.ViewBinder</a></li>
       </ul>
     </li>
               
     <li><h2>Classes</h2>
       <ul>
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortController.html">DragSortController</a></li>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html">DragSortCursorAdapter</a></li>
           <li class="selected api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortListView.html">DragSortListView</a></li>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/ResourceDragSortCursorAdapter.html">ResourceDragSortCursorAdapter</a></li>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html">SimpleDragSortCursorAdapter</a></li>
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/SimpleFloatViewManager.html">SimpleFloatViewManager</a></li>
       </ul>
     </li>
@@ -661,6 +666,10 @@ Summary:
         <td class="jd-linkcol" width="100%">
         <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.html#setAdapter(ListAdapter)">setAdapter</a></span>(ListAdapter adapter)
         
+        <div class="jd-descrdiv">For each DragSortListView Listener interface implemented by
+ <code>adapter</code>, this method calls the appropriate
+ set*Listener method with <code>adapter</code> as the argument.</div>
+  
   </td></tr>
 
 
@@ -1717,7 +1726,24 @@ From class
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+  <div class="jd-tagdata jd-tagdescr"><p>For each DragSortListView Listener interface implemented by
+ <code>adapter</code>, this method calls the appropriate
+ set*Listener method with <code>adapter</code> as the argument.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>adapter</th>
+          <td>The ListAdapter providing data to back
+ DragSortListView.</td>
+        </tr>
+      </table>
+  </div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">See Also</h5>
+      <ul class="nolist"><li>android.widget.ListView#setAdapter(android.widget.ListAdapter)</li>
+      </ul>
+  </div>
 
     </div>
 </div>

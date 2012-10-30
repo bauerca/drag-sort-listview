@@ -381,6 +381,245 @@
 >
 </field>
 </class>
+<class name="DragSortCursorAdapter"
+ extends="CursorAdapter"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<implements name="com.mobeta.android.dslv.DragSortListView.DragSortListener">
+</implements>
+<constructor name="DragSortCursorAdapter"
+ type="com.mobeta.android.dslv.DragSortCursorAdapter"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="Context">
+</parameter>
+<parameter name="c" type="Cursor">
+</parameter>
+</constructor>
+<constructor name="DragSortCursorAdapter"
+ type="com.mobeta.android.dslv.DragSortCursorAdapter"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="Context">
+</parameter>
+<parameter name="c" type="Cursor">
+</parameter>
+<parameter name="autoRequery" type="boolean">
+</parameter>
+</constructor>
+<constructor name="DragSortCursorAdapter"
+ type="com.mobeta.android.dslv.DragSortCursorAdapter"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="Context">
+</parameter>
+<parameter name="c" type="Cursor">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+</constructor>
+<method name="changeCursor"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="cursor" type="Cursor">
+</parameter>
+</method>
+<method name="drag"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="from" type="int">
+</parameter>
+<parameter name="to" type="int">
+</parameter>
+</method>
+<method name="drop"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="from" type="int">
+</parameter>
+<parameter name="to" type="int">
+</parameter>
+</method>
+<method name="getCount"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getCursorPosition"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="position" type="int">
+</parameter>
+</method>
+<method name="getCursorPositions"
+ return="java.util.ArrayList&lt;java.lang.Integer&gt;"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getDropDownView"
+ return="View"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="position" type="int">
+</parameter>
+<parameter name="convertView" type="View">
+</parameter>
+<parameter name="parent" type="ViewGroup">
+</parameter>
+</method>
+<method name="getItem"
+ return="java.lang.Object"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="position" type="int">
+</parameter>
+</method>
+<method name="getItemId"
+ return="long"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="position" type="int">
+</parameter>
+</method>
+<method name="getListPosition"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="cursorPosition" type="int">
+</parameter>
+</method>
+<method name="getView"
+ return="View"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="position" type="int">
+</parameter>
+<parameter name="convertView" type="View">
+</parameter>
+<parameter name="parent" type="ViewGroup">
+</parameter>
+</method>
+<method name="remove"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="which" type="int">
+</parameter>
+</method>
+<method name="swapCursor"
+ return="Cursor"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="newCursor" type="Cursor">
+</parameter>
+</method>
+<field name="REMOVED"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="-1"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
 <class name="DragSortListView"
  extends="ListView"
  abstract="false"
@@ -963,6 +1202,363 @@
  visibility="public"
 >
 <parameter name="which" type="int">
+</parameter>
+</method>
+</interface>
+<class name="ResourceDragSortCursorAdapter"
+ extends="com.mobeta.android.dslv.DragSortCursorAdapter"
+ abstract="true"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="ResourceDragSortCursorAdapter"
+ type="com.mobeta.android.dslv.ResourceDragSortCursorAdapter"
+ static="false"
+ final="false"
+ deprecated="deprecated"
+ visibility="public"
+>
+<parameter name="context" type="Context">
+</parameter>
+<parameter name="layout" type="int">
+</parameter>
+<parameter name="c" type="Cursor">
+</parameter>
+</constructor>
+<constructor name="ResourceDragSortCursorAdapter"
+ type="com.mobeta.android.dslv.ResourceDragSortCursorAdapter"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="Context">
+</parameter>
+<parameter name="layout" type="int">
+</parameter>
+<parameter name="c" type="Cursor">
+</parameter>
+<parameter name="autoRequery" type="boolean">
+</parameter>
+</constructor>
+<constructor name="ResourceDragSortCursorAdapter"
+ type="com.mobeta.android.dslv.ResourceDragSortCursorAdapter"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="Context">
+</parameter>
+<parameter name="layout" type="int">
+</parameter>
+<parameter name="c" type="Cursor">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+</constructor>
+<method name="newDropDownView"
+ return="View"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="Context">
+</parameter>
+<parameter name="cursor" type="Cursor">
+</parameter>
+<parameter name="parent" type="ViewGroup">
+</parameter>
+</method>
+<method name="newView"
+ return="View"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="Context">
+</parameter>
+<parameter name="cursor" type="Cursor">
+</parameter>
+<parameter name="parent" type="ViewGroup">
+</parameter>
+</method>
+<method name="setDropDownViewResource"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="dropDownLayout" type="int">
+</parameter>
+</method>
+<method name="setViewResource"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="layout" type="int">
+</parameter>
+</method>
+</class>
+<class name="SimpleDragSortCursorAdapter"
+ extends="com.mobeta.android.dslv.ResourceDragSortCursorAdapter"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="SimpleDragSortCursorAdapter"
+ type="com.mobeta.android.dslv.SimpleDragSortCursorAdapter"
+ static="false"
+ final="false"
+ deprecated="deprecated"
+ visibility="public"
+>
+<parameter name="context" type="Context">
+</parameter>
+<parameter name="layout" type="int">
+</parameter>
+<parameter name="c" type="Cursor">
+</parameter>
+<parameter name="from" type="java.lang.String[]">
+</parameter>
+<parameter name="to" type="int[]">
+</parameter>
+</constructor>
+<constructor name="SimpleDragSortCursorAdapter"
+ type="com.mobeta.android.dslv.SimpleDragSortCursorAdapter"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="Context">
+</parameter>
+<parameter name="layout" type="int">
+</parameter>
+<parameter name="c" type="Cursor">
+</parameter>
+<parameter name="from" type="java.lang.String[]">
+</parameter>
+<parameter name="to" type="int[]">
+</parameter>
+<parameter name="flags" type="int">
+</parameter>
+</constructor>
+<method name="bindView"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="view" type="View">
+</parameter>
+<parameter name="context" type="Context">
+</parameter>
+<parameter name="cursor" type="Cursor">
+</parameter>
+</method>
+<method name="changeCursorAndColumns"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="c" type="Cursor">
+</parameter>
+<parameter name="from" type="java.lang.String[]">
+</parameter>
+<parameter name="to" type="int[]">
+</parameter>
+</method>
+<method name="convertToString"
+ return="java.lang.CharSequence"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="cursor" type="Cursor">
+</parameter>
+</method>
+<method name="getCursorToStringConverter"
+ return="com.mobeta.android.dslv.SimpleDragSortCursorAdapter.CursorToStringConverter"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getStringConversionColumn"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="getViewBinder"
+ return="com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="setCursorToStringConverter"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="cursorToStringConverter" type="com.mobeta.android.dslv.SimpleDragSortCursorAdapter.CursorToStringConverter">
+</parameter>
+</method>
+<method name="setStringConversionColumn"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="stringConversionColumn" type="int">
+</parameter>
+</method>
+<method name="setViewBinder"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="viewBinder" type="com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder">
+</parameter>
+</method>
+<method name="setViewImage"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="v" type="ImageView">
+</parameter>
+<parameter name="value" type="java.lang.String">
+</parameter>
+</method>
+<method name="setViewText"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="v" type="TextView">
+</parameter>
+<parameter name="text" type="java.lang.String">
+</parameter>
+</method>
+</class>
+<interface name="SimpleDragSortCursorAdapter.CursorToStringConverter"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="convertToString"
+ return="java.lang.CharSequence"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="cursor" type="Cursor">
+</parameter>
+</method>
+</interface>
+<interface name="SimpleDragSortCursorAdapter.ViewBinder"
+ abstract="true"
+ static="true"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<method name="setViewValue"
+ return="boolean"
+ abstract="true"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="view" type="View">
+</parameter>
+<parameter name="cursor" type="Cursor">
+</parameter>
+<parameter name="columnIndex" type="int">
 </parameter>
 </method>
 </interface>
