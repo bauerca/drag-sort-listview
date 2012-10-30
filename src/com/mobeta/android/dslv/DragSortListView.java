@@ -454,7 +454,7 @@ public class DragSortListView extends ListView {
                         DragSortController.FLING_RIGHT_REMOVE);
                 boolean sortEnabled = a.getBoolean(
                         R.styleable.DragSortListView_sort_enabled,
-                        false);
+                        true);
                 int dragInitMode = a.getInt(
                         R.styleable.DragSortListView_drag_start_mode,
                         DragSortController.ON_DOWN);
@@ -530,6 +530,17 @@ public class DragSortListView extends ListView {
     public void setAdapter(ListAdapter adapter) {
         mAdapterWrapper = new AdapterWrapper(adapter);
         adapter.registerDataSetObserver(mObserver);
+
+        if (adapter instanceof DropListener) {
+            setDropListener((DropListener) adapter);
+        }
+        if (adapter instanceof DragListener) {
+            setDragListener((DragListener) adapter);
+        }
+        if (adapter instanceof RemoveListener) {
+            setRemoveListener((RemoveListener) adapter);
+        }
+
         super.setAdapter(mAdapterWrapper);
     }
     

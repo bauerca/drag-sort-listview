@@ -7,6 +7,7 @@
         <item>Warp</item>
         <item>Background handle</item>
         <item>Sections</item>
+        <item>CursorAdapter</item>
     </string-array>
     <string-array name="activity_descs">
         <item>
@@ -31,6 +32,11 @@
         <item>
             Demonstrates floating View control from a custom
             FloatViewManager. Restrict item drags to list sections.
+        </item>
+        <item>
+            Demonstrates usage of the DragSortCursorAdapter class,
+            which abstracts drag-sorts with a remapping of Cursor
+            positions to ListView positions.
         </item>
     </string-array>
     <string name="ok">OK</string>

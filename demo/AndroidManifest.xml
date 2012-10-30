@@ -23,5 +23,7 @@
                   android:label="Background handle" />
         <activity android:name="Sections"
                   android:label="Sections" />
+        <activity android:name="CursorDSLV"
+                  android:label="DB backed" />
     </application>
 </manifest> 
