@@ -10,6 +10,21 @@ import android.view.ViewGroup;
 import android.support.v4.widget.CursorAdapter;
 
 
+/**
+ * A subclass of {@link android.widget.CursorAdapter} that provides
+ * reordering of the elements in the Cursor based on completed
+ * drag-sort operations. The reordering is a simple mapping of
+ * list positions into Cursor positions (the Cursor is unchanged).
+ * To persist changes made by drag-sorts, one can retrieve the
+ * mapping with the {@link #getCursorPositions()} method, which
+ * returns the reordered list of Cursor positions.
+ *
+ * An instance of this class is passed
+ * to {@link DragSortListView#setAdapter(ListAdapter)} and, since
+ * this class implements the {@link DragSortListView.DragSortListener}
+ * interface, it is automatically set as the DragSortListener for
+ * the DragSortListView instance.
+ */
 public abstract class DragSortCursorAdapter extends CursorAdapter implements DragSortListView.DragSortListener {
 
     public static final int REMOVED = -1;
@@ -33,6 +48,11 @@ public abstract class DragSortCursorAdapter extends CursorAdapter implements Dra
         super(context, c, flags);
     }
 
+    /**
+     * Swaps Cursor and clears list-Cursor mapping.
+     *
+     * @see android.widget.CursorAdapter#swapCursor(android.database.Cursor)
+     */
     @Override
     public Cursor swapCursor(Cursor newCursor) {
         Cursor old = super.swapCursor(newCursor);
@@ -40,6 +60,11 @@ public abstract class DragSortCursorAdapter extends CursorAdapter implements Dra
         return old;
     }
 
+    /**
+     * Changes Cursor and clears list-Cursor mapping.
+     *
+     * @see android.widget.CursorAdapter#changeCursor(android.database.Cursor)
+     */
     @Override
     public void changeCursor(Cursor cursor) {
         super.changeCursor(cursor);
@@ -71,6 +96,13 @@ public abstract class DragSortCursorAdapter extends CursorAdapter implements Dra
         return super.getView(mListMapping.get(position, position), convertView, parent);
     }
 
+    /**
+     * On drop, this updates the mapping between Cursor positions
+     * and ListView positions. The Cursor is unchanged. Retrieve
+     * the current mapping with {@link getCursorPositions()}.
+     *
+     * @see DragSortListView.DropListener#drop(int, int)
+     */
     @Override
     public void drop(int from, int to) {
         if (from != to) {
@@ -92,6 +124,13 @@ public abstract class DragSortCursorAdapter extends CursorAdapter implements Dra
         }
     }
 
+    /**
+     * On remove, this updates the mapping between Cursor positions
+     * and ListView positions. The Cursor is unchanged. Retrieve
+     * the current mapping with {@link getCursorPositions()}.
+     *
+     * @see DragSortListView.RemoveListener#remove(int)
+     */
     @Override
     public void remove(int which) {
         int cursorPos = mListMapping.get(which, which);
@@ -110,6 +149,9 @@ public abstract class DragSortCursorAdapter extends CursorAdapter implements Dra
         notifyDataSetChanged();
     }
 
+    /**
+     * Does nothing. Just completes DragSortListener interface.
+     */
     @Override
     public void drag(int from, int to) {
         // do nothing
@@ -139,10 +181,23 @@ public abstract class DragSortCursorAdapter extends CursorAdapter implements Dra
         return super.getCount() - mRemovedCursorPositions.size();
     }
 
+    /**
+     * Get the Cursor position mapped to by the provided list position
+     * (given all previously handled drag-sort
+     * operations).
+     *
+     * @param position List position
+     *
+     * @return The mapped-to Cursor position
+     */
     public int getCursorPosition(int position) {
         return mListMapping.get(position, position);
     }
 
+    /**
+     * Get the current order of Cursor positions presented by the
+     * list.
+     */
     public ArrayList<Integer> getCursorPositions() {
         ArrayList<Integer> result = new ArrayList<Integer>();
 
@@ -153,6 +208,14 @@ public abstract class DragSortCursorAdapter extends CursorAdapter implements Dra
         return result;
     }
 
+    /**
+     * Get the list position mapped to by the provided Cursor position.
+     * If the provided Cursor position has been removed by a drag-sort,
+     * this returns {@link #REMOVED}.
+     *
+     * @param cursorPosition A Cursor position
+     * @return The mapped-to list position or REMOVED
+     */
     public int getListPosition(int cursorPosition) {
         if (mRemovedCursorPositions.contains(cursorPosition)) {
             return REMOVED;

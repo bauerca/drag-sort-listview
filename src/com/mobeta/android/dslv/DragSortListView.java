@@ -526,6 +526,16 @@ public class DragSortListView extends ListView {
         mMaxScrollSpeed = max;
     }
     
+    /**
+     * For each DragSortListView Listener interface implemented by
+     * <code>adapter</code>, this method calls the appropriate
+     * set*Listener method with <code>adapter</code> as the argument.
+     * 
+     * @param adapter The ListAdapter providing data to back
+     * DragSortListView.
+     *
+     * @see android.widget.ListView#setAdapter(android.widget.ListAdapter)
+     */
     @Override
     public void setAdapter(ListAdapter adapter) {
         mAdapterWrapper = new AdapterWrapper(adapter);

@@ -17,6 +17,11 @@ Check out the extensively updated demos and usage section below.
 **Oct. 19, 2012**: Public API documentation is up at
 http://bauerca.github.com/drag-sort-listview.
 
+**Oct. 30, 2012**: DragSortCursorAdapter class helps you reorder
+a Cursor-backed ListAdapter. Look at ResourceDragSortCursorAdapter
+and SimpleDragSortCursorAdapter as well in [the API](
+http://bauerca.github.com/drag-sort-listview).
+
 Overview
 --------
 
@@ -133,9 +138,17 @@ to populate
 its items. Drag-sorting additionally implies a reordering of the items
 in the ListAdapter, achieved through callbacks to special Listener
 interfaces
-defined in DSLV. If no Listeners are given to DSLV via the `set*Listener()`
-methods, DSLV works just like a ListView.
-The Listener interfaces are described below:
+defined in DSLV. Listeners can be registered with DSLV in two ways:
+
+1. Pass them individually to the `set*Listener()` methods
+2. Implement the Listener interfaces you require in a custom
+ListAdapter; when `DragSortListView.setAdapter()` is called
+with your custom
+Adapter, DSLV detects which interfaces are implemented and calls
+the appropriate `set*Listener()` methods on itself with the
+provided ListAdapter as argument.
+
+Each Listener interface is described below:
 
 #### DragSortListView.DropListener
 
@@ -159,6 +172,7 @@ a mapping from Cursor positions to DSLV positions. This is commonly
 done
 within in a custom ListAdapter or CursorWrapper that implements the
 DropListener interface. See Issue #20 for a discussion of this.
+**Update**: Or simply use the DragSortCursorAdapter class!
 
 #### DragSortListView.RemoveListener
 
@@ -253,6 +267,9 @@ typing
 
     javadoc com.mobeta.android.dslv *
 
+The javadoc can be viewed on the DSLV project page:
+http://bauerca.github.com/drag-sort-listview. Sorry for the many
+broken links at the moment. I am slowly getting to this.
 
 Installation
 ------------
