@@ -24,5 +24,6 @@
     </attr>
     <attr name="drag_handle_id" format="integer" />
     <attr name="use_default_controller" format="boolean" />
+    <attr name="remove_handle_id" format="integer" />
   </declare-styleable>
 </resources>
