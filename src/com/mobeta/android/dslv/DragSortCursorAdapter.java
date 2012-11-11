@@ -71,6 +71,14 @@ public abstract class DragSortCursorAdapter extends CursorAdapter implements Dra
         resetMappings();
     }
 
+    /**
+     * Resets list-cursor mapping.
+     */
+    public void reset() {
+        resetMappings();
+        notifyDataSetChanged();
+    }
+
     private void resetMappings() {
         mListMapping.clear();
         mRemovedCursorPositions.clear();
