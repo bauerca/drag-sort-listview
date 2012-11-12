@@ -11,7 +11,9 @@ Items slide around underneath the floating (dragged) View.
 broken. New features make it worthwhile :) and include: total floating
 View customization, total control over drag start/stop,
 and a helper class implementing common patterns (long-press to drag,
-fling-to-remove, etc.). Thanks to @orac for getting all this rolling!
+fling-to-remove, etc.). Thanks to
+[Dan Hulme (orac)](https://github.com/orac)
+for getting all this rolling!
 Check out the extensively updated demos and usage section below.
 
 **Oct. 19, 2012**: Public API documentation is up at
@@ -21,6 +23,9 @@ http://bauerca.github.com/drag-sort-listview.
 a Cursor-backed ListAdapter. Look at ResourceDragSortCursorAdapter
 and SimpleDragSortCursorAdapter as well in [the API](
 http://bauerca.github.com/drag-sort-listview).
+
+**Nov. 11, 2012**: Mavenized.
+Thanks to [Andreas Schildbach (Goonie)](https://github.com/Goonie)!
 
 Overview
 --------
@@ -279,13 +284,39 @@ through GitHub or via (read-only)
 
     git clone https://github.com/bauerca/drag-sort-listview.git
 
-Navigate to drag-sort-listview/ and type (assuming
-/path/to/android_sdk/tools is in your PATH)
+### Ant
 
-    android update project --path ./ --subprojects
+Execute the following in both the drag-sort-listview/library/ and
+drag-sort-listview/demo/ directories (assuming
+/path/to/android_sdk/tools is in your PATH):
 
-Then, navigate to drag-sort-listview/demo/, build,
-and try out the examples.
+    android update project --path ./
+
+To test out the demo, navigate to drag-sort-listview/demo/ and
+execute
+
+    ant debug install
+
+to build and install the demo on your connected device/emulator.
+
+### Maven
+
+A simple
+
+    mvn clean install
+
+should suffice to build and put the DSLV lib and demo in your local
+maven repository. To include in your project, add the following
+dependency to your pom.xml:
+
+```xml
+<dependency>
+    <groupId>com.mobeta.android.dslv</groupId>
+    <artifactId>drag-sort-listview</artifactId>
+    <version>0.3.0-SNAPSHOT</version>
+    <type>apklib</type>
+</dependency>
+```
 
 ### Installation in Eclipse (Indigo)
 
