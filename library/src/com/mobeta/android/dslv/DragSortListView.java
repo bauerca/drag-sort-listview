@@ -418,6 +418,8 @@ public class DragSortListView extends ListView {
     private static final int sCacheSize = 3;
     private HeightCache mChildHeightCache = new HeightCache(sCacheSize);
 
+    private int mRemoveHandleId = 0;
+
     public DragSortListView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -481,7 +483,10 @@ public class DragSortListView extends ListView {
                 int bgColor = a.getColor(
                         R.styleable.DragSortListView_float_background_color,
                         Color.BLACK);
-                
+                mRemoveHandleId = a.getResourceId(
+                        R.styleable.DragSortListView_remove_handle_id,
+                        0);
+
                 DragSortController controller = new DragSortController(
                         this, dragHandleId, dragInitMode, removeMode);
                 controller.setRemoveEnabled(removeEnabled);
@@ -627,9 +632,28 @@ public class DragSortListView extends ListView {
             // View needs to be measured if measurement is required.
             adjustItem(position + getHeaderViewsCount(), v, true);
 
+            if (mRemoveHandleId != 0) {
+                final View removeHandle = child.findViewById(mRemoveHandleId);
+                if (removeHandle != null) {
+                    removeHandle.setOnClickListener(removeHandleClickListener);
+                }
+            }
+
             return v;
         }
     }
+
+    private final OnClickListener removeHandleClickListener = new OnClickListener() {
+
+        @Override
+        public void onClick(final View v) {
+
+            final int pos = getPositionForView(v);
+
+            if (mRemoveListener != null)
+                mRemoveListener.remove(pos);
+        }
+    };
 
     private void drawDivider(int expPosition, Canvas canvas) {
         
