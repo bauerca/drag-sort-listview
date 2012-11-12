@@ -18,47 +18,17 @@ Copyright 2012 Andreas Schildbach
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.mobeta.android.dslv</groupId>
-	<artifactId>drag-sort-listview</artifactId>
-	<packaging>apklib</packaging>
-	<version>1.0-SNAPSHOT</version>
+	<artifactId>parent</artifactId>
+	<version>0.3.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.google.android</groupId>
-			<artifactId>android</artifactId>
-			<version>4.0.1.2</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.android</groupId>
-			<artifactId>support-v4</artifactId>
-			<version>r7</version>
-			<optional>true</optional>
-		</dependency>
-	</dependencies>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<testSourceDirectory>test</testSourceDirectory>
+    <modules>
+        <module>library</module>
+        <module>demo</module>
+    </modules>
 
-		<plugins>
-			<plugin>
-				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
-				<artifactId>android-maven-plugin</artifactId>
-				<version>3.3.2</version>
-				<extensions>true</extensions>
-			</plugin>
-		</plugins>
-
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-eclipse-plugin</artifactId>
-					<version>2.9</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-
-	</build>
 </project>
