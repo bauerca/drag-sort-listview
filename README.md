@@ -27,6 +27,12 @@ http://bauerca.github.com/drag-sort-listview).
 **Nov. 11, 2012**: Mavenized.
 Thanks to [Andreas Schildbach (Goonie)](https://github.com/Goonie)!
 
+**Nov. 15, 2012**: Smooth operation! Drops and removals are animated.
+Also, DragSortController now provides a convenience
+click-to-remove feature (see [XML attrs](https://github.com/bauerca/drag-sort-listview#xml-layout-declaration)
+and [RemoveListener](https://github.com/bauerca/drag-sort-listview#dragsortlistviewremovelistener)
+sections).
+
 Overview
 --------
 
@@ -88,7 +94,7 @@ ListView attributes) are given below. Read each bullet as
 #### XML attributes
 
 * `collapsed_height`: (dimension, 1px) Height of placeholder at original
-drag position.
+drag position. Cannot be zero.
 * `drag_scroll_start`: (float, 0.3) Start of drag-scroll regions
 (defined by a
 fraction of the total DSLV height; i.e. between 0 and 1).
@@ -100,6 +106,12 @@ default linear drag-scroll profile. Units of pixels/millisecond.
 underneath floating View. A value
 of 0 means a shuffle animation is always in progress, whereas a value
 of 1 means items snap from position to position without animation.
+* `drop_animation_duration`: (int, 150) Drop animation smoothly centers
+  the floating View over the drop slot before destroying it. Duration
+  in milliseconds.
+* `remove_animation_duration`: (int, 150) Remove animation smoothly
+  collapses the empty slot when an item is removed. Duration
+  in milliseconds.
 * `track_drag_sort`: (bool, false) Debugging option; explained below.
 * `use_default_controller`: (bool, true) Have DSLV create a
   DragSortController instance and pass the following xml attributes
@@ -129,12 +141,17 @@ of 1 means items snap from position to position without animation.
   of the `remove_mode` options below.
 * `remove_mode`: (enum, "flingRight") Sets the gesture for removing the
   dragged item.
+    + "clickRemove": Click on item child View with id `click_remove_id`.
     + "flingRight": Fling to the right; get outta here! 
     + "flingLeft": Fling to the left; sayonara sucker! 
     + "slideRight": Floating View fades as you slide your finger
       to the right; lifting while faded removes item.
     + "slideLeft": Floating View fades as you slide your finger
       to the right; lifting while faded removes item.
+* `click_remove_id`: (id, 0) Android resource id that points to a
+  child View of a list item. When `remove_mode="clickRemove"` and
+  `remove_enabled="true"`, a click on this child View removes the
+  containing item. This attr is used by DragSortController.
 
 ### Listeners
 
@@ -191,6 +208,9 @@ The position `which` should be "removed" from your ListAdapter; i.e.
 the mapping from your data (e.g. in a Cursor) to your ListAdapter
 should henceforth neglect the item previously pointed to by `which`.
 Whether you actually remove the data or not is up to you.
+
+Item removal can now happen outside of a drag event. The method
+`DragSortListView.removeItem(int position)` can be called at any time.
 
 #### DragSortListView.DragListener
 

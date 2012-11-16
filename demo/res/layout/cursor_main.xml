@@ -16,4 +16,5 @@
     dslv:drag_start_mode="onDown"
     dslv:drag_handle_id="@id/drag_handle"
     dslv:remove_enabled="true"
-    dslv:remove_mode="flingLeft" />
+    dslv:remove_mode="clickRemove"
+    dslv:click_remove_id="@id/click_remove" />

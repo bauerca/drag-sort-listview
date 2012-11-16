@@ -179,8 +179,10 @@ public class DragSortListView extends ListView {
      * Drag state enum.
      */
     private final static int IDLE = 0;
-    private final static int STOPPED = 1;
-    private final static int DRAGGING = 2;
+    private final static int REMOVING = 1;
+    private final static int DROPPING = 2;
+    private final static int STOPPED = 3;
+    private final static int DRAGGING = 4;
     
     private int mDragState = IDLE;
     
@@ -405,6 +407,13 @@ public class DragSortListView extends ListView {
     private boolean mBlockLayoutRequests = false;
 
     /**
+     * Set to true when a down event happens during drag sort;
+     * for example, when drag finish animations are
+     * playing.
+     */
+    private boolean mIgnoreTouchEvent = false;
+
+    /**
      * Caches DragSortItemView child heights. Sometimes DSLV has to
      * know the height of an offscreen item. Since ListView virtualizes
      * these, DSLV must get the item from the ListAdapter to obtain
@@ -418,8 +427,18 @@ public class DragSortListView extends ListView {
     private static final int sCacheSize = 3;
     private HeightCache mChildHeightCache = new HeightCache(sCacheSize);
 
+    private RemoveAnimator mRemoveAnimator;
+
+    private LiftAnimator mLiftAnimator;
+
+    private DropAnimator mDropAnimator;
+
     public DragSortListView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        int defaultDuration = 150;
+        int removeAnimDuration = defaultDuration; //ms
+        int dropAnimDuration = defaultDuration; //ms
 
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs,
@@ -458,6 +477,14 @@ public class DragSortListView extends ListView {
                     R.styleable.DragSortListView_max_drag_scroll_speed,
                     mMaxScrollSpeed);
 
+            removeAnimDuration = a.getInt(
+                    R.styleable.DragSortListView_remove_animation_duration,
+                    removeAnimDuration);
+
+            dropAnimDuration = a.getInt(
+                    R.styleable.DragSortListView_drop_animation_duration,
+                    dropAnimDuration);
+
             boolean useDefault = a.getBoolean(
                     R.styleable.DragSortListView_use_default_controller,
                     true);
@@ -478,12 +505,16 @@ public class DragSortListView extends ListView {
                 int dragHandleId = a.getResourceId(
                         R.styleable.DragSortListView_drag_handle_id,
                         0);
+                int clickRemoveId = a.getResourceId(
+                        R.styleable.DragSortListView_click_remove_id,
+                        0);
                 int bgColor = a.getColor(
                         R.styleable.DragSortListView_float_background_color,
                         Color.BLACK);
                 
                 DragSortController controller = new DragSortController(
-                        this, dragHandleId, dragInitMode, removeMode);
+                        this, dragHandleId, dragInitMode, removeMode,
+                        clickRemoveId);
                 controller.setRemoveEnabled(removeEnabled);
                 controller.setSortEnabled(sortEnabled);
                 controller.setBackgroundColor(bgColor);
@@ -496,6 +527,15 @@ public class DragSortListView extends ListView {
         }
 
         mDragScroller = new DragScroller();
+
+        float smoothness = 0.5f;
+        if (removeAnimDuration > 0) {
+            mRemoveAnimator = new RemoveAnimator(smoothness, removeAnimDuration);
+        }
+        //mLiftAnimator = new LiftAnimator(smoothness, 100);
+        if (dropAnimDuration > 0) {
+            mDropAnimator = new DropAnimator(smoothness, dropAnimDuration);
+        }
 
         mCancelEvent = MotionEvent.obtain(0,0,MotionEvent.ACTION_CANCEL,0f,0f,0f,0f,0,0f,0f,0,0);
 
@@ -555,16 +595,19 @@ public class DragSortListView extends ListView {
     @Override
     public void setAdapter(ListAdapter adapter) {
         mAdapterWrapper = new AdapterWrapper(adapter);
-        adapter.registerDataSetObserver(mObserver);
 
-        if (adapter instanceof DropListener) {
-            setDropListener((DropListener) adapter);
-        }
-        if (adapter instanceof DragListener) {
-            setDragListener((DragListener) adapter);
-        }
-        if (adapter instanceof RemoveListener) {
-            setRemoveListener((RemoveListener) adapter);
+        if (adapter != null) {
+            adapter.registerDataSetObserver(mObserver);
+
+            if (adapter instanceof DropListener) {
+                setDropListener((DropListener) adapter);
+            }
+            if (adapter instanceof DragListener) {
+                setDragListener((DragListener) adapter);
+            }
+            if (adapter instanceof RemoveListener) {
+                setRemoveListener((RemoveListener) adapter);
+            }
         }
 
         super.setAdapter(mAdapterWrapper);
@@ -664,7 +707,7 @@ public class DragSortListView extends ListView {
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
 
-        if (mFloatView != null) {
+        if (mDragState != IDLE) {
             // draw the divider over the expanded item
             if (mFirstExpPos != mSrcPos) {
                 drawDivider(mFirstExpPos, canvas);
@@ -672,7 +715,9 @@ public class DragSortListView extends ListView {
             if (mSecondExpPos != mFirstExpPos && mSecondExpPos != mSrcPos) {
                 drawDivider(mSecondExpPos, canvas);
             }
+        }
 
+        if (mFloatView != null) {
             // draw the float view over everything
             final int w = mFloatView.getWidth();
             final int h = mFloatView.getHeight();
@@ -984,12 +1029,391 @@ public class DragSortListView extends ListView {
         }
     }
 
-    public void cancelDrag() {
-        stopDrag(true, false);
+    private class SmoothAnimator implements Runnable {
+        private long mStartTime;
+
+        private float mDurationF;
+
+        private float mAlpha;
+        private float mA, mB, mC, mD;
+
+        private boolean mCanceled;
+        
+        public SmoothAnimator(float smoothness, int duration) {
+            mAlpha = smoothness;
+            mDurationF = (float) duration;
+            mA = mD = 1f / (2f * mAlpha * (1f - mAlpha));
+            mB = mAlpha / (2f * (mAlpha - 1f));
+            mC = 1f / (1f - mAlpha);
+        }
+
+        public float transform(float frac) {
+            if (frac < mAlpha) {
+                return mA * frac * frac;
+            } else if (frac < 1f - mAlpha) {
+                return mB + mC * frac;
+            } else {
+                return 1f - mD * (frac - 1f) * (frac - 1f);
+            }
+        }
+
+        public void start() {
+            mStartTime = SystemClock.uptimeMillis();
+            mCanceled = false;
+            onStart();
+            post(this);
+        }
+
+        public void cancel() {
+            mCanceled = true;
+        }
+
+        public void onStart() {
+            //stub
+        }
+
+        public void onUpdate(float frac, float smoothFrac) {
+            //stub
+        }
+
+        public void onStop() {
+            //stub
+        }
+
+        @Override
+        public void run() {
+            if (mCanceled) {
+                return;
+            }
+
+            float fraction = ((float) (SystemClock.uptimeMillis() - mStartTime)) / mDurationF;
+
+            if (fraction >= 1f) {
+                onUpdate(1f, 1f);
+                onStop();
+            } else {
+                onUpdate(fraction, transform(fraction));
+                post(this);
+            }
+        }
     }
 
-    public boolean stopDrag(boolean remove) {
-        return stopDrag(false, remove);
+    /**
+     * Centers floating View under touch point.
+     */
+    private class LiftAnimator extends SmoothAnimator {
+
+        private float mInitDragDeltaY;
+        private float mFinalDragDeltaY;
+
+        public LiftAnimator(float smoothness, int duration) {
+            super(smoothness, duration);
+        }
+        
+        @Override
+        public void onStart() {
+            mInitDragDeltaY = mDragDeltaY;
+            mFinalDragDeltaY = mFloatViewHeightHalf;
+        }
+
+        @Override
+        public void onUpdate(float frac, float smoothFrac) {
+            if (mDragState != DRAGGING) {
+                cancel();
+            } else {
+                mDragDeltaY = (int) (smoothFrac * mFinalDragDeltaY + (1f - smoothFrac) * mInitDragDeltaY);
+                mFloatLoc.y = mY - mDragDeltaY;
+                doDragFloatView(true);
+            }
+        }
+    }
+
+    /**
+     * Centers floating View over drop slot before destroying.
+     */
+    private class DropAnimator extends SmoothAnimator {
+
+        private int mDropPos;
+        private int srcPos;
+        private float mInitDeltaY;
+        private float mInitDeltaX;
+
+        public DropAnimator(float smoothness, int duration) {
+            super(smoothness, duration);
+        }
+        
+        @Override
+        public void onStart() {
+            mDropPos = mFloatPos;
+            srcPos = mSrcPos;
+            mDragState = DROPPING;
+            mInitDeltaY = mFloatLoc.y - getTargetY();
+            mInitDeltaX = mFloatLoc.x - getPaddingLeft();
+        }
+
+        private int getTargetY() {
+            final int first = getFirstVisiblePosition();
+            final int otherAdjust = (mItemHeightCollapsed + getDividerHeight()) / 2;
+            View v = getChildAt(mDropPos - first);
+            int targetY = -1;
+            if (v != null) {
+                if (mDropPos == srcPos) {
+                    targetY = v.getTop();
+                } else if (mDropPos < srcPos) {
+                    // expanded down
+                    targetY = v.getTop() - otherAdjust;
+                } else {
+                    // expanded up
+                    targetY = v.getBottom() + otherAdjust - mFloatViewHeight;
+                }
+            } else {
+                // drop position is not on screen?? no animation
+                cancel();
+            }
+
+            return targetY;
+        }
+
+        @Override
+        public void onUpdate(float frac, float smoothFrac) {
+            final int targetY = getTargetY();
+            final float deltaY = mFloatLoc.y - targetY;
+            final float f = 1f - smoothFrac;
+            if (f < Math.abs(deltaY / mInitDeltaY)) {
+                mFloatLoc.y = targetY + (int) (mInitDeltaY * f);
+                mFloatLoc.x = getPaddingLeft() + (int) (mInitDeltaX * f);
+                doDragFloatView(true);
+            }
+        }
+
+        @Override
+        public void onStop() {
+            dropFloatView();
+        }
+
+    }
+
+    /**
+     * Collapses expanded items.
+     */
+    private class RemoveAnimator extends SmoothAnimator {
+
+        private float mFirstStartBlank;
+        private float mSecondStartBlank;
+
+        private int mFirstChildHeight = -1;
+        private int mSecondChildHeight = -1;
+
+        private int mFirstPos;
+        private int mSecondPos;
+        private int srcPos;
+
+        public RemoveAnimator(float smoothness, int duration) {
+            super(smoothness, duration);
+        }
+        
+        @Override
+        public void onStart() {
+            mFirstChildHeight = -1;
+            mSecondChildHeight = -1;
+            mFirstPos = mFirstExpPos;
+            mSecondPos = mSecondExpPos;
+            srcPos = mSrcPos;
+            mDragState = REMOVING;
+            destroyFloatView();
+        }
+
+        @Override
+        public void onUpdate(float frac, float smoothFrac) {
+            float f = 1f - smoothFrac;
+
+            final int firstVis = getFirstVisiblePosition();
+            View item = getChildAt(mFirstPos - firstVis);
+            ViewGroup.LayoutParams lp;
+            int blank;
+            if (item != null) {
+                if (mFirstChildHeight == -1) {
+                    mFirstChildHeight = getChildHeight(mFirstPos, item, false);
+                    mFirstStartBlank = (float) (item.getHeight() - mFirstChildHeight);
+                }
+                blank = Math.max((int) (f * mFirstStartBlank), 1);
+                lp = item.getLayoutParams();
+                lp.height = mFirstChildHeight + blank;
+                item.setLayoutParams(lp);
+            }
+            if (mSecondPos != mFirstPos) {
+                item = getChildAt(mSecondPos - firstVis);
+                if (item != null) {
+                    if (mSecondChildHeight == -1) {
+                        mSecondChildHeight = getChildHeight(mSecondPos, item, false);
+                        mSecondStartBlank = (float) (item.getHeight() - mSecondChildHeight);
+                    }
+                    blank = Math.max((int) (f * mSecondStartBlank), 1);
+                    lp = item.getLayoutParams();
+                    lp.height = mSecondChildHeight + blank;
+                    item.setLayoutParams(lp);
+                }
+            }
+        }
+
+        @Override
+        public void onStop() {
+            doRemoveItem();
+        }
+    }
+
+    /**
+     * Removes an item from the list and animates the removal.
+     *
+     * @param which Position to remove (NOTE: headers/footers ignored!
+     * this is a position in your input ListAdapter).
+     */
+    public void removeItem(int which) {
+        if (mDragState == IDLE || mDragState == DRAGGING) {
+            if (mDragState == IDLE) {
+                // called from outside drag-sort
+                mSrcPos = getHeaderViewsCount() + which;
+                mFirstExpPos = mSrcPos;
+                mSecondExpPos = mSrcPos;
+                mFloatPos = mSrcPos;
+                View v = getChildAt(mSrcPos - getFirstVisiblePosition());
+                if (v != null) {
+                    v.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            if (mInTouchEvent) {
+                switch (mCancelMethod) {
+                case ON_TOUCH_EVENT:
+                    super.onTouchEvent(mCancelEvent);
+                    break;
+                case ON_INTERCEPT_TOUCH_EVENT:
+                    super.onInterceptTouchEvent(mCancelEvent);
+                    break;
+                }
+            }
+
+            if (mRemoveAnimator != null) {
+                mRemoveAnimator.start();
+            } else {
+                doRemoveItem(which);
+            }
+        }
+    }
+
+
+    /**
+     * Move an item, bypassing the drag-sort process. Simply calls
+     * through to {@link DropListener#drop(int, int)}.
+     * 
+     * @param from Position to move (NOTE: headers/footers ignored!
+     * this is a position in your input ListAdapter).
+     * @param to Target position (NOTE: headers/footers ignored!
+     * this is a position in your input ListAdapter).
+     */
+    public void moveItem(int from, int to) {
+        if (mDropListener != null) {
+            final int count = getInputAdapter().getCount();
+            if (from >= 0 && from < count && to >= 0 && to < count) {
+                mDropListener.drop(from, to);
+            }
+        }
+    }
+
+    /**
+     * Cancel a drag. Calls {@link #stopDrag(boolean, boolean)} with
+     * <code>true</code> as the first argument.
+     */
+    public void cancelDrag() {
+        if (mDragState == DRAGGING) {
+            mDragScroller.stopScrolling(true);
+            destroyFloatView();
+            clearPositions();
+            adjustAllItems();
+
+            if (mInTouchEvent) {
+                mDragState = STOPPED;
+            } else {
+                mDragState = IDLE;
+            }
+        }
+    }
+
+    private void clearPositions() {
+        mSrcPos = -1;
+        mFirstExpPos = -1;
+        mSecondExpPos = -1;
+        mFloatPos = -1;
+    }
+
+    private void dropFloatView() {
+        // must set to avoid cancelDrag being called from the
+        // DataSetObserver
+        mDragState = DROPPING;
+
+        if (mDropListener != null && mFloatPos >= 0 && mFloatPos < getCount()) {
+            final int numHeaders = getHeaderViewsCount();
+            mDropListener.drop(mSrcPos - numHeaders, mFloatPos - numHeaders);
+        }
+
+        destroyFloatView();
+
+        adjustOnReorder();
+        clearPositions();
+        adjustAllItems();
+
+        // now the drag is done
+        if (mInTouchEvent) {
+            mDragState = STOPPED;
+        } else {
+            mDragState = IDLE;
+        }
+    }
+
+    private void doRemoveItem() {
+        doRemoveItem(mSrcPos - getHeaderViewsCount());
+    }
+
+    /**
+     * Removes dragged item from the list. Calls RemoveListener.
+     */
+    private void doRemoveItem(int which) {
+        // must set to avoid cancelDrag being called from the
+        // DataSetObserver
+        mDragState = REMOVING;
+        
+        // end it
+        if (mRemoveListener != null) {
+            mRemoveListener.remove(which);
+        }
+
+        destroyFloatView();
+
+        adjustOnReorder();
+        clearPositions();
+
+        // now the drag is done
+        if (mInTouchEvent) {
+            mDragState = STOPPED;
+        } else {
+            mDragState = IDLE;
+        }
+    }
+
+    private void adjustOnReorder() {
+        final int firstPos = getFirstVisiblePosition();
+        //Log.d("mobeta", "first="+firstPos+" src="+mSrcPos);
+        if (mSrcPos < firstPos) {
+            // collapsed src item is off screen;
+            // adjust the scroll after item heights have been fixed
+            View v = getChildAt(0);
+            int top = 0;
+            if (v != null) {
+                top = v.getTop();
+            }
+            //Log.d("mobeta", "top="+top+" fvh="+mFloatViewHeight);
+            setSelectionFromTop(firstPos - 1, top - getPaddingTop());
+        }
     }
 
     /**
@@ -997,51 +1421,25 @@ public class DragSortListView extends ListView {
      * like to remove the dragged item from the list.
      *
      * @param remove Remove the dragged item from the list. Calls
-     * a registered DropListener, if one exists.
+     * a registered RemoveListener, if one exists. Otherwise, calls
+     * the DropListener, if one exists.
      *
-     * @return True if the stop was successful.
+     * @return True if the stop was successful. False if there is
+     * no floating View.
      */
-    public boolean stopDrag(boolean cancel, boolean remove) {
+    public boolean stopDrag(boolean remove) {
         if (mFloatView != null) {
-
-            mDragState = STOPPED;
-
             mDragScroller.stopScrolling(true);
             
-            if (!cancel) {
-                if (remove) {
-                    if (mRemoveListener != null) {
-                        mRemoveListener.remove(mSrcPos - getHeaderViewsCount());
-                    }
+            if (remove) {
+                removeItem(mSrcPos - getHeaderViewsCount());
+            } else {
+                if (mDropAnimator != null) {
+                    mDropAnimator.start();
                 } else {
-                    if (mDropListener != null && mFloatPos >= 0 && mFloatPos < getCount()) {
-                        final int numHeaders = getHeaderViewsCount();
-                        mDropListener.drop(mSrcPos - numHeaders, mFloatPos - numHeaders);
-                    }
-
-                    int firstPos = getFirstVisiblePosition();
-                    if (mSrcPos < firstPos) {
-                        // collapsed src item is off screen;
-                        // adjust the scroll after item heights have been fixed
-                        View v = getChildAt(0);
-                        int top = 0;
-                        if (v != null) {
-                            top = v.getTop();
-                        }
-                        //Log.d("mobeta", "top="+top+" fvh="+mFloatViewHeight);
-                        setSelectionFromTop(firstPos - 1, top - getPaddingTop());
-                    }
+                    dropFloatView();
                 }
             }
-
-            mSrcPos = -1;
-            mFirstExpPos = -1;
-            mSecondExpPos = -1;
-            mFloatPos = -1;
-
-            removeFloatView();
-
-            adjustAllItems();
 
             if (mTrackDragSort) {
                 mDragSortTracker.stopTracking();
@@ -1054,9 +1452,12 @@ public class DragSortListView extends ListView {
         }
     }
 
-
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+        if (mIgnoreTouchEvent) {
+            mIgnoreTouchEvent = false;
+            return false;
+        }
 
         if (!mDragEnabled) {
             return super.onTouchEvent(ev);
@@ -1071,20 +1472,23 @@ public class DragSortListView extends ListView {
             saveTouchCoords(ev);
         }
 
-        if (mFloatView != null) {
+        //if (mFloatView != null) {
+        if (mDragState == DRAGGING) {
             onDragTouchEvent(ev);
             more = true; //give us more!
         } else {
             // what if float view is null b/c we dropped in middle
             // of drag touch event?
 
-            if (mDragState != STOPPED) {
+            //if (mDragState != STOPPED) {
+            if (mDragState == IDLE) {
                 if (super.onTouchEvent(ev)) {
                     more = true;
                 }
             }
 
             int action = ev.getAction() & MotionEvent.ACTION_MASK;
+
             switch (action) {
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
@@ -1098,13 +1502,14 @@ public class DragSortListView extends ListView {
         }
 
         return more;
-
     }
 
     private void doActionUpOrCancel() {
         mCancelMethod = NO_CANCEL;
         mInTouchEvent = false;
-        mDragState = IDLE;
+        if (mDragState == STOPPED) {
+            mDragState = IDLE;
+        }
         mCurrFloatAlpha = mFloatAlpha;
         mChildHeightCache.clear();
     }
@@ -1124,6 +1529,7 @@ public class DragSortListView extends ListView {
         mOffsetX = (int) ev.getRawX() - mX;
         mOffsetY = (int) ev.getRawY() - mY;
     }
+
     
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -1134,13 +1540,18 @@ public class DragSortListView extends ListView {
         saveTouchCoords(ev);
         mLastCallWasIntercept = true;
 
-        boolean intercept = false;
-
         int action = ev.getAction() & MotionEvent.ACTION_MASK;
 
         if (action == MotionEvent.ACTION_DOWN) {
+            if (mDragState != IDLE) {
+                // intercept and ignore
+                mIgnoreTouchEvent = true;
+                return true;
+            }
             mInTouchEvent = true;
         }
+
+        boolean intercept = false;
         
         // the following deals with calls to super.onInterceptTouchEvent
         if (mFloatView != null) {
@@ -1164,8 +1575,6 @@ public class DragSortListView extends ListView {
                 }
             }
         }
-
-        // check for startDragging
 
         if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL) {
             mInTouchEvent = false;
@@ -1395,6 +1804,10 @@ public class DragSortListView extends ListView {
     }
 
     private int getChildHeight(int position, View item, boolean invalidChildHeight) {
+        if (position == mSrcPos) {
+            return 0;
+        }
+
         View child;
         if (position < getHeaderViewsCount() || position >= getCount() - getFooterViewsCount()) {
             child = item;
@@ -1572,8 +1985,16 @@ public class DragSortListView extends ListView {
 
         switch (ev.getAction() & MotionEvent.ACTION_MASK) {
         case MotionEvent.ACTION_CANCEL:
+            if (mDragState == DRAGGING) {
+                cancelDrag();
+            }
+            doActionUpOrCancel();
+            break;
         case MotionEvent.ACTION_UP:
-            stopDrag(false);
+            //Log.d("mobeta", "calling stopDrag from onDragTouchEvent");
+            if (mDragState == DRAGGING) {
+                stopDrag(false);
+            }
             doActionUpOrCancel();
             break;
         case MotionEvent.ACTION_MOVE:
@@ -1651,7 +2072,7 @@ public class DragSortListView extends ListView {
      * a drag in progress.
      */
     public boolean startDrag(int position, View floatView, int dragFlags, int deltaX, int deltaY) {
-        if (!mInTouchEvent || mFloatView != null || floatView == null) {
+        if (mDragState != IDLE || !mInTouchEvent || mFloatView != null || floatView == null) {
             return false;
         }
 
@@ -1704,6 +2125,10 @@ public class DragSortListView extends ListView {
         }
 
         requestLayout();
+
+        if (mLiftAnimator != null) {
+            mLiftAnimator.start();
+        }
 
         return true;
     }
@@ -1809,7 +2234,7 @@ public class DragSortListView extends ListView {
         mFloatViewMid = mFloatLoc.y + mFloatViewHeightHalf;
     }
     
-    private void removeFloatView() {
+    private void destroyFloatView() {
         if (mFloatView != null) {
             mFloatView.setVisibility(GONE);
             if (mFloatViewManager != null) {
@@ -1998,7 +2423,6 @@ public class DragSortListView extends ListView {
         float getSpeed(float w, long t);
     }
 
-    //private class DragScroller implements Runnable, AbsListView.OnScrollListener {
     private class DragScroller implements Runnable {
 
         private boolean mAbort;

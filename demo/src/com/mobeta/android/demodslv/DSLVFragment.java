@@ -53,13 +53,10 @@ public class DSLVFragment extends ListFragment {
      * Return list item layout resource passed to the ArrayAdapter.
      */
     protected int getItemLayout() {
-        boolean handleRight = false;
         if (removeMode == DragSortController.FLING_LEFT_REMOVE || removeMode == DragSortController.SLIDE_LEFT_REMOVE) {
-            handleRight = true;
-        }
-        
-        if (handleRight) {
             return R.layout.list_item_handle_right;
+        } else if (removeMode == DragSortController.CLICK_REMOVE) {
+            return R.layout.list_item_click_remove;
         } else {
             return R.layout.list_item_handle_left;
         }
@@ -111,6 +108,7 @@ public class DSLVFragment extends ListFragment {
         //   removeMode = flingRight
         DragSortController controller = new DragSortController(dslv);
         controller.setDragHandleId(R.id.drag_handle);
+        controller.setClickRemoveId(R.id.click_remove);
         controller.setRemoveEnabled(removeEnabled);
         controller.setSortEnabled(sortEnabled);
         controller.setDragInitMode(dragStartMode);

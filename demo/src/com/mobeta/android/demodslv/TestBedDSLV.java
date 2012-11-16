@@ -40,7 +40,9 @@ EnablesDialog.EnabledOkListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_bed_main);
 
-        getSupportFragmentManager().beginTransaction().add(R.id.test_bed, getNewDslvFragment(), mTag).commit();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().add(R.id.test_bed, getNewDslvFragment(), mTag).commit();
+        }
     }
 
     @Override

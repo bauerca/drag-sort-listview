@@ -80,7 +80,7 @@ public class CursorDSLV extends FragmentActivity implements LoaderCallbacks<Curs
         String[] cols = {"name"};
         int[] ids = {R.id.text};
         adapter = new SimpleDragSortCursorAdapter(this,
-                R.layout.list_item_handle_right, null, cols, ids, 0);
+                R.layout.list_item_click_remove, null, cols, ids, 0);
 
         DragSortListView dslv = (DragSortListView) findViewById(android.R.id.list);
         dslv.setAdapter(adapter);
@@ -107,5 +107,11 @@ public class CursorDSLV extends FragmentActivity implements LoaderCallbacks<Curs
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.changeCursor(null);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mOpenHelper.close();
     }
 }

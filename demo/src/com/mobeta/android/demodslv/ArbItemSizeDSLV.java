@@ -10,6 +10,7 @@ import android.app.ListActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.ListView;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -42,6 +43,10 @@ public class ArbItemSizeDSLV extends ListActivity {
             }
         };
 
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        ((DragSortListView) l).removeItem(position - l.getHeaderViewsCount());
+    }
 
     /** Called when the activity is first created. */
     @Override

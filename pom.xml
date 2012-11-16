@@ -19,11 +19,13 @@ Copyright 2012 Andreas Schildbach
 
 	<groupId>com.mobeta.android.dslv</groupId>
 	<artifactId>parent</artifactId>
-	<version>0.3.0-SNAPSHOT</version>
+	<version>0.4.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <android.version>2.1_r1</android.version>
+        <android.support-v4.version>r7</android.support-v4.version>
     </properties>
 
     <modules>
@@ -31,4 +33,52 @@ Copyright 2012 Andreas Schildbach
         <module>demo</module>
     </modules>
 
+    <scm>
+        <url>https://github.com/bauerca/drag-sort-listview/</url>
+        <connection>scm:git:git://github.com/bauerca/drag-sort-listview.git</connection>
+        <developerConnection>scm:git:git@github.com:bauerca/drag-sort-listview.git</developerConnection>
+    </scm>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.android</groupId>
+                <artifactId>android</artifactId>
+                <version>${android.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.android</groupId>
+                <artifactId>support-v4</artifactId>
+                <version>${android.support-v4.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.2.2</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                </configuration>
+            </plugin>
+        </plugins>
+		<pluginManagement>
+			<plugins>
+			    <plugin>
+			    	<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+			    	<artifactId>android-maven-plugin</artifactId>
+			    	<version>3.3.2</version>
+			    	<extensions>true</extensions>
+			    </plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-eclipse-plugin</artifactId>
+					<version>2.9</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+    </build>
 </project>

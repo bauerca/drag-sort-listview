@@ -35,10 +35,11 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
     /**
      * Remove mode enum.
      */
-    public static final int FLING_RIGHT_REMOVE = 0;
-    public static final int FLING_LEFT_REMOVE = 1;
-    public static final int SLIDE_RIGHT_REMOVE = 2;
-    public static final int SLIDE_LEFT_REMOVE = 3;
+    public static final int CLICK_REMOVE = 0;
+    public static final int FLING_RIGHT_REMOVE = 1;
+    public static final int FLING_LEFT_REMOVE = 2;
+    public static final int SLIDE_RIGHT_REMOVE = 3;
+    public static final int SLIDE_LEFT_REMOVE = 4;
 
     /**
      * The current remove mode.
@@ -57,6 +58,8 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
 
     private int mHitPos = MISS;
 
+    private int mClickRemoveHitPos = MISS;
+
     private int[] mTempLoc = new int[2];
 
     private int mItemX;
@@ -73,6 +76,8 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
 
     private int mDragHandleId;
 
+    private int mClickRemoveId;
+
     private DragSortListView mDslv;
 
 
@@ -88,6 +93,10 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
         this(dslv, 0, ON_DOWN, FLING_RIGHT_REMOVE);
     }
 
+    public DragSortController(DragSortListView dslv, int dragHandleId, int dragInitMode, int removeMode) {
+        this(dslv, dragHandleId, dragInitMode, removeMode, 0);
+    }
+
     /**
      * By default, sorting is enabled, and removal is disabled.
      *
@@ -95,7 +104,7 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
      * @param dragHandleId The resource id of the View that represents
      * the drag handle in a list item.
      */
-    public DragSortController(DragSortListView dslv, int dragHandleId, int dragInitMode, int removeMode) {
+    public DragSortController(DragSortListView dslv, int dragHandleId, int dragInitMode, int removeMode, int clickRemoveId) {
         super(dslv);
         mDslv = dslv;
         mDetector = new GestureDetector(dslv.getContext(), this);
@@ -103,6 +112,7 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
         mFlingRemoveDetector.setIsLongpressEnabled(false);
         mTouchSlop = ViewConfiguration.get(dslv.getContext()).getScaledTouchSlop();
         mDragHandleId = dragHandleId;
+        mClickRemoveId = clickRemoveId;
         setRemoveMode(removeMode);
         setDragInitMode(dragInitMode);
         mOrigFloatAlpha = dslv.getFloatAlpha();
@@ -139,7 +149,8 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
     }
 
     /**
-     * One of {@link FLING_RIGHT_REMOVE}, {@link FLING_LEFT_REMOVE},
+     * One of {@link CLICK_REMOVE}, {@link FLING_RIGHT_REMOVE},
+     * {@link FLING_LEFT_REMOVE},
      * {@link SLIDE_RIGHT_REMOVE}, or {@link SLIDE_LEFT_REMOVE}.
      */
     public void setRemoveMode(int mode) {
@@ -170,6 +181,17 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
     public void setDragHandleId(int id) {
         mDragHandleId = id;
     }
+
+    /**
+     * Set the resource id for the View that represents click
+     * removal button.
+     *
+     * @param id An android resource id.
+     */
+    public void setClickRemoveId(int id) {
+        mClickRemoveId = id;
+    }
+
 
     /**
      * Sets flags to restrict certain motions of the floating View
@@ -301,6 +323,10 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
      * touched; MISS if unsuccessful.
      */
     public int dragHandleHitPosition(MotionEvent ev) {
+        return viewIdHitPosition(ev, mDragHandleId);
+    }
+
+    public int viewIdHitPosition(MotionEvent ev, int id) {
         final int x = (int) ev.getX();
         final int y = (int) ev.getY();
 
@@ -319,7 +345,7 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
             final int rawY = (int) ev.getRawY();
         
             //View dragBox = (View) item.getTag();
-            View dragBox = (View) item.findViewById(mDragHandleId);
+            View dragBox = (View) item.findViewById(id);
             boolean dragHit = false;
             if (dragBox != null) {
                 dragBox.getLocationOnScreen(mTempLoc);
@@ -341,8 +367,11 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
 
     @Override
     public boolean onDown(MotionEvent ev) {
-        mHitPos = startDragPosition(ev);
+        if (mRemoveEnabled && mRemoveMode == CLICK_REMOVE) {
+            mClickRemoveHitPos = viewIdHitPosition(ev, mClickRemoveId);
+        }
 
+        mHitPos = startDragPosition(ev);
         if (mHitPos != MISS && mDragInitMode == ON_DOWN) {
             startDrag(mHitPos, (int) ev.getX() - mItemX, (int) ev.getY() - mItemY);
         }
@@ -395,7 +424,12 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
     // complete the OnGestureListener interface
     @Override
     public boolean onSingleTapUp(MotionEvent ev) {
-        return false;
+        if (mRemoveEnabled && mRemoveMode == CLICK_REMOVE) {
+            if (mClickRemoveHitPos != MISS) {
+                mDslv.removeItem(mClickRemoveHitPos - mDslv.getHeaderViewsCount());
+            }
+        }
+        return true;
     }
 
     // complete the OnGestureListener interface

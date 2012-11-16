@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">DemoDSLV</string>
+    <string name="app_name">Drag-Sort Demos</string>
     <string-array name="activity_titles">
         <item>Basic usage playground</item>
         <item>Heteroheight</item>
@@ -47,6 +47,7 @@
     <string name="add_header">Add header</string>
     <string name="add_footer">Add footer</string>
     <string-array name="remove_mode_labels">
+      <item>Click remove</item>
       <item>Fling right</item>
       <item>Fling left</item>
       <item>Slide right</item>
