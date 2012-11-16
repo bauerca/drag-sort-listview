@@ -16,6 +16,8 @@ public class SimpleFloatViewManager implements DragSortListView.FloatViewManager
 
     private Bitmap mFloatBitmap;
 
+    private ImageView mImageView;
+
     private int mFloatBGColor = Color.BLACK;
 
     private ListView mListView;
@@ -51,12 +53,14 @@ public class SimpleFloatViewManager implements DragSortListView.FloatViewManager
         mFloatBitmap = Bitmap.createBitmap(v.getDrawingCache());
         v.setDrawingCacheEnabled(false);
 
-        ImageView iv = new ImageView(mListView.getContext());
-        iv.setBackgroundColor(mFloatBGColor);
-        iv.setPadding(0, 0, 0, 0);
-        iv.setImageBitmap(mFloatBitmap);
+        if (mImageView == null) {
+            mImageView = new ImageView(mListView.getContext());
+        }
+        mImageView.setBackgroundColor(mFloatBGColor);
+        mImageView.setPadding(0, 0, 0, 0);
+        mImageView.setImageBitmap(mFloatBitmap);
 
-        return iv;
+        return mImageView;
     }
 
     /**

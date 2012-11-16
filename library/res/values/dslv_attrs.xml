@@ -6,14 +6,17 @@
     <attr name="max_drag_scroll_speed" format="float" />
     <attr name="float_background_color" format="color" />
     <attr name="remove_mode">
-      <enum name="flingRight" value="0" />
-      <enum name="flingLeft" value="1" />
-      <enum name="slideRight" value="2" />
-      <enum name="slideLeft" value="3" />
+      <enum name="clickRemove" value="0" />
+      <enum name="flingRight" value="1" />
+      <enum name="flingLeft" value="2" />
+      <enum name="slideRight" value="3" />
+      <enum name="slideLeft" value="4" />
     </attr>
     <attr name="track_drag_sort" format="boolean"/>
     <attr name="float_alpha" format="float"/>
     <attr name="slide_shuffle_speed" format="float"/>
+    <attr name="remove_animation_duration" format="integer"/>
+    <attr name="drop_animation_duration" format="integer"/>
     <attr name="drag_enabled" format="boolean" />
     <attr name="sort_enabled" format="boolean" />
     <attr name="remove_enabled" format="boolean" />
@@ -23,6 +26,7 @@
       <enum name="onLongPress" value="2"/>
     </attr>
     <attr name="drag_handle_id" format="integer" />
+    <attr name="click_remove_id" format="integer" />
     <attr name="use_default_controller" format="boolean" />
   </declare-styleable>
 </resources>
