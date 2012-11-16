@@ -52,13 +52,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-  <meta name="description" content="Javadoc API documentation." />
+  <meta name="description" content="Javadoc API documentation for drag-sort-listview." />
 
 <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.ico" />
 <title>
 
-  SimpleDragSortCursorAdapter - DragSortListView
+  SimpleDragSortCursorAdapter
 
+
+| drag-sort-listview
 
 </title>
 <link href="../../../../../assets/doclava-developer-docs.css" rel="stylesheet" type="text/css" />
@@ -89,6 +91,8 @@
 
 <div id="header">
     <div id="headerLeft">
+    
+      <span id="masthead-title">drag-sort-listview</span>
     
     </div>
     <div id="headerRight">
@@ -134,9 +138,9 @@
         <div id="nav-panels">
           <div id="resize-packages-nav">
             <div id="packages-nav">
-              <div id="index-links">
+              <div id="index-links"><nobr>
                 <a href="../../../../packages.html"  >Package Index</a> | 
-                <a href="../../../../classes.html" >Class Index</a>
+                <a href="../../../../classes.html" >Class Index</a></nobr>
               </div>
               <ul>
                 
@@ -163,9 +167,15 @@
               
     <li><h2>Classes</h2>
       <ul>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/BuildConfig.html">BuildConfig</a></li>
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortController.html">DragSortController</a></li>
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html">DragSortCursorAdapter</a></li>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortItemView.html">DragSortItemView</a></li>
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortListView.html">DragSortListView</a></li>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/R.html">R</a></li>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/R.attr.html">R.attr</a></li>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/R.id.html">R.id</a></li>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/R.styleable.html">R.styleable</a></li>
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/ResourceDragSortCursorAdapter.html">ResourceDragSortCursorAdapter</a></li>
           <li class="selected api apilevel-"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html">SimpleDragSortCursorAdapter</a></li>
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/SimpleFloatViewManager.html">SimpleFloatViewManager</a></li>
@@ -179,9 +189,9 @@
           </div><!-- end classes -->
         </div><!-- end nav-panels -->
         <div id="nav-tree" style="display:none">
-          <div id="index-links">
+          <div id="index-links"><nobr>
             <a href="../../../../packages.html"  >Package Index</a> | 
-            <a href="../../../../classes.html" >Class Index</a>
+            <a href="../../../../classes.html" >Class Index</a></nobr>
           </div>
         </div><!-- end nav-tree -->
       </div><!-- end swapper -->
@@ -228,6 +238,49 @@
   
   
 
+  
+   
+  
+  
+   
+  
+  
+   
+  
+  
+
+  
+   
+  
+  
+  
+  
+
+  
+   
+  
+  
+  
+  
+
+  
+   
+  
+  
+   
+  
+  
+  
+
+  
+   
+  
+  
+  
+  
+
+  
+   
   
   
   
@@ -285,6 +338,9 @@ Summary:
 
 
 
+  &#124; <a href="#inhfields">Inherited Fields</a>
+  
+
 
   &#124; <a href="#pubctors">Ctors</a>
   
@@ -337,6 +393,10 @@ Summary:
   
 
   
+  
+  
+
+  
     extends <a href="../../../../com/mobeta/android/dslv/ResourceDragSortCursorAdapter.html">ResourceDragSortCursorAdapter</a><br/>
   
   
@@ -357,7 +417,7 @@ Summary:
 
     <tr>
          	
-        <td colspan="5" class="jd-inheritance-class-cell">java.lang.Object</td>
+        <td colspan="6" class="jd-inheritance-class-cell"><a href="http://d.android.com/reference/java/lang/Object.html">java.lang.Object</a></td>
     </tr>
     
 
@@ -365,11 +425,23 @@ Summary:
         
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
          	
-        <td colspan="4" class="jd-inheritance-class-cell">CursorAdapter</td>
+        <td colspan="5" class="jd-inheritance-class-cell"><a href="http://d.android.com/reference/android/widget/BaseAdapter.html">android.widget.BaseAdapter</a></td>
     </tr>
     
 
     <tr>
+        
+            <td class="jd-inheritance-space">&nbsp;</td>
+        
+            <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
+         	
+        <td colspan="4" class="jd-inheritance-class-cell">android.support.v4.widget.CursorAdapter</td>
+    </tr>
+    
+
+    <tr>
+        
+            <td class="jd-inheritance-space">&nbsp;</td>
         
             <td class="jd-inheritance-space">&nbsp;</td>
         
@@ -385,6 +457,8 @@ Summary:
         
             <td class="jd-inheritance-space">&nbsp;</td>
         
+            <td class="jd-inheritance-space">&nbsp;</td>
+        
             <td class="jd-inheritance-space">&nbsp;&nbsp;&nbsp;&#x21b3;</td>
          	
         <td colspan="2" class="jd-inheritance-class-cell"><a href="../../../../com/mobeta/android/dslv/ResourceDragSortCursorAdapter.html">com.mobeta.android.dslv.ResourceDragSortCursorAdapter</a></td>
@@ -392,6 +466,8 @@ Summary:
     
 
     <tr>
+        
+            <td class="jd-inheritance-space">&nbsp;</td>
         
             <td class="jd-inheritance-space">&nbsp;</td>
         
@@ -424,12 +500,12 @@ Summary:
 
  Binding occurs in two phases. First, if a
  android.widget.SimpleCursorAdapter.ViewBinder is available,
- ViewBinder#setViewValue(android.view.View, android.database.Cursor, int)
+ <code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.ViewBinder.html#setViewValue(android.view.View, android.database.Cursor, int)">setViewValue(android.view.View, android.database.Cursor, int)</a></code>
  is invoked. If the returned value is true, binding has occured. If the
  returned value is false and the view to bind is a TextView,
- <code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewText(TextView, java.lang.String)">setViewText(TextView, String)</a></code> is invoked. If the returned value
+ <code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewText(android.widget.TextView, java.lang.String)">setViewText(TextView, String)</a></code> is invoked. If the returned value
  is false and the view to bind is an ImageView,
- <code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewImage(ImageView, java.lang.String)">setViewImage(ImageView, String)</a></code> is invoked. If no appropriate
+ <code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewImage(android.widget.ImageView, java.lang.String)">setViewImage(ImageView, String)</a></code> is invoked. If no appropriate
  binding can be found, an IllegalStateException is thrown.
 
  If this adapter is used with filtering, for instance in an
@@ -437,8 +513,8 @@ Summary:
  android.widget.SimpleCursorAdapter.CursorToStringConverter and the
  android.widget.FilterQueryProvider interfaces
  to get control over the filtering process. You can refer to
- #convertToString(android.database.Cursor) and
- #runQueryOnBackgroundThread(CharSequence) for more information.
+ <code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#convertToString(android.database.Cursor)">convertToString(android.database.Cursor)</a></code> and
+ <code><a href="null#runQueryOnBackgroundThread(java.lang.CharSequence)">runQueryOnBackgroundThread(CharSequence)</a></code> for more information.
 </p>
 
 
@@ -475,12 +551,12 @@ Summary:
 
   
     <tr class="alt-color api apilevel-" >
-      <td class="jd-typecol">
+      <td class="jd-typecol"><nobr>
         
          
          
         
-        interface</td>
+        interface</nobr></td>
       <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.CursorToStringConverter.html">SimpleDragSortCursorAdapter.CursorToStringConverter</a></td>
       <td class="jd-descrcol" width="100%">This class can be used by external clients of SimpleCursorAdapter
  to define how the Cursor should be converted to a String.&nbsp;</td>
@@ -488,12 +564,12 @@ Summary:
     
     
     <tr class=" api apilevel-" >
-      <td class="jd-typecol">
+      <td class="jd-typecol"><nobr>
         
          
          
         
-        interface</td>
+        interface</nobr></td>
       <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.ViewBinder.html">SimpleDragSortCursorAdapter.ViewBinder</a></td>
       <td class="jd-descrcol" width="100%">This class can be used by external clients of SimpleCursorAdapter
  to bind values fom the Cursor to views.&nbsp;</td>
@@ -501,7 +577,6 @@ Summary:
     
     
 
-</table>
 
 
 
@@ -556,6 +631,88 @@ Summary:
 
 
 
+<tr class="api apilevel-" >
+<td colspan="12">
+
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-constants-android.support.v4.widget.CursorAdapter" class="jd-expando-trigger closed"
+          ><img id="inherited-constants-android.support.v4.widget.CursorAdapter-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>From class
+android.support.v4.widget.CursorAdapter
+<div id="inherited-constants-android.support.v4.widget.CursorAdapter">
+  <div id="inherited-constants-android.support.v4.widget.CursorAdapter-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-constants-android.support.v4.widget.CursorAdapter-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol">FLAG_AUTO_REQUERY</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol">FLAG_REGISTER_CONTENT_OBSERVER</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+
+
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-constants-android.widget.Adapter" class="jd-expando-trigger closed"
+          ><img id="inherited-constants-android.widget.Adapter-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>From interface
+android.widget.Adapter
+<div id="inherited-constants-android.widget.Adapter">
+  <div id="inherited-constants-android.widget.Adapter-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-constants-android.widget.Adapter-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+    
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol">IGNORE_ITEM_VIEW_TYPE</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol">NO_SELECTION</td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+
+
 
 
 
@@ -575,6 +732,161 @@ Summary:
 
 
 
+<!-- =========== FIELD SUMMARY =========== -->
+<table id="inhfields" class="jd-sumtable"><tr><th>
+  <a href="#" class="toggle-all" onclick="return toggleAllInherited(this, null)">[Expand]</a>
+  <div style="clear:left;">Inherited Fields</div></th></tr>
+
+
+
+
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-fields-android.support.v4.widget.CursorAdapter" class="jd-expando-trigger closed"
+          ><img id="inherited-fields-android.support.v4.widget.CursorAdapter-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>From class
+android.support.v4.widget.CursorAdapter
+<div id="inherited-fields-android.support.v4.widget.CursorAdapter">
+  <div id="inherited-fields-android.support.v4.widget.CursorAdapter-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-fields-android.support.v4.widget.CursorAdapter-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          boolean</nobr></td>
+          <td class="jd-linkcol">mAutoRequery</td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          CursorAdapter.ChangeObserver</nobr></td>
+          <td class="jd-linkcol">mChangeObserver</td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          <a href="http://d.android.com/reference/android/content/Context.html">Context</a></nobr></td>
+          <td class="jd-linkcol">mContext</td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a></nobr></td>
+          <td class="jd-linkcol">mCursor</td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          CursorFilter</nobr></td>
+          <td class="jd-linkcol">mCursorFilter</td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          <a href="http://d.android.com/reference/android/database/DataSetObserver.html">DataSetObserver</a></nobr></td>
+          <td class="jd-linkcol">mDataSetObserver</td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          boolean</nobr></td>
+          <td class="jd-linkcol">mDataValid</td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class=" api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          <a href="http://d.android.com/reference/android/widget/FilterQueryProvider.html">FilterQueryProvider</a></nobr></td>
+          <td class="jd-linkcol">mFilterQueryProvider</td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+      <tr class="alt-color api apilevel-" >
+          <td class="jd-typecol"><nobr>
+          protected
+          
+          
+          int</nobr></td>
+          <td class="jd-linkcol">mRowIDColumn</td>
+          <td class="jd-descrcol" width="100%"></td>
+      </tr>
+      
+    
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</table>
+
+
 
 
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -584,16 +896,16 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            
+            </nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#SimpleDragSortCursorAdapter(Context, int, Cursor, java.lang.String[], int[])">SimpleDragSortCursorAdapter</a></span>(Context context, int layout, Cursor c, String[] from, int[] to)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#SimpleDragSortCursorAdapter(android.content.Context, int, android.database.Cursor, java.lang.String[], int[])">SimpleDragSortCursorAdapter</a></span>(<a href="http://d.android.com/reference/android/content/Context.html">Context</a> context, int layout, <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> c, <a href="http://d.android.com/reference/java/lang/String.html">String[]</a> from, int[] to)</nobr>
         
         <div class="jd-descrdiv">
       <em>
@@ -609,16 +921,16 @@ Summary:
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            
+            </nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#SimpleDragSortCursorAdapter(Context, int, Cursor, java.lang.String[], int[], int)">SimpleDragSortCursorAdapter</a></span>(Context context, int layout, Cursor c, String[] from, int[] to, int flags)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#SimpleDragSortCursorAdapter(android.content.Context, int, android.database.Cursor, java.lang.String[], int[], int)">SimpleDragSortCursorAdapter</a></span>(<a href="http://d.android.com/reference/android/content/Context.html">Context</a> context, int layout, <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> c, <a href="http://d.android.com/reference/java/lang/String.html">String[]</a> from, int[] to, int flags)</nobr>
         
         <div class="jd-descrdiv">Standard constructor.</div>
   
@@ -640,16 +952,16 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#bindView(View, Context, Cursor)">bindView</a></span>(View view, Context context, Cursor cursor)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#bindView(android.view.View, android.content.Context, android.database.Cursor)">bindView</a></span>(<a href="http://d.android.com/reference/android/view/View.html">View</a> view, <a href="http://d.android.com/reference/android/content/Context.html">Context</a> context, <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> cursor)</nobr>
         
         <div class="jd-descrdiv">Binds all of the field names passed into the "to" parameter of the
  constructor with their corresponding cursor columns as specified in the
@@ -660,16 +972,16 @@ Summary:
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#changeCursorAndColumns(Cursor, java.lang.String[], int[])">changeCursorAndColumns</a></span>(Cursor c, String[] from, int[] to)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#changeCursorAndColumns(android.database.Cursor, java.lang.String[], int[])">changeCursorAndColumns</a></span>(<a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> c, <a href="http://d.android.com/reference/java/lang/String.html">String[]</a> from, int[] to)</nobr>
         
         <div class="jd-descrdiv">Change the cursor and change the column-to-view mappings at the same time.</div>
   
@@ -678,16 +990,16 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            CharSequence
+            <a href="http://d.android.com/reference/java/lang/CharSequence.html">CharSequence</a></nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#convertToString(Cursor)">convertToString</a></span>(Cursor cursor)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#convertToString(android.database.Cursor)">convertToString</a></span>(<a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> cursor)</nobr>
         
         <div class="jd-descrdiv">Returns a CharSequence representation of the specified Cursor as defined
  by the current CursorToStringConverter.</div>
@@ -697,16 +1009,16 @@ Summary:
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            <a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.CursorToStringConverter.html">SimpleDragSortCursorAdapter.CursorToStringConverter</a>
+            <a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.CursorToStringConverter.html">SimpleDragSortCursorAdapter.CursorToStringConverter</a></nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getCursorToStringConverter()">getCursorToStringConverter</a></span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getCursorToStringConverter()">getCursorToStringConverter</a></span>()</nobr>
         
         <div class="jd-descrdiv">Returns the converter used to convert the filtering Cursor
  into a String.</div>
@@ -716,16 +1028,16 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            int
+            int</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getStringConversionColumn()">getStringConversionColumn</a></span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getStringConversionColumn()">getStringConversionColumn</a></span>()</nobr>
         
         <div class="jd-descrdiv">Return the index of the column used to get a String representation
  of the Cursor.</div>
@@ -735,16 +1047,16 @@ Summary:
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            <a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.ViewBinder.html">SimpleDragSortCursorAdapter.ViewBinder</a>
+            <a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.ViewBinder.html">SimpleDragSortCursorAdapter.ViewBinder</a></nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getViewBinder()">getViewBinder</a></span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getViewBinder()">getViewBinder</a></span>()</nobr>
         
         <div class="jd-descrdiv">Returns the <code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.ViewBinder.html">SimpleDragSortCursorAdapter.ViewBinder</a></code> used to bind data to views.</div>
   
@@ -753,16 +1065,16 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setCursorToStringConverter(com.mobeta.android.dslv.SimpleDragSortCursorAdapter.CursorToStringConverter)">setCursorToStringConverter</a></span>(<a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.CursorToStringConverter.html">SimpleDragSortCursorAdapter.CursorToStringConverter</a> cursorToStringConverter)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setCursorToStringConverter(com.mobeta.android.dslv.SimpleDragSortCursorAdapter.CursorToStringConverter)">setCursorToStringConverter</a></span>(<a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.CursorToStringConverter.html">SimpleDragSortCursorAdapter.CursorToStringConverter</a> cursorToStringConverter)</nobr>
         
         <div class="jd-descrdiv">Sets the converter  used to convert the filtering Cursor
  into a String.</div>
@@ -772,16 +1084,16 @@ Summary:
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setStringConversionColumn(int)">setStringConversionColumn</a></span>(int stringConversionColumn)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setStringConversionColumn(int)">setStringConversionColumn</a></span>(int stringConversionColumn)</nobr>
         
         <div class="jd-descrdiv">Defines the index of the column in the Cursor used to get a String
  representation of that Cursor.</div>
@@ -791,16 +1103,16 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewBinder(com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder)">setViewBinder</a></span>(<a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.ViewBinder.html">SimpleDragSortCursorAdapter.ViewBinder</a> viewBinder)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewBinder(com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder)">setViewBinder</a></span>(<a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.ViewBinder.html">SimpleDragSortCursorAdapter.ViewBinder</a> viewBinder)</nobr>
         
         <div class="jd-descrdiv">Sets the binder used to bind data to views.</div>
   
@@ -809,16 +1121,16 @@ Summary:
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewImage(ImageView, java.lang.String)">setViewImage</a></span>(ImageView v, String value)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewImage(android.widget.ImageView, java.lang.String)">setViewImage</a></span>(<a href="http://d.android.com/reference/android/widget/ImageView.html">ImageView</a> v, <a href="http://d.android.com/reference/java/lang/String.html">String</a> value)</nobr>
         
         <div class="jd-descrdiv">Called by bindView() to set the image for an ImageView but only if
  there is no existing ViewBinder or if the existing ViewBinder cannot
@@ -829,16 +1141,16 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewText(TextView, java.lang.String)">setViewText</a></span>(TextView v, String text)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewText(android.widget.TextView, java.lang.String)">setViewText</a></span>(<a href="http://d.android.com/reference/android/widget/TextView.html">TextView</a> v, <a href="http://d.android.com/reference/java/lang/String.html">String</a> text)</nobr>
         
         <div class="jd-descrdiv">Called by bindView() to set the text for a TextView but only if
  there is no existing ViewBinder or if the existing ViewBinder cannot
@@ -849,16 +1161,16 @@ Summary:
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            Cursor
+            <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a></nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#swapCursor(Cursor)">swapCursor</a></span>(Cursor c)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#swapCursor(android.database.Cursor)">swapCursor</a></span>(<a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> c)</nobr>
         
         <div class="jd-descrdiv">Swaps Cursor and clears list-Cursor mapping.</div>
   
@@ -901,32 +1213,32 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            View
+            <a href="http://d.android.com/reference/android/view/View.html">View</a></nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/ResourceDragSortCursorAdapter.html#newDropDownView(Context, Cursor, ViewGroup)">newDropDownView</a></span>(Context context, Cursor cursor, ViewGroup parent)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/ResourceDragSortCursorAdapter.html#newDropDownView(android.content.Context, android.database.Cursor, android.view.ViewGroup)">newDropDownView</a></span>(<a href="http://d.android.com/reference/android/content/Context.html">Context</a> context, <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> cursor, <a href="http://d.android.com/reference/android/view/ViewGroup.html">ViewGroup</a> parent)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            View
+            <a href="http://d.android.com/reference/android/view/View.html">View</a></nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/ResourceDragSortCursorAdapter.html#newView(Context, Cursor, ViewGroup)">newView</a></span>(Context context, Cursor cursor, ViewGroup parent)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/ResourceDragSortCursorAdapter.html#newView(android.content.Context, android.database.Cursor, android.view.ViewGroup)">newView</a></span>(<a href="http://d.android.com/reference/android/content/Context.html">Context</a> context, <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> cursor, <a href="http://d.android.com/reference/android/view/ViewGroup.html">ViewGroup</a> parent)</nobr>
         
         <div class="jd-descrdiv">Inflates view(s) from the specified XML file.</div>
   
@@ -935,16 +1247,16 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/ResourceDragSortCursorAdapter.html#setDropDownViewResource(int)">setDropDownViewResource</a></span>(int dropDownLayout)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/ResourceDragSortCursorAdapter.html#setDropDownViewResource(int)">setDropDownViewResource</a></span>(int dropDownLayout)</nobr>
         
         <div class="jd-descrdiv"><p>Sets the layout resource of the drop down views.</div>
   
@@ -953,16 +1265,16 @@ From class
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/ResourceDragSortCursorAdapter.html#setViewResource(int)">setViewResource</a></span>(int layout)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/ResourceDragSortCursorAdapter.html#setViewResource(int)">setViewResource</a></span>(int layout)</nobr>
         
         <div class="jd-descrdiv"><p>Sets the layout resource of the item views.</div>
   
@@ -997,16 +1309,16 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#changeCursor(Cursor)">changeCursor</a></span>(Cursor cursor)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#changeCursor(android.database.Cursor)">changeCursor</a></span>(<a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> cursor)</nobr>
         
         <div class="jd-descrdiv">Changes Cursor and clears list-Cursor mapping.</div>
   
@@ -1015,16 +1327,16 @@ From class
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#drag(int, int)">drag</a></span>(int from, int to)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#drag(int, int)">drag</a></span>(int from, int to)</nobr>
         
         <div class="jd-descrdiv">Does nothing.</div>
   
@@ -1033,16 +1345,16 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#drop(int, int)">drop</a></span>(int from, int to)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#drop(int, int)">drop</a></span>(int from, int to)</nobr>
         
         <div class="jd-descrdiv">On drop, this updates the mapping between Cursor positions
  and ListView positions.</div>
@@ -1052,32 +1364,32 @@ From class
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            int
+            int</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#getCount()">getCount</a></span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#getCount()">getCount</a></span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            int
+            int</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#getCursorPosition(int)">getCursorPosition</a></span>(int position)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#getCursorPosition(int)">getCursorPosition</a></span>(int position)</nobr>
         
         <div class="jd-descrdiv">Get the Cursor position mapped to by the provided list position
  (given all previously handled drag-sort
@@ -1088,16 +1400,16 @@ From class
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            ArrayList&lt;Integer&gt;
+            <a href="http://d.android.com/reference/java/util/ArrayList.html">ArrayList</a>&lt;<a href="http://d.android.com/reference/java/lang/Integer.html">Integer</a>&gt;</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#getCursorPositions()">getCursorPositions</a></span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#getCursorPositions()">getCursorPositions</a></span>()</nobr>
         
         <div class="jd-descrdiv">Get the current order of Cursor positions presented by the
  list.</div>
@@ -1107,64 +1419,64 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            View
+            <a href="http://d.android.com/reference/android/view/View.html">View</a></nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#getDropDownView(int, View, ViewGroup)">getDropDownView</a></span>(int position, View convertView, ViewGroup parent)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#getDropDownView(int, android.view.View, android.view.ViewGroup)">getDropDownView</a></span>(int position, <a href="http://d.android.com/reference/android/view/View.html">View</a> convertView, <a href="http://d.android.com/reference/android/view/ViewGroup.html">ViewGroup</a> parent)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            Object
+            <a href="http://d.android.com/reference/java/lang/Object.html">Object</a></nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#getItem(int)">getItem</a></span>(int position)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#getItem(int)">getItem</a></span>(int position)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            long
+            long</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#getItemId(int)">getItemId</a></span>(int position)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#getItemId(int)">getItemId</a></span>(int position)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            int
+            int</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#getListPosition(int)">getListPosition</a></span>(int cursorPosition)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#getListPosition(int)">getListPosition</a></span>(int cursorPosition)</nobr>
         
         <div class="jd-descrdiv">Get the list position mapped to by the provided Cursor position.</div>
   
@@ -1173,32 +1485,32 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            View
+            <a href="http://d.android.com/reference/android/view/View.html">View</a></nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#getView(int, View, ViewGroup)">getView</a></span>(int position, View convertView, ViewGroup parent)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#getView(int, android.view.View, android.view.ViewGroup)">getView</a></span>(int position, <a href="http://d.android.com/reference/android/view/View.html">View</a> convertView, <a href="http://d.android.com/reference/android/view/ViewGroup.html">ViewGroup</a> parent)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#remove(int)">remove</a></span>(int which)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#remove(int)">remove</a></span>(int which)</nobr>
         
         <div class="jd-descrdiv">On remove, this updates the mapping between Cursor positions
  and ListView positions.</div>
@@ -1208,16 +1520,34 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            Cursor
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#swapCursor(Cursor)">swapCursor</a></span>(Cursor newCursor)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#reset()">reset</a></span>()</nobr>
+        
+        <div class="jd-descrdiv">Resets list-cursor mapping.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html#swapCursor(android.database.Cursor)">swapCursor</a></span>(<a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> newCursor)</nobr>
         
         <div class="jd-descrdiv">Swaps Cursor and clears list-Cursor mapping.</div>
   
@@ -1231,6 +1561,536 @@ From class
 
 
 
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-android.support.v4.widget.CursorAdapter" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-android.support.v4.widget.CursorAdapter-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From class
+
+  android.support.v4.widget.CursorAdapter
+
+<div id="inherited-methods-android.support.v4.widget.CursorAdapter">
+  <div id="inherited-methods-android.support.v4.widget.CursorAdapter-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-android.support.v4.widget.CursorAdapter-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">bindView</span>(<a href="http://d.android.com/reference/android/view/View.html">View</a> arg0, <a href="http://d.android.com/reference/android/content/Context.html">Context</a> arg1, <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> arg2)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">changeCursor</span>(<a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://d.android.com/reference/java/lang/CharSequence.html">CharSequence</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">convertToString</span>(<a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getCount</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getCursor</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://d.android.com/reference/android/view/View.html">View</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getDropDownView</span>(int arg0, <a href="http://d.android.com/reference/android/view/View.html">View</a> arg1, <a href="http://d.android.com/reference/android/view/ViewGroup.html">ViewGroup</a> arg2)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://d.android.com/reference/android/widget/Filter.html">Filter</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getFilter</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://d.android.com/reference/android/widget/FilterQueryProvider.html">FilterQueryProvider</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getFilterQueryProvider</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://d.android.com/reference/java/lang/Object.html">Object</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getItem</span>(int arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            long</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getItemId</span>(int arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://d.android.com/reference/android/view/View.html">View</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getView</span>(int arg0, <a href="http://d.android.com/reference/android/view/View.html">View</a> arg1, <a href="http://d.android.com/reference/android/view/ViewGroup.html">ViewGroup</a> arg2)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">hasStableIds</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">init</span>(<a href="http://d.android.com/reference/android/content/Context.html">Context</a> arg0, <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> arg1, boolean arg2)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://d.android.com/reference/android/view/View.html">View</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">newDropDownView</span>(<a href="http://d.android.com/reference/android/content/Context.html">Context</a> arg0, <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> arg1, <a href="http://d.android.com/reference/android/view/ViewGroup.html">ViewGroup</a> arg2)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            <a href="http://d.android.com/reference/android/view/View.html">View</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">newView</span>(<a href="http://d.android.com/reference/android/content/Context.html">Context</a> arg0, <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> arg1, <a href="http://d.android.com/reference/android/view/ViewGroup.html">ViewGroup</a> arg2)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">onContentChanged</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">runQueryOnBackgroundThread</span>(<a href="http://d.android.com/reference/java/lang/CharSequence.html">CharSequence</a> arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">setFilterQueryProvider</span>(<a href="http://d.android.com/reference/android/widget/FilterQueryProvider.html">FilterQueryProvider</a> arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">swapCursor</span>(<a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> arg0)</nobr>
+        
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-android.widget.BaseAdapter" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-android.widget.BaseAdapter-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From class
+
+  <a href="http://d.android.com/reference/android/widget/BaseAdapter.html">android.widget.BaseAdapter</a>
+
+<div id="inherited-methods-android.widget.BaseAdapter">
+  <div id="inherited-methods-android.widget.BaseAdapter-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-android.widget.BaseAdapter-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">areAllItemsEnabled</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            <a href="http://d.android.com/reference/android/view/View.html">View</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getDropDownView</span>(int arg0, <a href="http://d.android.com/reference/android/view/View.html">View</a> arg1, <a href="http://d.android.com/reference/android/view/ViewGroup.html">ViewGroup</a> arg2)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getItemViewType</span>(int arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getViewTypeCount</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">hasStableIds</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">isEmpty</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">isEnabled</span>(int arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">notifyDataSetChanged</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">notifyDataSetInvalidated</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">registerDataSetObserver</span>(<a href="http://d.android.com/reference/android/database/DataSetObserver.html">DataSetObserver</a> arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">unregisterDataSetObserver</span>(<a href="http://d.android.com/reference/android/database/DataSetObserver.html">DataSetObserver</a> arg0)</nobr>
+        
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
 
 
 <tr class="api apilevel-" >
@@ -1241,7 +2101,7 @@ From class
           class="jd-expando-trigger-img" /></a>
 From class
 
-  java.lang.Object
+  <a href="http://d.android.com/reference/java/lang/Object.html">java.lang.Object</a>
 
 <div id="inherited-methods-java.lang.Object">
   <div id="inherited-methods-java.lang.Object-list"
@@ -1254,176 +2114,504 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            Object
+            <a href="http://d.android.com/reference/java/lang/Object.html">Object</a></nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">clone</span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">clone</span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            boolean
+            boolean</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">equals</span>(Object arg0)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">equals</span>(<a href="http://d.android.com/reference/java/lang/Object.html">Object</a> arg0)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">finalize</span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">finalize</span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             final
             
             
-            Class&lt;?&gt;
+            <a href="http://d.android.com/reference/java/lang/Class.html">Class</a>&lt;?&gt;</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">getClass</span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getClass</span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            int
+            int</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">hashCode</span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">hashCode</span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             final
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">notify</span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">notify</span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             final
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">notifyAll</span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">notifyAll</span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            String
+            <a href="http://d.android.com/reference/java/lang/String.html">String</a></nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">toString</span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">toString</span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             final
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">wait</span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             final
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>(long arg0, int arg1)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             final
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>(long arg0)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">wait</span>(long arg0)</nobr>
+        
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-android.widget.Adapter" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-android.widget.Adapter-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From interface
+
+  <a href="http://d.android.com/reference/android/widget/Adapter.html">android.widget.Adapter</a>
+
+<div id="inherited-methods-android.widget.Adapter">
+  <div id="inherited-methods-android.widget.Adapter-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-android.widget.Adapter-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getCount</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            <a href="http://d.android.com/reference/java/lang/Object.html">Object</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getItem</span>(int arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            long</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getItemId</span>(int arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getItemViewType</span>(int arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            <a href="http://d.android.com/reference/android/view/View.html">View</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getView</span>(int arg0, <a href="http://d.android.com/reference/android/view/View.html">View</a> arg1, <a href="http://d.android.com/reference/android/view/ViewGroup.html">ViewGroup</a> arg2)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getViewTypeCount</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">hasStableIds</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">isEmpty</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">registerDataSetObserver</span>(<a href="http://d.android.com/reference/android/database/DataSetObserver.html">DataSetObserver</a> arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">unregisterDataSetObserver</span>(<a href="http://d.android.com/reference/android/database/DataSetObserver.html">DataSetObserver</a> arg0)</nobr>
+        
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-android.widget.Filterable" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-android.widget.Filterable-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From interface
+
+  <a href="http://d.android.com/reference/android/widget/Filterable.html">android.widget.Filterable</a>
+
+<div id="inherited-methods-android.widget.Filterable">
+  <div id="inherited-methods-android.widget.Filterable-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-android.widget.Filterable-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            <a href="http://d.android.com/reference/android/widget/Filter.html">Filter</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getFilter</span>()</nobr>
+        
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-android.widget.ListAdapter" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-android.widget.ListAdapter-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From interface
+
+  <a href="http://d.android.com/reference/android/widget/ListAdapter.html">android.widget.ListAdapter</a>
+
+<div id="inherited-methods-android.widget.ListAdapter">
+  <div id="inherited-methods-android.widget.ListAdapter-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-android.widget.ListAdapter-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">areAllItemsEnabled</span>()</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">isEnabled</span>(int arg0)</nobr>
+        
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-android.widget.SpinnerAdapter" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-android.widget.SpinnerAdapter-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From interface
+
+  <a href="http://d.android.com/reference/android/widget/SpinnerAdapter.html">android.widget.SpinnerAdapter</a>
+
+<div id="inherited-methods-android.widget.SpinnerAdapter">
+  <div id="inherited-methods-android.widget.SpinnerAdapter-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-android.widget.SpinnerAdapter-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            <a href="http://d.android.com/reference/android/view/View.html">View</a></nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getDropDownView</span>(int arg0, <a href="http://d.android.com/reference/android/view/View.html">View</a> arg1, <a href="http://d.android.com/reference/android/view/ViewGroup.html">ViewGroup</a> arg2)</nobr>
         
   </td></tr>
 
@@ -1456,16 +2644,16 @@ From interface
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             abstract
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.DragListener.html#drag(int, int)">drag</a></span>(int from, int to)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.DragListener.html#drag(int, int)">drag</a></span>(int from, int to)</nobr>
         
   </td></tr>
 
@@ -1500,16 +2688,16 @@ From interface
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             abstract
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.DropListener.html#drop(int, int)">drop</a></span>(int from, int to)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.DropListener.html#drop(int, int)">drop</a></span>(int from, int to)</nobr>
         
   </td></tr>
 
@@ -1542,16 +2730,16 @@ From interface
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             abstract
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.RemoveListener.html#remove(int)">remove</a></span>(int which)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.RemoveListener.html#remove(int)">remove</a></span>(int which)</nobr>
         
   </td></tr>
 
@@ -1596,7 +2784,7 @@ From interface
 
 
 
-<a id="SimpleDragSortCursorAdapter(Context, int, Cursor, java.lang.String[], int[])"></a>
+<A NAME="SimpleDragSortCursorAdapter(android.content.Context, int, android.database.Cursor, java.lang.String[], int[])"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1609,7 +2797,7 @@ From interface
         
       </span>
       <span class="sympad">SimpleDragSortCursorAdapter</span>
-      <span class="normal">(Context context, int layout, Cursor c, String[] from, int[] to)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/content/Context.html">Context</a> context, int layout, <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> c, <a href="http://d.android.com/reference/java/lang/String.html">String[]</a> from, int[] to)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1635,7 +2823,7 @@ From interface
 </div>
 
 
-<a id="SimpleDragSortCursorAdapter(Context, int, Cursor, java.lang.String[], int[], int)"></a>
+<A NAME="SimpleDragSortCursorAdapter(android.content.Context, int, android.database.Cursor, java.lang.String[], int[], int)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1648,7 +2836,7 @@ From interface
         
       </span>
       <span class="sympad">SimpleDragSortCursorAdapter</span>
-      <span class="normal">(Context context, int layout, Cursor c, String[] from, int[] to, int flags)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/content/Context.html">Context</a> context, int layout, <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> c, <a href="http://d.android.com/reference/java/lang/String.html">String[]</a> from, int[] to, int flags)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1665,34 +2853,34 @@ From interface
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>context</th>
+          <th>context</td>
           <td>The context where the ListView associated with this
             SimpleListItemFactory is running</td>
         </tr>
         <tr>
-          <th>layout</th>
+          <th>layout</td>
           <td>resource identifier of a layout file that defines the views
             for this list item. The layout file should include at least
             those named views defined in "to"</td>
         </tr>
         <tr>
-          <th>c</th>
+          <th>c</td>
           <td>The database cursor.  Can be null if the cursor is not available yet.</td>
         </tr>
         <tr>
-          <th>from</th>
+          <th>from</td>
           <td>A list of column names representing the data to bind to the UI.  Can be null 
             if the cursor is not available yet.</td>
         </tr>
         <tr>
-          <th>to</th>
+          <th>to</td>
           <td>The views that should display column in the "from" parameter.
             These should all be TextViews. The first N views in this list
             are given the values of the first N columns in the from
             parameter.  Can be null if the cursor is not available yet.</td>
         </tr>
         <tr>
-          <th>flags</th>
+          <th>flags</td>
           <td>Flags used to determine the behavior of the adapter,
  as per CursorAdapter#CursorAdapter(Context, Cursor, int).
 </td>
@@ -1719,7 +2907,7 @@ From interface
 
 
 
-<a id="bindView(View, Context, Cursor)"></a>
+<A NAME="bindView(android.view.View, android.content.Context, android.database.Cursor)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1732,7 +2920,7 @@ From interface
         void
       </span>
       <span class="sympad">bindView</span>
-      <span class="normal">(View view, Context context, Cursor cursor)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/view/View.html">View</a> view, <a href="http://d.android.com/reference/android/content/Context.html">Context</a> context, <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> cursor)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1750,26 +2938,25 @@ From interface
 
  Binding occurs in two phases. First, if a
  android.widget.SimpleCursorAdapter.ViewBinder is available,
- ViewBinder#setViewValue(android.view.View, android.database.Cursor, int)
+ <code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.ViewBinder.html#setViewValue(android.view.View, android.database.Cursor, int)">setViewValue(android.view.View, android.database.Cursor, int)</a></code>
  is invoked. If the returned value is true, binding has occured. If the
  returned value is false and the view to bind is a TextView,
- <code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewText(TextView, java.lang.String)">setViewText(TextView, String)</a></code> is invoked. If the returned value is
+ <code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewText(android.widget.TextView, java.lang.String)">setViewText(TextView, String)</a></code> is invoked. If the returned value is
  false and the view to bind is an ImageView,
- <code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewImage(ImageView, java.lang.String)">setViewImage(ImageView, String)</a></code> is invoked. If no appropriate
+ <code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewImage(android.widget.ImageView, java.lang.String)">setViewImage(ImageView, String)</a></code> is invoked. If no appropriate
  binding can be found, an IllegalStateException is thrown.</p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Throws</h5>
       <table class="jd-tagtable">  
         <tr>
-            <th>IllegalStateException</td>
+            <th><a href="http://d.android.com/reference/java/lang/IllegalStateException.html">IllegalStateException</a></td>
             <td>if binding cannot occur</td>
         </tr>
       </table>
   </div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">See Also</h5>
-      <ul class="nolist"><li>android.widget.CursorAdapter#bindView(android.view.View,
-      android.content.Context, android.database.Cursor)</li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getViewBinder()">getViewBinder()</a></code></li><li>#setViewBinder(android.widget.SimpleCursorAdapter.ViewBinder)</li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewImage(ImageView, java.lang.String)">setViewImage(ImageView, String)</a></code></li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewText(TextView, java.lang.String)">setViewText(TextView, String)</a></code></li>
+      <ul class="nolist"><li><code><a href="../../../../null#bindView(android.view.View, android.content.Context, android.database.Cursor)">bindView(android.view.View, android.content.Context, android.database.Cursor)</a></code></li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getViewBinder()">getViewBinder()</a></code></li><li>#setViewBinder(android.widget.SimpleCursorAdapter.ViewBinder)</li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewImage(android.widget.ImageView, java.lang.String)">setViewImage(ImageView, String)</a></code></li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setViewText(android.widget.TextView, java.lang.String)">setViewText(TextView, String)</a></code></li>
       </ul>
   </div>
 
@@ -1777,7 +2964,7 @@ From interface
 </div>
 
 
-<a id="changeCursorAndColumns(Cursor, java.lang.String[], int[])"></a>
+<A NAME="changeCursorAndColumns(android.database.Cursor, java.lang.String[], int[])"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1790,7 +2977,7 @@ From interface
         void
       </span>
       <span class="sympad">changeCursorAndColumns</span>
-      <span class="normal">(Cursor c, String[] from, int[] to)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> c, <a href="http://d.android.com/reference/java/lang/String.html">String[]</a> from, int[] to)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1807,16 +2994,16 @@ From interface
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>c</th>
+          <th>c</td>
           <td>The database cursor.  Can be null if the cursor is not available yet.</td>
         </tr>
         <tr>
-          <th>from</th>
+          <th>from</td>
           <td>A list of column names representing the data to bind to the UI.  Can be null 
             if the cursor is not available yet.</td>
         </tr>
         <tr>
-          <th>to</th>
+          <th>to</td>
           <td>The views that should display column in the "from" parameter.
             These should all be TextViews. The first N views in this list
             are given the values of the first N columns in the from
@@ -1830,7 +3017,7 @@ From interface
 </div>
 
 
-<a id="convertToString(Cursor)"></a>
+<A NAME="convertToString(android.database.Cursor)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1840,10 +3027,10 @@ From interface
          
          
          
-        CharSequence
+        <a href="http://d.android.com/reference/java/lang/CharSequence.html">CharSequence</a>
       </span>
       <span class="sympad">convertToString</span>
-      <span class="normal">(Cursor cursor)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> cursor)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1864,7 +3051,7 @@ From interface
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>cursor</th>
+          <th>cursor</td>
           <td>the Cursor to convert to a CharSequence</td>
         </tr>
       </table>
@@ -1879,7 +3066,7 @@ From interface
 </div>
 
 
-<a id="getCursorToStringConverter()"></a>
+<A NAME="getCursorToStringConverter()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1913,7 +3100,7 @@ From interface
   </div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">See Also</h5>
-      <ul class="nolist"><li>#setCursorToStringConverter(android.widget.SimpleCursorAdapter.CursorToStringConverter)</li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getStringConversionColumn()">getStringConversionColumn()</a></code></li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setStringConversionColumn(int)">setStringConversionColumn(int)</a></code></li><li>android.widget.CursorAdapter#convertToString(android.database.Cursor)</li>
+      <ul class="nolist"><li>#setCursorToStringConverter(android.widget.SimpleCursorAdapter.CursorToStringConverter)</li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getStringConversionColumn()">getStringConversionColumn()</a></code></li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setStringConversionColumn(int)">setStringConversionColumn(int)</a></code></li><li><code><a href="../../../../null#convertToString(android.database.Cursor)">convertToString(android.database.Cursor)</a></code></li>
       </ul>
   </div>
 
@@ -1921,7 +3108,7 @@ From interface
 </div>
 
 
-<a id="getStringConversionColumn()"></a>
+<A NAME="getStringConversionColumn()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1954,7 +3141,7 @@ From interface
   </div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">See Also</h5>
-      <ul class="nolist"><li>android.widget.CursorAdapter#convertToString(android.database.Cursor)</li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setStringConversionColumn(int)">setStringConversionColumn(int)</a></code></li><li>#setCursorToStringConverter(android.widget.SimpleCursorAdapter.CursorToStringConverter)</li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getCursorToStringConverter()">getCursorToStringConverter()</a></code></li>
+      <ul class="nolist"><li><code><a href="../../../../null#convertToString(android.database.Cursor)">convertToString(android.database.Cursor)</a></code></li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setStringConversionColumn(int)">setStringConversionColumn(int)</a></code></li><li>#setCursorToStringConverter(android.widget.SimpleCursorAdapter.CursorToStringConverter)</li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getCursorToStringConverter()">getCursorToStringConverter()</a></code></li>
       </ul>
   </div>
 
@@ -1962,7 +3149,7 @@ From interface
 </div>
 
 
-<a id="getViewBinder()"></a>
+<A NAME="getViewBinder()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1994,7 +3181,7 @@ From interface
   </div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">See Also</h5>
-      <ul class="nolist"><li>#bindView(android.view.View, android.content.Context, android.database.Cursor)</li><li>#setViewBinder(android.widget.SimpleCursorAdapter.ViewBinder)</li>
+      <ul class="nolist"><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#bindView(android.view.View, android.content.Context, android.database.Cursor)">bindView(android.view.View, android.content.Context, android.database.Cursor)</a></code></li><li>#setViewBinder(android.widget.SimpleCursorAdapter.ViewBinder)</li>
       </ul>
   </div>
 
@@ -2002,7 +3189,7 @@ From interface
 </div>
 
 
-<a id="setCursorToStringConverter(com.mobeta.android.dslv.SimpleDragSortCursorAdapter.CursorToStringConverter)"></a>
+<A NAME="setCursorToStringConverter(com.mobeta.android.dslv.SimpleDragSortCursorAdapter.CursorToStringConverter)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2033,7 +3220,7 @@ From interface
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>cursorToStringConverter</th>
+          <th>cursorToStringConverter</td>
           <td>the Cursor to String converter, or
         null to remove the converter</td>
         </tr>
@@ -2041,7 +3228,7 @@ From interface
   </div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">See Also</h5>
-      <ul class="nolist"><li>#setCursorToStringConverter(android.widget.SimpleCursorAdapter.CursorToStringConverter)</li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getStringConversionColumn()">getStringConversionColumn()</a></code></li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setStringConversionColumn(int)">setStringConversionColumn(int)</a></code></li><li>android.widget.CursorAdapter#convertToString(android.database.Cursor)</li>
+      <ul class="nolist"><li>#setCursorToStringConverter(android.widget.SimpleCursorAdapter.CursorToStringConverter)</li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getStringConversionColumn()">getStringConversionColumn()</a></code></li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#setStringConversionColumn(int)">setStringConversionColumn(int)</a></code></li><li><code><a href="../../../../null#convertToString(android.database.Cursor)">convertToString(android.database.Cursor)</a></code></li>
       </ul>
   </div>
 
@@ -2049,7 +3236,7 @@ From interface
 </div>
 
 
-<a id="setStringConversionColumn(int)"></a>
+<A NAME="setStringConversionColumn(int)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2082,7 +3269,7 @@ From interface
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>stringConversionColumn</th>
+          <th>stringConversionColumn</td>
           <td>a valid index in the current Cursor or -1 to use the default
         conversion mechanism</td>
         </tr>
@@ -2090,7 +3277,7 @@ From interface
   </div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">See Also</h5>
-      <ul class="nolist"><li>android.widget.CursorAdapter#convertToString(android.database.Cursor)</li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getStringConversionColumn()">getStringConversionColumn()</a></code></li><li>#setCursorToStringConverter(android.widget.SimpleCursorAdapter.CursorToStringConverter)</li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getCursorToStringConverter()">getCursorToStringConverter()</a></code></li>
+      <ul class="nolist"><li><code><a href="../../../../null#convertToString(android.database.Cursor)">convertToString(android.database.Cursor)</a></code></li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getStringConversionColumn()">getStringConversionColumn()</a></code></li><li>#setCursorToStringConverter(android.widget.SimpleCursorAdapter.CursorToStringConverter)</li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getCursorToStringConverter()">getCursorToStringConverter()</a></code></li>
       </ul>
   </div>
 
@@ -2098,7 +3285,7 @@ From interface
 </div>
 
 
-<a id="setViewBinder(com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder)"></a>
+<A NAME="setViewBinder(com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2128,7 +3315,7 @@ From interface
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>viewBinder</th>
+          <th>viewBinder</td>
           <td>the binder used to bind data to views, can be null to
         remove the existing binder</td>
         </tr>
@@ -2136,7 +3323,7 @@ From interface
   </div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">See Also</h5>
-      <ul class="nolist"><li>#bindView(android.view.View, android.content.Context, android.database.Cursor)</li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getViewBinder()">getViewBinder()</a></code></li>
+      <ul class="nolist"><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#bindView(android.view.View, android.content.Context, android.database.Cursor)">bindView(android.view.View, android.content.Context, android.database.Cursor)</a></code></li><li><code><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html#getViewBinder()">getViewBinder()</a></code></li>
       </ul>
   </div>
 
@@ -2144,7 +3331,7 @@ From interface
 </div>
 
 
-<a id="setViewImage(ImageView, java.lang.String)"></a>
+<A NAME="setViewImage(android.widget.ImageView, java.lang.String)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2157,7 +3344,7 @@ From interface
         void
       </span>
       <span class="sympad">setViewImage</span>
-      <span class="normal">(ImageView v, String value)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/widget/ImageView.html">ImageView</a> v, <a href="http://d.android.com/reference/java/lang/String.html">String</a> value)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -2183,11 +3370,11 @@ From interface
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>v</th>
+          <th>v</td>
           <td>ImageView to receive an image</td>
         </tr>
         <tr>
-          <th>value</th>
+          <th>value</td>
           <td>the value retrieved from the cursor
 </td>
         </tr>
@@ -2198,7 +3385,7 @@ From interface
 </div>
 
 
-<a id="setViewText(TextView, java.lang.String)"></a>
+<A NAME="setViewText(android.widget.TextView, java.lang.String)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2211,7 +3398,7 @@ From interface
         void
       </span>
       <span class="sympad">setViewText</span>
-      <span class="normal">(TextView v, String text)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/widget/TextView.html">TextView</a> v, <a href="http://d.android.com/reference/java/lang/String.html">String</a> text)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -2233,11 +3420,11 @@ From interface
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>v</th>
+          <th>v</td>
           <td>TextView to receive text</td>
         </tr>
         <tr>
-          <th>text</th>
+          <th>text</td>
           <td>the text to be set for the TextView
 </td>
         </tr>
@@ -2248,7 +3435,7 @@ From interface
 </div>
 
 
-<a id="swapCursor(Cursor)"></a>
+<A NAME="swapCursor(android.database.Cursor)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2258,10 +3445,10 @@ From interface
          
          
          
-        Cursor
+        <a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a>
       </span>
       <span class="sympad">swapCursor</span>
-      <span class="normal">(Cursor c)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/database/Cursor.html">Cursor</a> c)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -2287,7 +3474,7 @@ From interface
 
 
 <!-- ========= END OF CLASS DATA ========= -->
-<a id="navbar_top"></a>
+<A NAME="navbar_top"></A>
 
 <div id="footer">
 Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.

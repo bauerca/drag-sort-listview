@@ -52,13 +52,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-  <meta name="description" content="Javadoc API documentation." />
+  <meta name="description" content="Javadoc API documentation for drag-sort-listview." />
 
 <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.ico" />
 <title>
 
-  com.mobeta.android.dslv - DragSortListView
+  com.mobeta.android.dslv
 
+
+| drag-sort-listview
 
 </title>
 <link href="../../../../../assets/doclava-developer-docs.css" rel="stylesheet" type="text/css" />
@@ -89,6 +91,8 @@
 
 <div id="header">
     <div id="headerLeft">
+    
+      <span id="masthead-title">drag-sort-listview</span>
     
     </div>
     <div id="headerRight">
@@ -134,9 +138,9 @@
         <div id="nav-panels">
           <div id="resize-packages-nav">
             <div id="packages-nav">
-              <div id="index-links">
+              <div id="index-links"><nobr>
                 <a href="../../../../packages.html"  >Package Index</a> | 
-                <a href="../../../../classes.html" >Class Index</a>
+                <a href="../../../../classes.html" >Class Index</a></nobr>
               </div>
               <ul>
                 
@@ -163,9 +167,15 @@
               
     <li><h2>Classes</h2>
       <ul>
+        <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/BuildConfig.html">BuildConfig</a></li>
         <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortController.html">DragSortController</a></li>
         <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html">DragSortCursorAdapter</a></li>
+        <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortItemView.html">DragSortItemView</a></li>
         <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortListView.html">DragSortListView</a></li>
+        <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/R.html">R</a></li>
+        <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/R.attr.html">R.attr</a></li>
+        <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/R.id.html">R.id</a></li>
+        <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/R.styleable.html">R.styleable</a></li>
         <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/ResourceDragSortCursorAdapter.html">ResourceDragSortCursorAdapter</a></li>
         <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html">SimpleDragSortCursorAdapter</a></li>
         <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/SimpleFloatViewManager.html">SimpleFloatViewManager</a></li>
@@ -179,9 +189,9 @@
           </div><!-- end classes -->
         </div><!-- end nav-panels -->
         <div id="nav-tree" style="display:none">
-          <div id="index-links">
+          <div id="index-links"><nobr>
             <a href="../../../../packages.html"  >Package Index</a> | 
-            <a href="../../../../classes.html" >Class Index</a>
+            <a href="../../../../classes.html" >Class Index</a></nobr>
           </div>
         </div><!-- end nav-tree -->
       </div><!-- end swapper -->
@@ -255,7 +265,7 @@
               <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortListView.DropListener.html">DragSortListView.DropListener</a></td>
               <td class="jd-descrcol" width="100%">Your implementation of this has to reorder your ListAdapter! 
  Make sure to call
- BaseAdapter#notifyDataSetChanged() or something like it
+ <code><a href="null#notifyDataSetChanged()">notifyDataSetChanged()</a></code> or something like it
  in your implementation.&nbsp;</td>
           </tr>
         <tr class="alt-color api apilevel-" >
@@ -266,7 +276,7 @@
         <tr class=" api apilevel-" >
               <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortListView.RemoveListener.html">DragSortListView.RemoveListener</a></td>
               <td class="jd-descrcol" width="100%">Make sure to call
- BaseAdapter#notifyDataSetChanged() or something like it
+ <code><a href="null#notifyDataSetChanged()">notifyDataSetChanged()</a></code> or something like it
  in your implementation.&nbsp;</td>
           </tr>
         <tr class="alt-color api apilevel-" >
@@ -290,19 +300,44 @@
     
   <table class="jd-sumtable-expando">
         <tr class="alt-color api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/BuildConfig.html">BuildConfig</a></td>
+              <td class="jd-descrcol" width="100%">&nbsp;</td>
+          </tr>
+        <tr class=" api apilevel-" >
               <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortController.html">DragSortController</a></td>
               <td class="jd-descrcol" width="100%">Class that starts and stops item drags on a <code><a href="../../../../com/mobeta/android/dslv/DragSortListView.html">DragSortListView</a></code>
  based on touch gestures.&nbsp;</td>
           </tr>
-        <tr class=" api apilevel-" >
+        <tr class="alt-color api apilevel-" >
               <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html">DragSortCursorAdapter</a></td>
               <td class="jd-descrcol" width="100%">A subclass of android.widget.CursorAdapter that provides
  reordering of the elements in the Cursor based on completed
  drag-sort operations.&nbsp;</td>
           </tr>
+        <tr class=" api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortItemView.html">DragSortItemView</a></td>
+              <td class="jd-descrcol" width="100%">Lightweight ViewGroup that wraps list items obtained from user's
+ ListAdapter.&nbsp;</td>
+          </tr>
         <tr class="alt-color api apilevel-" >
               <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortListView.html">DragSortListView</a></td>
               <td class="jd-descrcol" width="100%">ListView subclass that mediates drag and drop resorting of items.&nbsp;</td>
+          </tr>
+        <tr class=" api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/R.html">R</a></td>
+              <td class="jd-descrcol" width="100%">&nbsp;</td>
+          </tr>
+        <tr class="alt-color api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/R.attr.html">R.attr</a></td>
+              <td class="jd-descrcol" width="100%">&nbsp;</td>
+          </tr>
+        <tr class=" api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/R.id.html">R.id</a></td>
+              <td class="jd-descrcol" width="100%">&nbsp;</td>
+          </tr>
+        <tr class="alt-color api apilevel-" >
+              <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/R.styleable.html">R.styleable</a></td>
+              <td class="jd-descrcol" width="100%">&nbsp;</td>
           </tr>
         <tr class=" api apilevel-" >
               <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/ResourceDragSortCursorAdapter.html">ResourceDragSortCursorAdapter</a></td>

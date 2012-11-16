@@ -52,13 +52,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-  <meta name="description" content="Javadoc API documentation." />
+  <meta name="description" content="Javadoc API documentation for drag-sort-listview." />
 
 <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.ico" />
 <title>
 
-  DragSortController - DragSortListView
+  DragSortController
 
+
+| drag-sort-listview
 
 </title>
 <link href="../../../../../assets/doclava-developer-docs.css" rel="stylesheet" type="text/css" />
@@ -89,6 +91,8 @@
 
 <div id="header">
     <div id="headerLeft">
+    
+      <span id="masthead-title">drag-sort-listview</span>
     
     </div>
     <div id="headerRight">
@@ -134,9 +138,9 @@
         <div id="nav-panels">
           <div id="resize-packages-nav">
             <div id="packages-nav">
-              <div id="index-links">
+              <div id="index-links"><nobr>
                 <a href="../../../../packages.html"  >Package Index</a> | 
-                <a href="../../../../classes.html" >Class Index</a>
+                <a href="../../../../classes.html" >Class Index</a></nobr>
               </div>
               <ul>
                 
@@ -163,9 +167,15 @@
               
     <li><h2>Classes</h2>
       <ul>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/BuildConfig.html">BuildConfig</a></li>
           <li class="selected api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortController.html">DragSortController</a></li>
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortCursorAdapter.html">DragSortCursorAdapter</a></li>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortItemView.html">DragSortItemView</a></li>
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/DragSortListView.html">DragSortListView</a></li>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/R.html">R</a></li>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/R.attr.html">R.attr</a></li>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/R.id.html">R.id</a></li>
+          <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/R.styleable.html">R.styleable</a></li>
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/ResourceDragSortCursorAdapter.html">ResourceDragSortCursorAdapter</a></li>
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/SimpleDragSortCursorAdapter.html">SimpleDragSortCursorAdapter</a></li>
           <li class="api apilevel-"><a href="../../../../com/mobeta/android/dslv/SimpleFloatViewManager.html">SimpleFloatViewManager</a></li>
@@ -179,9 +189,9 @@
           </div><!-- end classes -->
         </div><!-- end nav-panels -->
         <div id="nav-tree" style="display:none">
-          <div id="index-links">
+          <div id="index-links"><nobr>
             <a href="../../../../packages.html"  >Package Index</a> | 
-            <a href="../../../../classes.html" >Class Index</a>
+            <a href="../../../../classes.html" >Class Index</a></nobr>
           </div>
         </div><!-- end nav-tree -->
       </div><!-- end swapper -->
@@ -211,6 +221,20 @@
 <div id="api-info-block">
 
 
+
+  
+   
+  
+  
+  
+  
+
+  
+   
+  
+  
+  
+  
 
   
    
@@ -300,6 +324,13 @@ Summary:
 
   
   
+      implements 
+      
+        <a href="http://d.android.com/reference/android/view/GestureDetector.OnGestureListener.html">GestureDetector.OnGestureListener</a> 
+      
+        <a href="http://d.android.com/reference/android/view/View.OnTouchListener.html">View.OnTouchListener</a> 
+      
+  
   
 
 
@@ -313,7 +344,7 @@ Summary:
 
     <tr>
          	
-        <td colspan="3" class="jd-inheritance-class-cell">java.lang.Object</td>
+        <td colspan="3" class="jd-inheritance-class-cell"><a href="http://d.android.com/reference/java/lang/Object.html">java.lang.Object</a></td>
     </tr>
     
 
@@ -403,54 +434,61 @@ Summary:
     
     <tr class="alt-color api apilevel-" >
         <td class="jd-typecol">int</td>
-        <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#FLING_LEFT_REMOVE">FLING_LEFT_REMOVE</a></td>
-        <td class="jd-descrcol" width="100%"></td>
+        <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#CLICK_REMOVE">CLICK_REMOVE</a></td>
+        <td class="jd-descrcol" width="100%">Remove mode enum.</td>
     </tr>
     
     
     <tr class=" api apilevel-" >
         <td class="jd-typecol">int</td>
-        <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#FLING_RIGHT_REMOVE">FLING_RIGHT_REMOVE</a></td>
-        <td class="jd-descrcol" width="100%">Remove mode enum.</td>
+        <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#FLING_LEFT_REMOVE">FLING_LEFT_REMOVE</a></td>
+        <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
     <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol">int</td>
+        <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#FLING_RIGHT_REMOVE">FLING_RIGHT_REMOVE</a></td>
+        <td class="jd-descrcol" width="100%"></td>
+    </tr>
+    
+    
+    <tr class=" api apilevel-" >
         <td class="jd-typecol">int</td>
         <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#MISS">MISS</a></td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol">int</td>
         <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#ON_DOWN">ON_DOWN</a></td>
         <td class="jd-descrcol" width="100%">Drag init mode enum.</td>
     </tr>
     
     
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol">int</td>
         <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#ON_DRAG">ON_DRAG</a></td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol">int</td>
         <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#ON_LONG_PRESS">ON_LONG_PRESS</a></td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol">int</td>
         <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#SLIDE_LEFT_REMOVE">SLIDE_LEFT_REMOVE</a></td>
         <td class="jd-descrcol" width="100%"></td>
     </tr>
     
     
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol">int</td>
         <td class="jd-linkcol"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#SLIDE_RIGHT_REMOVE">SLIDE_RIGHT_REMOVE</a></td>
         <td class="jd-descrcol" width="100%"></td>
@@ -478,16 +516,16 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            
+            </nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#DragSortController(com.mobeta.android.dslv.DragSortListView)">DragSortController</a></span>(<a href="../../../../com/mobeta/android/dslv/DragSortListView.html">DragSortListView</a> dslv)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#DragSortController(com.mobeta.android.dslv.DragSortListView)">DragSortController</a></span>(<a href="../../../../com/mobeta/android/dslv/DragSortListView.html">DragSortListView</a> dslv)</nobr>
         
         <div class="jd-descrdiv">Calls #DragSortController(DragSortListView, int) with a
  0 drag handle id, FLING_RIGHT_REMOVE remove mode,
@@ -498,16 +536,32 @@ Summary:
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            
+            </nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#DragSortController(com.mobeta.android.dslv.DragSortListView, int, int, int)">DragSortController</a></span>(<a href="../../../../com/mobeta/android/dslv/DragSortListView.html">DragSortListView</a> dslv, int dragHandleId, int dragInitMode, int removeMode)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#DragSortController(com.mobeta.android.dslv.DragSortListView, int, int, int)">DragSortController</a></span>(<a href="../../../../com/mobeta/android/dslv/DragSortListView.html">DragSortListView</a> dslv, int dragHandleId, int dragInitMode, int removeMode)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            </nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#DragSortController(com.mobeta.android.dslv.DragSortListView, int, int, int, int)">DragSortController</a></span>(<a href="../../../../com/mobeta/android/dslv/DragSortListView.html">DragSortListView</a> dslv, int dragHandleId, int dragInitMode, int removeMode, int clickRemoveId)</nobr>
         
         <div class="jd-descrdiv">By default, sorting is enabled, and removal is disabled.</div>
   
@@ -529,16 +583,16 @@ Summary:
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            int
+            int</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#dragHandleHitPosition(MotionEvent)">dragHandleHitPosition</a></span>(MotionEvent ev)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#dragHandleHitPosition(android.view.MotionEvent)">dragHandleHitPosition</a></span>(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> ev)</nobr>
         
         <div class="jd-descrdiv">Checks for the touch of an item's drag handle (specified by
  <code><a href="../../../../com/mobeta/android/dslv/DragSortController.html#setDragHandleId(int)">setDragHandleId(int)</a></code>), and returns that item's position
@@ -549,96 +603,96 @@ Summary:
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            int
+            int</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#getDragInitMode()">getDragInitMode</a></span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#getDragInitMode()">getDragInitMode</a></span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            int
+            int</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#getRemoveMode()">getRemoveMode</a></span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#getRemoveMode()">getRemoveMode</a></span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            boolean
+            boolean</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#isRemoveEnabled()">isRemoveEnabled</a></span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#isRemoveEnabled()">isRemoveEnabled</a></span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            boolean
+            boolean</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#isSortEnabled()">isSortEnabled</a></span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#isSortEnabled()">isSortEnabled</a></span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            boolean
+            boolean</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#onDown(MotionEvent)">onDown</a></span>(MotionEvent ev)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#onDown(android.view.MotionEvent)">onDown</a></span>(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> ev)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#onDragFloatView(View, Point, Point)">onDragFloatView</a></span>(View floatView, Point position, Point touch)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#onDragFloatView(android.view.View, android.graphics.Point, android.graphics.Point)">onDragFloatView</a></span>(<a href="http://d.android.com/reference/android/view/View.html">View</a> floatView, <a href="http://d.android.com/reference/android/graphics/Point.html">Point</a> position, <a href="http://d.android.com/reference/android/graphics/Point.html">Point</a> touch)</nobr>
         
         <div class="jd-descrdiv">Overrides to provide fading when slide removal is enabled.</div>
   
@@ -647,112 +701,131 @@ Summary:
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             final
             
             
-            boolean
+            boolean</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#onFling(MotionEvent, MotionEvent, float, float)">onFling</a></span>(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#onFling(android.view.MotionEvent, android.view.MotionEvent, float, float)">onFling</a></span>(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> e1, <a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> e2, float velocityX, float velocityY)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#onLongPress(MotionEvent)">onLongPress</a></span>(MotionEvent e)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#onLongPress(android.view.MotionEvent)">onLongPress</a></span>(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> e)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            boolean
+            boolean</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#onScroll(MotionEvent, MotionEvent, float, float)">onScroll</a></span>(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#onScroll(android.view.MotionEvent, android.view.MotionEvent, float, float)">onScroll</a></span>(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> e1, <a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> e2, float distanceX, float distanceY)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#onShowPress(MotionEvent)">onShowPress</a></span>(MotionEvent ev)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#onShowPress(android.view.MotionEvent)">onShowPress</a></span>(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> ev)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            boolean
+            boolean</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#onSingleTapUp(MotionEvent)">onSingleTapUp</a></span>(MotionEvent ev)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#onSingleTapUp(android.view.MotionEvent)">onSingleTapUp</a></span>(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> ev)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            boolean
+            boolean</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#onTouch(View, MotionEvent)">onTouch</a></span>(View v, MotionEvent ev)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#onTouch(android.view.View, android.view.MotionEvent)">onTouch</a></span>(<a href="http://d.android.com/reference/android/view/View.html">View</a> v, <a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> ev)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#setDragHandleId(int)">setDragHandleId</a></span>(int id)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#setClickRemoveId(int)">setClickRemoveId</a></span>(int id)</nobr>
+        
+        <div class="jd-descrdiv">Set the resource id for the View that represents click
+ removal button.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#setDragHandleId(int)">setDragHandleId</a></span>(int id)</nobr>
         
         <div class="jd-descrdiv">Set the resource id for the View that represents the drag
  handle in a list item.</div>
@@ -761,17 +834,17 @@ Summary:
 
 
 	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#setDragInitMode(int)">setDragInitMode</a></span>(int mode)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#setDragInitMode(int)">setDragInitMode</a></span>(int mode)</nobr>
         
         <div class="jd-descrdiv">Set how a drag is initiated.</div>
   
@@ -779,17 +852,17 @@ Summary:
 
 
 	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#setRemoveEnabled(boolean)">setRemoveEnabled</a></span>(boolean enabled)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#setRemoveEnabled(boolean)">setRemoveEnabled</a></span>(boolean enabled)</nobr>
         
         <div class="jd-descrdiv">Enable/Disable item removal without affecting remove mode.</div>
   
@@ -797,36 +870,37 @@ Summary:
 
 
 	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#setRemoveMode(int)">setRemoveMode</a></span>(int mode)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#setRemoveMode(int)">setRemoveMode</a></span>(int mode)</nobr>
         
-        <div class="jd-descrdiv">One of FLING_RIGHT_REMOVE, FLING_LEFT_REMOVE,
+        <div class="jd-descrdiv">One of CLICK_REMOVE, FLING_RIGHT_REMOVE,
+ FLING_LEFT_REMOVE,
  SLIDE_RIGHT_REMOVE, or SLIDE_LEFT_REMOVE.</div>
   
   </td></tr>
 
 
 	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#setSortEnabled(boolean)">setSortEnabled</a></span>(boolean enabled)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#setSortEnabled(boolean)">setSortEnabled</a></span>(boolean enabled)</nobr>
         
         <div class="jd-descrdiv">Enable/Disable list item sorting.</div>
   
@@ -834,17 +908,17 @@ Summary:
 
 
 	 
-    <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            boolean
+            boolean</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#startDrag(int, int, int)">startDrag</a></span>(int position, int deltaX, int deltaY)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#startDrag(int, int, int)">startDrag</a></span>(int position, int deltaX, int deltaY)</nobr>
         
         <div class="jd-descrdiv">Sets flags to restrict certain motions of the floating View
  based on DragSortController settings (such as remove mode).</div>
@@ -853,21 +927,37 @@ Summary:
 
 
 	 
-    <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            int
+            int</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#startDragPosition(MotionEvent)">startDragPosition</a></span>(MotionEvent ev)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#startDragPosition(android.view.MotionEvent)">startDragPosition</a></span>(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> ev)</nobr>
         
         <div class="jd-descrdiv">Get the position to start dragging based on the ACTION_DOWN
  MotionEvent.</div>
   
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            int</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortController.html#viewIdHitPosition(android.view.MotionEvent, int)">viewIdHitPosition</a></span>(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> ev, int id)</nobr>
+        
   </td></tr>
 
 
@@ -907,16 +997,16 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            View
+            <a href="http://d.android.com/reference/android/view/View.html">View</a></nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleFloatViewManager.html#onCreateFloatView(int)">onCreateFloatView</a></span>(int position)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleFloatViewManager.html#onCreateFloatView(int)">onCreateFloatView</a></span>(int position)</nobr>
         
         <div class="jd-descrdiv">This simple implementation creates a Bitmap copy of the
  list item currently shown at ListView <code>position</code>.</div>
@@ -926,16 +1016,16 @@ From class
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleFloatViewManager.html#onDestroyFloatView(View)">onDestroyFloatView</a></span>(View floatView)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleFloatViewManager.html#onDestroyFloatView(android.view.View)">onDestroyFloatView</a></span>(<a href="http://d.android.com/reference/android/view/View.html">View</a> floatView)</nobr>
         
         <div class="jd-descrdiv">Removes the Bitmap from the ImageView created in
  onCreateFloatView() and tells the system to recycle it.</div>
@@ -945,16 +1035,16 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleFloatViewManager.html#onDragFloatView(View, Point, Point)">onDragFloatView</a></span>(View floatView, Point position, Point touch)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleFloatViewManager.html#onDragFloatView(android.view.View, android.graphics.Point, android.graphics.Point)">onDragFloatView</a></span>(<a href="http://d.android.com/reference/android/view/View.html">View</a> floatView, <a href="http://d.android.com/reference/android/graphics/Point.html">Point</a> position, <a href="http://d.android.com/reference/android/graphics/Point.html">Point</a> touch)</nobr>
         
         <div class="jd-descrdiv">This does nothing
 </div>
@@ -964,16 +1054,16 @@ From class
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleFloatViewManager.html#setBackgroundColor(int)">setBackgroundColor</a></span>(int color)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/SimpleFloatViewManager.html#setBackgroundColor(int)">setBackgroundColor</a></span>(int color)</nobr>
         
   </td></tr>
 
@@ -993,7 +1083,7 @@ From class
           class="jd-expando-trigger-img" /></a>
 From class
 
-  java.lang.Object
+  <a href="http://d.android.com/reference/java/lang/Object.html">java.lang.Object</a>
 
 <div id="inherited-methods-java.lang.Object">
   <div id="inherited-methods-java.lang.Object-list"
@@ -1006,176 +1096,340 @@ From class
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            Object
+            <a href="http://d.android.com/reference/java/lang/Object.html">Object</a></nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">clone</span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">clone</span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            boolean
+            boolean</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">equals</span>(Object arg0)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">equals</span>(<a href="http://d.android.com/reference/java/lang/Object.html">Object</a> arg0)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">finalize</span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">finalize</span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             final
             
             
-            Class&lt;?&gt;
+            <a href="http://d.android.com/reference/java/lang/Class.html">Class</a>&lt;?&gt;</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">getClass</span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">getClass</span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            int
+            int</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">hashCode</span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">hashCode</span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             final
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">notify</span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">notify</span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             final
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">notifyAll</span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">notifyAll</span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             
             
             
-            String
+            <a href="http://d.android.com/reference/java/lang/String.html">String</a></nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">toString</span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">toString</span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             final
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>()
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">wait</span>()</nobr>
         
   </td></tr>
 
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             final
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>(long arg0, int arg1)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">wait</span>(long arg0, int arg1)</nobr>
         
   </td></tr>
 
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             
             
             final
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad">wait</span>(long arg0)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">wait</span>(long arg0)</nobr>
+        
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-android.view.GestureDetector.OnGestureListener" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-android.view.GestureDetector.OnGestureListener-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From interface
+
+  <a href="http://d.android.com/reference/android/view/GestureDetector.OnGestureListener.html">android.view.GestureDetector.OnGestureListener</a>
+
+<div id="inherited-methods-android.view.GestureDetector.OnGestureListener">
+  <div id="inherited-methods-android.view.GestureDetector.OnGestureListener-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-android.view.GestureDetector.OnGestureListener-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">onDown</span>(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">onFling</span>(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> arg0, <a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> arg1, float arg2, float arg3)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">onLongPress</span>(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">onScroll</span>(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> arg0, <a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> arg1, float arg2, float arg3)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">onShowPress</span>(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> arg0)</nobr>
+        
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">onSingleTapUp</span>(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> arg0)</nobr>
+        
+  </td></tr>
+
+
+</table>
+  </div>
+</div>
+</td></tr>
+
+
+
+<tr class="api apilevel-" >
+<td colspan="12">
+  <a href="#" onclick="return toggleInherited(this, null)" id="inherited-methods-android.view.View.OnTouchListener" class="jd-expando-trigger closed"
+          ><img id="inherited-methods-android.view.View.OnTouchListener-trigger"
+          src="../../../../../assets/images/triangle-closed.png"
+          class="jd-expando-trigger-img" /></a>
+From interface
+
+  <a href="http://d.android.com/reference/android/view/View.OnTouchListener.html">android.view.View.OnTouchListener</a>
+
+<div id="inherited-methods-android.view.View.OnTouchListener">
+  <div id="inherited-methods-android.view.View.OnTouchListener-list"
+        class="jd-inheritedlinks">
+  </div>
+  <div id="inherited-methods-android.view.View.OnTouchListener-summary" style="display: none;">
+    <table class="jd-sumtable-expando">
+    
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            abstract
+            
+            
+            
+            
+            boolean</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad">onTouch</span>(<a href="http://d.android.com/reference/android/view/View.html">View</a> arg0, <a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> arg1)</nobr>
         
   </td></tr>
 
@@ -1208,16 +1462,16 @@ From interface
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             abstract
             
             
             
             
-            View
+            <a href="http://d.android.com/reference/android/view/View.html">View</a></nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.FloatViewManager.html#onCreateFloatView(int)">onCreateFloatView</a></span>(int position)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.FloatViewManager.html#onCreateFloatView(int)">onCreateFloatView</a></span>(int position)</nobr>
         
         <div class="jd-descrdiv">Return the floating View for item at <code>position</code>.</div>
   
@@ -1226,16 +1480,16 @@ From interface
 
 	 
     <tr class=" api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             abstract
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.FloatViewManager.html#onDestroyFloatView(View)">onDestroyFloatView</a></span>(View floatView)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.FloatViewManager.html#onDestroyFloatView(android.view.View)">onDestroyFloatView</a></span>(<a href="http://d.android.com/reference/android/view/View.html">View</a> floatView)</nobr>
         
         <div class="jd-descrdiv">Called when the float View is dropped; lets you perform
  any necessary cleanup.</div>
@@ -1245,16 +1499,16 @@ From interface
 
 	 
     <tr class="alt-color api apilevel-" >
-        <td class="jd-typecol">
+        <td class="jd-typecol"><nobr>
             abstract
             
             
             
             
-            void
+            void</nobr>
         </td>
-        <td class="jd-linkcol" width="100%">
-        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.FloatViewManager.html#onDragFloatView(View, Point, Point)">onDragFloatView</a></span>(View floatView, Point location, Point touch)
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.FloatViewManager.html#onDragFloatView(android.view.View, android.graphics.Point, android.graphics.Point)">onDragFloatView</a></span>(<a href="http://d.android.com/reference/android/view/View.html">View</a> floatView, <a href="http://d.android.com/reference/android/graphics/Point.html">Point</a> location, <a href="http://d.android.com/reference/android/graphics/Point.html">Point</a> touch)</nobr>
         
         <div class="jd-descrdiv">Called whenever the floating View is dragged.</div>
   
@@ -1296,7 +1550,7 @@ From interface
 
 
 
-<a id="FLING_LEFT_REMOVE"></a>
+<A NAME="CLICK_REMOVE"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1306,47 +1560,7 @@ From interface
         final 
         int
       </span>
-        FLING_LEFT_REMOVE
-    </h4>
-      <div class="api-level">
-        
-
-
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-
-    
-        <div class="jd-tagdata">
-        <span class="jd-tagtitle">Constant Value: </span>
-        <span>
-            
-                1
-                (0x00000001)
-            
-        </span>
-        </div>
-    
-    </div>
-</div>
-
-
-
-<a id="FLING_RIGHT_REMOVE"></a>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-        static 
-        final 
-        int
-      </span>
-        FLING_RIGHT_REMOVE
+        CLICK_REMOVE
     </h4>
       <div class="api-level">
         
@@ -1377,7 +1591,87 @@ From interface
 
 
 
-<a id="MISS"></a>
+<A NAME="FLING_LEFT_REMOVE"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        FLING_LEFT_REMOVE
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                2
+                (0x00000002)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+<A NAME="FLING_RIGHT_REMOVE"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        FLING_RIGHT_REMOVE
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                1
+                (0x00000001)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+<A NAME="MISS"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1417,7 +1711,7 @@ From interface
 
 
 
-<a id="ON_DOWN"></a>
+<A NAME="ON_DOWN"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1458,7 +1752,7 @@ From interface
 
 
 
-<a id="ON_DRAG"></a>
+<A NAME="ON_DRAG"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1498,7 +1792,7 @@ From interface
 
 
 
-<a id="ON_LONG_PRESS"></a>
+<A NAME="ON_LONG_PRESS"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1538,7 +1832,7 @@ From interface
 
 
 
-<a id="SLIDE_LEFT_REMOVE"></a>
+<A NAME="SLIDE_LEFT_REMOVE"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1549,6 +1843,46 @@ From interface
         int
       </span>
         SLIDE_LEFT_REMOVE
+    </h4>
+      <div class="api-level">
+        
+
+
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    
+        <div class="jd-tagdata">
+        <span class="jd-tagtitle">Constant Value: </span>
+        <span>
+            
+                4
+                (0x00000004)
+            
+        </span>
+        </div>
+    
+    </div>
+</div>
+
+
+
+<A NAME="SLIDE_RIGHT_REMOVE"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+        static 
+        final 
+        int
+      </span>
+        SLIDE_RIGHT_REMOVE
     </h4>
       <div class="api-level">
         
@@ -1578,46 +1912,6 @@ From interface
 
 
 
-<a id="SLIDE_RIGHT_REMOVE"></a>
-
-<div class="jd-details api apilevel-"> 
-    <h4 class="jd-details-title">
-      <span class="normal">
-        public 
-        static 
-        final 
-        int
-      </span>
-        SLIDE_RIGHT_REMOVE
-    </h4>
-      <div class="api-level">
-        
-
-
-        
-  
-
-      </div>
-    <div class="jd-details-descr">
-      
-  <div class="jd-tagdata jd-tagdescr"><p></p></div>
-
-    
-        <div class="jd-tagdata">
-        <span class="jd-tagtitle">Constant Value: </span>
-        <span>
-            
-                2
-                (0x00000002)
-            
-        </span>
-        </div>
-    
-    </div>
-</div>
-
-
-
 
 <!-- Fields -->
 
@@ -1630,7 +1924,7 @@ From interface
 
 
 
-<a id="DragSortController(com.mobeta.android.dslv.DragSortListView)"></a>
+<A NAME="DragSortController(com.mobeta.android.dslv.DragSortListView)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1663,7 +1957,7 @@ From interface
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>dslv</th>
+          <th>dslv</td>
           <td>The DSLV instance
 </td>
         </tr>
@@ -1674,7 +1968,7 @@ From interface
 </div>
 
 
-<a id="DragSortController(com.mobeta.android.dslv.DragSortListView, int, int, int)"></a>
+<A NAME="DragSortController(com.mobeta.android.dslv.DragSortListView, int, int, int)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1699,16 +1993,47 @@ From interface
       </div>
     <div class="jd-details-descr">
       
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="DragSortController(com.mobeta.android.dslv.DragSortListView, int, int, int, int)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        
+      </span>
+      <span class="sympad">DragSortController</span>
+      <span class="normal">(<a href="../../../../com/mobeta/android/dslv/DragSortListView.html">DragSortListView</a> dslv, int dragHandleId, int dragInitMode, int removeMode, int clickRemoveId)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
   <div class="jd-tagdata jd-tagdescr"><p>By default, sorting is enabled, and removal is disabled.</p></div>
   <div class="jd-tagdata">
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>dslv</th>
+          <th>dslv</td>
           <td>The DSLV instance</td>
         </tr>
         <tr>
-          <th>dragHandleId</th>
+          <th>dragHandleId</td>
           <td>The resource id of the View that represents
  the drag handle in a list item.
 </td>
@@ -1735,7 +2060,7 @@ From interface
 
 
 
-<a id="dragHandleHitPosition(MotionEvent)"></a>
+<A NAME="dragHandleHitPosition(android.view.MotionEvent)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1748,7 +2073,7 @@ From interface
         int
       </span>
       <span class="sympad">dragHandleHitPosition</span>
-      <span class="normal">(MotionEvent ev)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> ev)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1767,7 +2092,7 @@ From interface
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>ev</th>
+          <th>ev</td>
           <td>The ACTION_DOWN MotionEvent.</td>
         </tr>
       </table>
@@ -1783,7 +2108,7 @@ From interface
 </div>
 
 
-<a id="getDragInitMode()"></a>
+<A NAME="getDragInitMode()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1814,7 +2139,7 @@ From interface
 </div>
 
 
-<a id="getRemoveMode()"></a>
+<A NAME="getRemoveMode()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1845,7 +2170,7 @@ From interface
 </div>
 
 
-<a id="isRemoveEnabled()"></a>
+<A NAME="isRemoveEnabled()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1876,7 +2201,7 @@ From interface
 </div>
 
 
-<a id="isSortEnabled()"></a>
+<A NAME="isSortEnabled()"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1907,7 +2232,7 @@ From interface
 </div>
 
 
-<a id="onDown(MotionEvent)"></a>
+<A NAME="onDown(android.view.MotionEvent)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1920,7 +2245,7 @@ From interface
         boolean
       </span>
       <span class="sympad">onDown</span>
-      <span class="normal">(MotionEvent ev)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> ev)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1938,7 +2263,7 @@ From interface
 </div>
 
 
-<a id="onDragFloatView(View, Point, Point)"></a>
+<A NAME="onDragFloatView(android.view.View, android.graphics.Point, android.graphics.Point)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -1951,7 +2276,7 @@ From interface
         void
       </span>
       <span class="sympad">onDragFloatView</span>
-      <span class="normal">(View floatView, Point position, Point touch)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/view/View.html">View</a> floatView, <a href="http://d.android.com/reference/android/graphics/Point.html">Point</a> position, <a href="http://d.android.com/reference/android/graphics/Point.html">Point</a> touch)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -1969,18 +2294,18 @@ From interface
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>floatView</th>
+          <th>floatView</td>
           <td>The floating View.</td>
         </tr>
         <tr>
-          <th>position</th>
+          <th>position</td>
           <td>The location (top-left; relative to DSLV
  top-left) at which the float
  View would like to appear, given the current touch location
- and the offset provided in <code><a href="../../../../com/mobeta/android/dslv/DragSortListView.html#startDrag(int, View, int, int, int)">startDrag(int, View, int, int, int)</a></code>.</td>
+ and the offset provided in <code><a href="../../../../com/mobeta/android/dslv/DragSortListView.html#startDrag(int, android.view.View, int, int, int)">startDrag(int, View, int, int, int)</a></code>.</td>
         </tr>
         <tr>
-          <th>touch</th>
+          <th>touch</td>
           <td>The current touch location (relative to DSLV
  top-left).</td>
         </tr>
@@ -1991,7 +2316,7 @@ From interface
 </div>
 
 
-<a id="onFling(MotionEvent, MotionEvent, float, float)"></a>
+<A NAME="onFling(android.view.MotionEvent, android.view.MotionEvent, float, float)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2004,7 +2329,7 @@ From interface
         boolean
       </span>
       <span class="sympad">onFling</span>
-      <span class="normal">(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> e1, <a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> e2, float velocityX, float velocityY)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -2022,7 +2347,7 @@ From interface
 </div>
 
 
-<a id="onLongPress(MotionEvent)"></a>
+<A NAME="onLongPress(android.view.MotionEvent)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2035,7 +2360,7 @@ From interface
         void
       </span>
       <span class="sympad">onLongPress</span>
-      <span class="normal">(MotionEvent e)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> e)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -2053,7 +2378,7 @@ From interface
 </div>
 
 
-<a id="onScroll(MotionEvent, MotionEvent, float, float)"></a>
+<A NAME="onScroll(android.view.MotionEvent, android.view.MotionEvent, float, float)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2066,7 +2391,7 @@ From interface
         boolean
       </span>
       <span class="sympad">onScroll</span>
-      <span class="normal">(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> e1, <a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> e2, float distanceX, float distanceY)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -2084,7 +2409,7 @@ From interface
 </div>
 
 
-<a id="onShowPress(MotionEvent)"></a>
+<A NAME="onShowPress(android.view.MotionEvent)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2097,7 +2422,7 @@ From interface
         void
       </span>
       <span class="sympad">onShowPress</span>
-      <span class="normal">(MotionEvent ev)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> ev)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -2115,7 +2440,7 @@ From interface
 </div>
 
 
-<a id="onSingleTapUp(MotionEvent)"></a>
+<A NAME="onSingleTapUp(android.view.MotionEvent)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2128,7 +2453,7 @@ From interface
         boolean
       </span>
       <span class="sympad">onSingleTapUp</span>
-      <span class="normal">(MotionEvent ev)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> ev)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -2146,7 +2471,7 @@ From interface
 </div>
 
 
-<a id="onTouch(View, MotionEvent)"></a>
+<A NAME="onTouch(android.view.View, android.view.MotionEvent)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2159,7 +2484,7 @@ From interface
         boolean
       </span>
       <span class="sympad">onTouch</span>
-      <span class="normal">(View v, MotionEvent ev)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/view/View.html">View</a> v, <a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> ev)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -2177,7 +2502,49 @@ From interface
 </div>
 
 
-<a id="setDragHandleId(int)"></a>
+<A NAME="setClickRemoveId(int)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">setClickRemoveId</span>
+      <span class="normal">(int id)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Set the resource id for the View that represents click
+ removal button.</p></div>
+  <div class="jd-tagdata">
+      <h5 class="jd-tagtitle">Parameters</h5>
+      <table class="jd-tagtable">
+        <tr>
+          <th>id</td>
+          <td>An android resource id.
+</td>
+        </tr>
+      </table>
+  </div>
+
+    </div>
+</div>
+
+
+<A NAME="setDragHandleId(int)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2208,7 +2575,7 @@ From interface
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>id</th>
+          <th>id</td>
           <td>An android resource id.
 </td>
         </tr>
@@ -2219,7 +2586,7 @@ From interface
 </div>
 
 
-<a id="setDragInitMode(int)"></a>
+<A NAME="setDragInitMode(int)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2250,7 +2617,7 @@ From interface
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>mode</th>
+          <th>mode</td>
           <td>The drag init mode.
 </td>
         </tr>
@@ -2261,7 +2628,7 @@ From interface
 </div>
 
 
-<a id="setRemoveEnabled(boolean)"></a>
+<A NAME="setRemoveEnabled(boolean)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2293,7 +2660,7 @@ From interface
 </div>
 
 
-<a id="setRemoveMode(int)"></a>
+<A NAME="setRemoveMode(int)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2318,7 +2685,8 @@ From interface
       </div>
     <div class="jd-details-descr">
       
-  <div class="jd-tagdata jd-tagdescr"><p>One of FLING_RIGHT_REMOVE, FLING_LEFT_REMOVE,
+  <div class="jd-tagdata jd-tagdescr"><p>One of CLICK_REMOVE, FLING_RIGHT_REMOVE,
+ FLING_LEFT_REMOVE,
  SLIDE_RIGHT_REMOVE, or SLIDE_LEFT_REMOVE.
 </p></div>
 
@@ -2326,7 +2694,7 @@ From interface
 </div>
 
 
-<a id="setSortEnabled(boolean)"></a>
+<A NAME="setSortEnabled(boolean)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2357,7 +2725,7 @@ From interface
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>enabled</th>
+          <th>enabled</td>
           <td>Set <code>true</code> to enable list
  item sorting.
 </td>
@@ -2369,7 +2737,7 @@ From interface
 </div>
 
 
-<a id="startDrag(int, int, int)"></a>
+<A NAME="startDrag(int, int, int)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2401,15 +2769,15 @@ From interface
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>position</th>
+          <th>position</td>
           <td>The list item position (includes headers).</td>
         </tr>
         <tr>
-          <th>deltaX</th>
+          <th>deltaX</td>
           <td>Touch x-coord minus left edge of floating View.</td>
         </tr>
         <tr>
-          <th>deltaY</th>
+          <th>deltaY</td>
           <td>Touch y-coord minus top edge of floating View.</td>
         </tr>
       </table>
@@ -2424,7 +2792,7 @@ From interface
 </div>
 
 
-<a id="startDragPosition(MotionEvent)"></a>
+<A NAME="startDragPosition(android.view.MotionEvent)"></A>
 
 <div class="jd-details api apilevel-"> 
     <h4 class="jd-details-title">
@@ -2437,7 +2805,7 @@ From interface
         int
       </span>
       <span class="sympad">startDragPosition</span>
-      <span class="normal">(MotionEvent ev)</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> ev)</span>
     </h4>
       <div class="api-level">
         <div>
@@ -2451,7 +2819,7 @@ From interface
       
   <div class="jd-tagdata jd-tagdescr"><p>Get the position to start dragging based on the ACTION_DOWN
  MotionEvent. This function simply calls
- <code><a href="../../../../com/mobeta/android/dslv/DragSortController.html#dragHandleHitPosition(MotionEvent)">dragHandleHitPosition(MotionEvent)</a></code>. Override
+ <code><a href="../../../../com/mobeta/android/dslv/DragSortController.html#dragHandleHitPosition(android.view.MotionEvent)">dragHandleHitPosition(MotionEvent)</a></code>. Override
  to change drag handle behavior;
  this function is called internally when an ACTION_DOWN
  event is detected.</p></div>
@@ -2459,7 +2827,7 @@ From interface
       <h5 class="jd-tagtitle">Parameters</h5>
       <table class="jd-tagtable">
         <tr>
-          <th>ev</th>
+          <th>ev</td>
           <td>The ACTION_DOWN MotionEvent.</td>
         </tr>
       </table>
@@ -2475,6 +2843,37 @@ From interface
 </div>
 
 
+<A NAME="viewIdHitPosition(android.view.MotionEvent, int)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        int
+      </span>
+      <span class="sympad">viewIdHitPosition</span>
+      <span class="normal">(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> ev, int id)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
 
 
 
@@ -2483,7 +2882,7 @@ From interface
 
 
 <!-- ========= END OF CLASS DATA ========= -->
-<a id="navbar_top"></a>
+<A NAME="navbar_top"></A>
 
 <div id="footer">
 Generated by <a href="http://code.google.com/p/doclava/">Doclava</a>.

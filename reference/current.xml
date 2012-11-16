@@ -1,6 +1,34 @@
 <api>
 <package name="com.mobeta.android.dslv"
 >
+<class name="BuildConfig"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="BuildConfig"
+ type="com.mobeta.android.dslv.BuildConfig"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<field name="DEBUG"
+ type="boolean"
+ transient="false"
+ volatile="false"
+ value="true"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
 <class name="DragSortController"
  extends="com.mobeta.android.dslv.SimpleFloatViewManager"
  abstract="false"
@@ -9,6 +37,8 @@
  deprecated="not deprecated"
  visibility="public"
 >
+<implements name="android.view.View.OnTouchListener">
+</implements>
 <constructor name="DragSortController"
  type="com.mobeta.android.dslv.DragSortController"
  static="false"
@@ -35,6 +65,24 @@
 <parameter name="removeMode" type="int">
 </parameter>
 </constructor>
+<constructor name="DragSortController"
+ type="com.mobeta.android.dslv.DragSortController"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="dslv" type="com.mobeta.android.dslv.DragSortListView">
+</parameter>
+<parameter name="dragHandleId" type="int">
+</parameter>
+<parameter name="dragInitMode" type="int">
+</parameter>
+<parameter name="removeMode" type="int">
+</parameter>
+<parameter name="clickRemoveId" type="int">
+</parameter>
+</constructor>
 <method name="dragHandleHitPosition"
  return="int"
  abstract="false"
@@ -45,7 +93,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="ev" type="MotionEvent">
+<parameter name="ev" type="android.view.MotionEvent">
 </parameter>
 </method>
 <method name="getDragInitMode"
@@ -102,7 +150,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="ev" type="MotionEvent">
+<parameter name="ev" type="android.view.MotionEvent">
 </parameter>
 </method>
 <method name="onFling"
@@ -115,9 +163,9 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="e1" type="MotionEvent">
+<parameter name="e1" type="android.view.MotionEvent">
 </parameter>
-<parameter name="e2" type="MotionEvent">
+<parameter name="e2" type="android.view.MotionEvent">
 </parameter>
 <parameter name="velocityX" type="float">
 </parameter>
@@ -134,7 +182,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="e" type="MotionEvent">
+<parameter name="e" type="android.view.MotionEvent">
 </parameter>
 </method>
 <method name="onScroll"
@@ -147,9 +195,9 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="e1" type="MotionEvent">
+<parameter name="e1" type="android.view.MotionEvent">
 </parameter>
-<parameter name="e2" type="MotionEvent">
+<parameter name="e2" type="android.view.MotionEvent">
 </parameter>
 <parameter name="distanceX" type="float">
 </parameter>
@@ -166,7 +214,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="ev" type="MotionEvent">
+<parameter name="ev" type="android.view.MotionEvent">
 </parameter>
 </method>
 <method name="onSingleTapUp"
@@ -179,7 +227,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="ev" type="MotionEvent">
+<parameter name="ev" type="android.view.MotionEvent">
 </parameter>
 </method>
 <method name="onTouch"
@@ -192,9 +240,22 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="v" type="View">
+<parameter name="v" type="android.view.View">
 </parameter>
-<parameter name="ev" type="MotionEvent">
+<parameter name="ev" type="android.view.MotionEvent">
+</parameter>
+</method>
+<method name="setClickRemoveId"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="id" type="int">
 </parameter>
 </method>
 <method name="setDragHandleId"
@@ -289,14 +350,40 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="ev" type="MotionEvent">
+<parameter name="ev" type="android.view.MotionEvent">
 </parameter>
 </method>
+<method name="viewIdHitPosition"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="ev" type="android.view.MotionEvent">
+</parameter>
+<parameter name="id" type="int">
+</parameter>
+</method>
+<field name="CLICK_REMOVE"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="0"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
 <field name="FLING_LEFT_REMOVE"
  type="int"
  transient="false"
  volatile="false"
- value="1"
+ value="2"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -307,7 +394,7 @@
  type="int"
  transient="false"
  volatile="false"
- value="0"
+ value="1"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -362,7 +449,7 @@
  type="int"
  transient="false"
  volatile="false"
- value="3"
+ value="4"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -373,7 +460,7 @@
  type="int"
  transient="false"
  volatile="false"
- value="2"
+ value="3"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -382,7 +469,7 @@
 </field>
 </class>
 <class name="DragSortCursorAdapter"
- extends="CursorAdapter"
+ extends="android.support.v4.widget.CursorAdapter"
  abstract="true"
  static="false"
  final="false"
@@ -398,9 +485,9 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="context" type="Context">
+<parameter name="context" type="android.content.Context">
 </parameter>
-<parameter name="c" type="Cursor">
+<parameter name="c" type="android.database.Cursor">
 </parameter>
 </constructor>
 <constructor name="DragSortCursorAdapter"
@@ -410,9 +497,9 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="context" type="Context">
+<parameter name="context" type="android.content.Context">
 </parameter>
-<parameter name="c" type="Cursor">
+<parameter name="c" type="android.database.Cursor">
 </parameter>
 <parameter name="autoRequery" type="boolean">
 </parameter>
@@ -424,26 +511,13 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="context" type="Context">
+<parameter name="context" type="android.content.Context">
 </parameter>
-<parameter name="c" type="Cursor">
+<parameter name="c" type="android.database.Cursor">
 </parameter>
 <parameter name="flags" type="int">
 </parameter>
 </constructor>
-<method name="changeCursor"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="cursor" type="Cursor">
-</parameter>
-</method>
 <method name="drag"
  return="void"
  abstract="false"
@@ -474,17 +548,6 @@
 <parameter name="to" type="int">
 </parameter>
 </method>
-<method name="getCount"
- return="int"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-</method>
 <method name="getCursorPosition"
  return="int"
  abstract="false"
@@ -509,49 +572,6 @@
  visibility="public"
 >
 </method>
-<method name="getDropDownView"
- return="View"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="position" type="int">
-</parameter>
-<parameter name="convertView" type="View">
-</parameter>
-<parameter name="parent" type="ViewGroup">
-</parameter>
-</method>
-<method name="getItem"
- return="java.lang.Object"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="position" type="int">
-</parameter>
-</method>
-<method name="getItemId"
- return="long"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="position" type="int">
-</parameter>
-</method>
 <method name="getListPosition"
  return="int"
  abstract="false"
@@ -563,23 +583,6 @@
  visibility="public"
 >
 <parameter name="cursorPosition" type="int">
-</parameter>
-</method>
-<method name="getView"
- return="View"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="position" type="int">
-</parameter>
-<parameter name="convertView" type="View">
-</parameter>
-<parameter name="parent" type="ViewGroup">
 </parameter>
 </method>
 <method name="remove"
@@ -595,8 +598,8 @@
 <parameter name="which" type="int">
 </parameter>
 </method>
-<method name="swapCursor"
- return="Cursor"
+<method name="reset"
+ return="void"
  abstract="false"
  native="false"
  synchronized="false"
@@ -605,8 +608,6 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="newCursor" type="Cursor">
-</parameter>
 </method>
 <field name="REMOVED"
  type="int"
@@ -620,8 +621,72 @@
 >
 </field>
 </class>
+<class name="DragSortItemView"
+ extends="android.view.ViewGroup"
+ abstract="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="DragSortItemView"
+ type="com.mobeta.android.dslv.DragSortItemView"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="context" type="android.content.Context">
+</parameter>
+</constructor>
+<method name="getGravity"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</method>
+<method name="onLayout"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="protected"
+>
+<parameter name="changed" type="boolean">
+</parameter>
+<parameter name="left" type="int">
+</parameter>
+<parameter name="top" type="int">
+</parameter>
+<parameter name="right" type="int">
+</parameter>
+<parameter name="bottom" type="int">
+</parameter>
+</method>
+<method name="setGravity"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="gravity" type="int">
+</parameter>
+</method>
+</class>
 <class name="DragSortListView"
- extends="ListView"
+ extends="android.widget.ListView"
  abstract="false"
  static="false"
  final="false"
@@ -635,12 +700,12 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="context" type="Context">
+<parameter name="context" type="android.content.Context">
 </parameter>
-<parameter name="attrs" type="AttributeSet">
+<parameter name="attrs" type="android.util.AttributeSet">
 </parameter>
 </constructor>
-<method name="dispatchDraw"
+<method name="cancelDrag"
  return="void"
  abstract="false"
  native="false"
@@ -648,10 +713,8 @@
  static="false"
  final="false"
  deprecated="not deprecated"
- visibility="protected"
+ visibility="public"
 >
-<parameter name="canvas" type="Canvas">
-</parameter>
 </method>
 <method name="getFloatAlpha"
  return="float"
@@ -665,7 +728,7 @@
 >
 </method>
 <method name="getInputAdapter"
- return="ListAdapter"
+ return="android.widget.ListAdapter"
  abstract="false"
  native="false"
  synchronized="false"
@@ -686,7 +749,7 @@
  visibility="public"
 >
 </method>
-<method name="layoutChildren"
+<method name="moveItem"
  return="void"
  abstract="false"
  native="false"
@@ -694,8 +757,12 @@
  static="false"
  final="false"
  deprecated="not deprecated"
- visibility="protected"
+ visibility="public"
 >
+<parameter name="from" type="int">
+</parameter>
+<parameter name="to" type="int">
+</parameter>
 </method>
 <method name="onDragTouchEvent"
  return="boolean"
@@ -707,83 +774,10 @@
  deprecated="not deprecated"
  visibility="protected"
 >
-<parameter name="ev" type="MotionEvent">
+<parameter name="ev" type="android.view.MotionEvent">
 </parameter>
 </method>
-<method name="onDraw"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
-<parameter name="canvas" type="Canvas">
-</parameter>
-</method>
-<method name="onInterceptTouchEvent"
- return="boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="ev" type="MotionEvent">
-</parameter>
-</method>
-<method name="onMeasure"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
-<parameter name="widthMeasureSpec" type="int">
-</parameter>
-<parameter name="heightMeasureSpec" type="int">
-</parameter>
-</method>
-<method name="onSizeChanged"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="protected"
->
-<parameter name="w" type="int">
-</parameter>
-<parameter name="h" type="int">
-</parameter>
-<parameter name="oldw" type="int">
-</parameter>
-<parameter name="oldh" type="int">
-</parameter>
-</method>
-<method name="onTouchEvent"
- return="boolean"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="ev" type="MotionEvent">
-</parameter>
-</method>
-<method name="requestLayout"
+<method name="removeItem"
  return="void"
  abstract="false"
  native="false"
@@ -793,18 +787,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-</method>
-<method name="setAdapter"
- return="void"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="adapter" type="ListAdapter">
+<parameter name="which" type="int">
 </parameter>
 </method>
 <method name="setDragEnabled"
@@ -983,7 +966,7 @@
 >
 <parameter name="position" type="int">
 </parameter>
-<parameter name="floatView" type="View">
+<parameter name="floatView" type="android.view.View">
 </parameter>
 <parameter name="dragFlags" type="int">
 </parameter>
@@ -1141,7 +1124,7 @@
  visibility="public"
 >
 <method name="onCreateFloatView"
- return="View"
+ return="android.view.View"
  abstract="true"
  native="false"
  synchronized="false"
@@ -1163,7 +1146,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="floatView" type="View">
+<parameter name="floatView" type="android.view.View">
 </parameter>
 </method>
 <method name="onDragFloatView"
@@ -1176,11 +1159,11 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="floatView" type="View">
+<parameter name="floatView" type="android.view.View">
 </parameter>
-<parameter name="location" type="Point">
+<parameter name="location" type="android.graphics.Point">
 </parameter>
-<parameter name="touch" type="Point">
+<parameter name="touch" type="android.graphics.Point">
 </parameter>
 </method>
 </interface>
@@ -1205,6 +1188,547 @@
 </parameter>
 </method>
 </interface>
+<class name="R"
+ extends="java.lang.Object"
+ abstract="false"
+ static="false"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="R"
+ type="com.mobeta.android.dslv.R"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+</class>
+<class name="R.attr"
+ extends="java.lang.Object"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="R.attr"
+ type="com.mobeta.android.dslv.R.attr"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<field name="click_remove_id"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771983"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="collapsed_height"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771968"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="drag_enabled"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771978"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="drag_handle_id"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771982"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="drag_scroll_start"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771969"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="drag_start_mode"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771981"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="drop_animation_duration"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771977"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="float_alpha"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771974"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="float_background_color"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771971"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="max_drag_scroll_speed"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771970"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="remove_animation_duration"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771976"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="remove_enabled"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771980"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="remove_mode"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771972"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="slide_shuffle_speed"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771975"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="sort_enabled"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771979"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="track_drag_sort"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771973"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="use_default_controller"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771984"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="R.id"
+ extends="java.lang.Object"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="R.id"
+ type="com.mobeta.android.dslv.R.id"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<field name="clickRemove"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837504"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="flingLeft"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837506"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="flingRight"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837505"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="onDown"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837509"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="onLongPress"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837511"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="onMove"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837510"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="slideLeft"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837508"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="slideRight"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130837507"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
+<class name="R.styleable"
+ extends="java.lang.Object"
+ abstract="false"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<constructor name="R.styleable"
+ type="com.mobeta.android.dslv.R.styleable"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</constructor>
+<field name="DragSortListView"
+ type="int[]"
+ transient="false"
+ volatile="false"
+ value="null"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_click_remove_id"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="15"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_collapsed_height"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="0"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_drag_enabled"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="10"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_drag_handle_id"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="14"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_drag_scroll_start"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="1"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_drag_start_mode"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="13"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_drop_animation_duration"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="9"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_float_alpha"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="6"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_float_background_color"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="3"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_max_drag_scroll_speed"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_remove_animation_duration"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="8"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_remove_enabled"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="12"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_remove_mode"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="4"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_slide_shuffle_speed"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="7"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_sort_enabled"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="11"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_track_drag_sort"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="5"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_use_default_controller"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="16"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+</class>
 <class name="ResourceDragSortCursorAdapter"
  extends="com.mobeta.android.dslv.DragSortCursorAdapter"
  abstract="true"
@@ -1220,11 +1744,11 @@
  deprecated="deprecated"
  visibility="public"
 >
-<parameter name="context" type="Context">
+<parameter name="context" type="android.content.Context">
 </parameter>
 <parameter name="layout" type="int">
 </parameter>
-<parameter name="c" type="Cursor">
+<parameter name="c" type="android.database.Cursor">
 </parameter>
 </constructor>
 <constructor name="ResourceDragSortCursorAdapter"
@@ -1234,11 +1758,11 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="context" type="Context">
+<parameter name="context" type="android.content.Context">
 </parameter>
 <parameter name="layout" type="int">
 </parameter>
-<parameter name="c" type="Cursor">
+<parameter name="c" type="android.database.Cursor">
 </parameter>
 <parameter name="autoRequery" type="boolean">
 </parameter>
@@ -1250,34 +1774,17 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="context" type="Context">
+<parameter name="context" type="android.content.Context">
 </parameter>
 <parameter name="layout" type="int">
 </parameter>
-<parameter name="c" type="Cursor">
+<parameter name="c" type="android.database.Cursor">
 </parameter>
 <parameter name="flags" type="int">
 </parameter>
 </constructor>
-<method name="newDropDownView"
- return="View"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="context" type="Context">
-</parameter>
-<parameter name="cursor" type="Cursor">
-</parameter>
-<parameter name="parent" type="ViewGroup">
-</parameter>
-</method>
 <method name="newView"
- return="View"
+ return="android.view.View"
  abstract="false"
  native="false"
  synchronized="false"
@@ -1286,11 +1793,11 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="context" type="Context">
+<parameter name="context" type="android.content.Context">
 </parameter>
-<parameter name="cursor" type="Cursor">
+<parameter name="cursor" type="android.database.Cursor">
 </parameter>
-<parameter name="parent" type="ViewGroup">
+<parameter name="parent" type="android.view.ViewGroup">
 </parameter>
 </method>
 <method name="setDropDownViewResource"
@@ -1335,11 +1842,11 @@
  deprecated="deprecated"
  visibility="public"
 >
-<parameter name="context" type="Context">
+<parameter name="context" type="android.content.Context">
 </parameter>
 <parameter name="layout" type="int">
 </parameter>
-<parameter name="c" type="Cursor">
+<parameter name="c" type="android.database.Cursor">
 </parameter>
 <parameter name="from" type="java.lang.String[]">
 </parameter>
@@ -1353,11 +1860,11 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="context" type="Context">
+<parameter name="context" type="android.content.Context">
 </parameter>
 <parameter name="layout" type="int">
 </parameter>
-<parameter name="c" type="Cursor">
+<parameter name="c" type="android.database.Cursor">
 </parameter>
 <parameter name="from" type="java.lang.String[]">
 </parameter>
@@ -1376,11 +1883,11 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="view" type="View">
+<parameter name="view" type="android.view.View">
 </parameter>
-<parameter name="context" type="Context">
+<parameter name="context" type="android.content.Context">
 </parameter>
-<parameter name="cursor" type="Cursor">
+<parameter name="cursor" type="android.database.Cursor">
 </parameter>
 </method>
 <method name="changeCursorAndColumns"
@@ -1393,24 +1900,11 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="c" type="Cursor">
+<parameter name="c" type="android.database.Cursor">
 </parameter>
 <parameter name="from" type="java.lang.String[]">
 </parameter>
 <parameter name="to" type="int[]">
-</parameter>
-</method>
-<method name="convertToString"
- return="java.lang.CharSequence"
- abstract="false"
- native="false"
- synchronized="false"
- static="false"
- final="false"
- deprecated="not deprecated"
- visibility="public"
->
-<parameter name="cursor" type="Cursor">
 </parameter>
 </method>
 <method name="getCursorToStringConverter"
@@ -1495,7 +1989,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="v" type="ImageView">
+<parameter name="v" type="android.widget.ImageView">
 </parameter>
 <parameter name="value" type="java.lang.String">
 </parameter>
@@ -1510,7 +2004,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="v" type="TextView">
+<parameter name="v" type="android.widget.TextView">
 </parameter>
 <parameter name="text" type="java.lang.String">
 </parameter>
@@ -1533,7 +2027,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="cursor" type="Cursor">
+<parameter name="cursor" type="android.database.Cursor">
 </parameter>
 </method>
 </interface>
@@ -1554,9 +2048,9 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="view" type="View">
+<parameter name="view" type="android.view.View">
 </parameter>
-<parameter name="cursor" type="Cursor">
+<parameter name="cursor" type="android.database.Cursor">
 </parameter>
 <parameter name="columnIndex" type="int">
 </parameter>
@@ -1579,11 +2073,11 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="lv" type="ListView">
+<parameter name="lv" type="android.widget.ListView">
 </parameter>
 </constructor>
 <method name="onCreateFloatView"
- return="View"
+ return="android.view.View"
  abstract="false"
  native="false"
  synchronized="false"
@@ -1605,7 +2099,7 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="floatView" type="View">
+<parameter name="floatView" type="android.view.View">
 </parameter>
 </method>
 <method name="onDragFloatView"
@@ -1618,11 +2112,11 @@
  deprecated="not deprecated"
  visibility="public"
 >
-<parameter name="floatView" type="View">
+<parameter name="floatView" type="android.view.View">
 </parameter>
-<parameter name="position" type="Point">
+<parameter name="position" type="android.graphics.Point">
 </parameter>
-<parameter name="touch" type="Point">
+<parameter name="touch" type="android.graphics.Point">
 </parameter>
 </method>
 <method name="setBackgroundColor"
