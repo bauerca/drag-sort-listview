@@ -43,11 +43,6 @@ public class ArbItemSizeDSLV extends ListActivity {
             }
         };
 
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        ((DragSortListView) l).removeItem(position - l.getHeaderViewsCount());
-    }
-
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {

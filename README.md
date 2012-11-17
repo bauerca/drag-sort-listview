@@ -4,8 +4,25 @@ DragSortListView
 News
 ----
 
-**Sept. 26, 2012**: Drag-sorting is now animated! (optional, of course)
-Items slide around underneath the floating (dragged) View.
+**Nov. 17, 2012**: [Drag-Sort Demos](https://play.google.com/store/apps/details?id=com.mobeta.android.demodslv)
+app in Google Play Store!
+
+**Nov. 15, 2012**: Smooth operation! Drops and removals are animated.
+Also, DragSortController now provides a convenience
+click-to-remove feature (see [XML attrs](https://github.com/bauerca/drag-sort-listview#xml-layout-declaration)
+and [RemoveListener](https://github.com/bauerca/drag-sort-listview#dragsortlistviewremovelistener)
+sections).
+
+**Nov. 11, 2012**: Mavenized.
+Thanks to [Andreas Schildbach (Goonie)](https://github.com/Goonie)!
+
+**Oct. 30, 2012**: DragSortCursorAdapter class helps you reorder
+a Cursor-backed ListAdapter. Look at ResourceDragSortCursorAdapter
+and SimpleDragSortCursorAdapter as well in [the API](
+http://bauerca.github.com/drag-sort-listview).
+
+**Oct. 19, 2012**: Public API documentation is up at
+http://bauerca.github.com/drag-sort-listview.
 
 **Oct. 19, 2012**: Refactoring rampage. Backward compatibility is slightly
 broken. New features make it worthwhile :) and include: total floating
@@ -16,22 +33,8 @@ fling-to-remove, etc.). Thanks to
 for getting all this rolling!
 Check out the extensively updated demos and usage section below.
 
-**Oct. 19, 2012**: Public API documentation is up at
-http://bauerca.github.com/drag-sort-listview.
-
-**Oct. 30, 2012**: DragSortCursorAdapter class helps you reorder
-a Cursor-backed ListAdapter. Look at ResourceDragSortCursorAdapter
-and SimpleDragSortCursorAdapter as well in [the API](
-http://bauerca.github.com/drag-sort-listview).
-
-**Nov. 11, 2012**: Mavenized.
-Thanks to [Andreas Schildbach (Goonie)](https://github.com/Goonie)!
-
-**Nov. 15, 2012**: Smooth operation! Drops and removals are animated.
-Also, DragSortController now provides a convenience
-click-to-remove feature (see [XML attrs](https://github.com/bauerca/drag-sort-listview#xml-layout-declaration)
-and [RemoveListener](https://github.com/bauerca/drag-sort-listview#dragsortlistviewremovelistener)
-sections).
+**Sept. 26, 2012**: Drag-sorting is now animated! (optional, of course)
+Items slide around underneath the floating (dragged) View.
 
 Overview
 --------

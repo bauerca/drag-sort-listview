@@ -1,0 +1,28 @@
+This is a demo app for the DragSortListView library. The project is
+hosted on GitHub with repo name: drag-sort-listview.
+
+DragSortListView is an extension of Android's ListView widget that
+mediates drag-and-drop reordering of list items. Its primary purpose
+is to provide an empty "drop slot" that tracks the dragged item,
+effectively reordering the list on-the-fly. DragSortListView also
+handles the tricky task of scrolling while dragging items over a long
+list. Animated transitions give the process a seamless and intuitive
+feel.
+
+Several convenience features accompany the basic functionality
+described above. The most common drag initiation and item removal
+techniques have been implemented for you and are accessed through
+simple XML attributes:<br/>
+  • Drag initiation: on touch, on drag, on long-press<br/>
+  • Item removal: on click, on fling, on slide<br/>
+
+The first demo, "Basic usage playground," exposes the basic
+features of the library through the menu. You can dynamically
+change drag initiation and item removal methods and add
+headers/footers to the list. The rest of the demos address more
+advanced usage.
+
+As you know, issues with the library that are voiced in the
+comments will go unnoticed and left to wither. Please open an
+issue ticket on the GitHub project page, or email me directly.
+Thanks and happy dragging!
