@@ -678,6 +678,7 @@ public class DragSortListView extends ListView {
         
         final Drawable divider = getDivider();
         final int dividerHeight = getDividerHeight();
+        //Log.d("mobeta", "div="+divider+" divH="+dividerHeight);
         
         if (divider != null && dividerHeight != 0) {
             final ViewGroup expItem = (ViewGroup) getChildAt(expPosition - getFirstVisiblePosition());
@@ -696,9 +697,14 @@ public class DragSortListView extends ListView {
                     b = expItem.getBottom() - childHeight;
                     t = b - dividerHeight;
                 }
+                //Log.d("mobeta", "l="+l+" t="+t+" r="+r+" b="+b);
 
+                // Have to clip to support ColorDrawable on <= Gingerbread
+                canvas.save();
+                canvas.clipRect(l, t, r, b); 
                 divider.setBounds(l, t, r, b);
                 divider.draw(canvas);
+                canvas.restore();
             }
         }
     }
