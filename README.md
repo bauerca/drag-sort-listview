@@ -4,6 +4,10 @@ DragSortListView
 News
 ----
 
+**Nov. 23, 2012**: Hmmm, what's this? &rarr; <iframe style="border: 0;
+margin: 0; padding: 0;" src="https://www.gittip.com/bauerca/widget.html"
+width="48pt" height="22pt"></iframe> :)
+
 **Nov. 17, 2012**: [Drag-Sort Demos](https://play.google.com/store/apps/details?id=com.mobeta.android.demodslv)
 app in Google Play Store!
 
