@@ -17,6 +17,14 @@ public class EnablesDialog extends DialogFragment {
 
     private EnabledOkListener mListener;
 
+    public EnablesDialog() {
+        super();
+        mEnabled = new boolean[3];
+        mEnabled[0] = true;
+        mEnabled[1] = true;
+        mEnabled[2] = false;
+    }
+
     public EnablesDialog(boolean drag, boolean sort, boolean remove) {
         super();
         mEnabled = new boolean[3];

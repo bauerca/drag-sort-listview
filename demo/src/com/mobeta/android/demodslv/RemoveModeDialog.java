@@ -8,6 +8,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import com.mobeta.android.dslv.DragSortController;
+
 /**
  * Simply passes remove mode back to OnOkListener
  */
@@ -16,6 +18,11 @@ public class RemoveModeDialog extends DialogFragment {
     private int mRemoveMode;
 
     private RemoveOkListener mListener;
+
+    public RemoveModeDialog() {
+        super();
+        mRemoveMode = DragSortController.FLING_RIGHT_REMOVE;
+    }
 
     public RemoveModeDialog(int inRemoveMode) {
         super();

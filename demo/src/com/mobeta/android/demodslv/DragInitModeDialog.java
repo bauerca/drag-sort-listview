@@ -8,6 +8,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import com.mobeta.android.dslv.DragSortController;
+
 /**
  * Sets drag init mode on DSLV controller passed into ctor.
  */
@@ -18,6 +20,11 @@ public class DragInitModeDialog extends DialogFragment {
     private int mDragInitMode;
 
     private DragOkListener mListener;
+
+    public DragInitModeDialog() {
+        super();
+        mDragInitMode = DragSortController.ON_DOWN;
+    }
 
     public DragInitModeDialog(int dragStartMode) {
         super();
