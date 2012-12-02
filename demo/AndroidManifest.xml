@@ -28,5 +28,9 @@
                   android:label="Sections" />
         <activity android:name="CursorDSLV"
                   android:label="Cursor-backed" />
+        <activity android:name="MultipleChoiceListView"
+                  android:label="Multi-select list" />
+        <activity android:name="SingleChoiceListView"
+                  android:label="Single-choice list" />
     </application>
 </manifest> 

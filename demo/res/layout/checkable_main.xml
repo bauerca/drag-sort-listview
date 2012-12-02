@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mobeta.android.dslv.DragSortListView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dslv="http://schemas.android.com/apk/res/com.mobeta.android.demodslv"
+    android:id="@android:id/list"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_margin="3dp"
+    android:choiceMode="multipleChoice"
+    android:dividerHeight="1px"
+    android:padding="3dp"
+    dslv:click_remove_id="@id/click_remove"
+    dslv:collapsed_height="1px"
+    dslv:drag_enabled="true"
+    dslv:drag_handle_id="@id/drag_handle"
+    dslv:drag_scroll_start="0.33"
+    dslv:drag_start_mode="onDown"
+    dslv:float_alpha="0.6"
+    dslv:remove_enabled="true"
+    dslv:remove_mode="clickRemove"
+    dslv:slide_shuffle_speed="0.3" />
+
