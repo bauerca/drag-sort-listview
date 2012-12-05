@@ -34,8 +34,10 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Environment;
 import android.os.SystemClock;
+import android.text.method.MovementMethod;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.util.SparseIntArray;
 import android.view.*;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -44,6 +46,7 @@ import android.widget.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ChoiceFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -2334,8 +2337,12 @@ public class DragSortListView extends ListView {
     /**
      * This better reorder your ListAdapter! DragSortListView does not do this
      * for you; doesn't make sense to. Make sure
-     * {@link BaseAdapter#notifyDataSetChanged()} or something like it is
-     * called in your implementation.
+     * {@link BaseAdapter#notifyDataSetChanged()} or something like it is called
+     * in your implementation. Furthermore, if you have a choiceMode other than
+     * none and the ListAdapter does not return true for
+     * {@link ListAdapter#hasStableIds()}, you will need to call
+     * {@link #moveCheckState(int, int)} to move the check boxes along with the
+     * list items.
      * 
      * @param l
      */
@@ -2407,6 +2414,177 @@ public class DragSortListView extends ListView {
         }
     }
     
+    /**
+     * Use this to move the check state of an item from one position to another
+     * in a drop operation. If you have a choiceMode which is not none, this
+     * method must be called when the order of items changes in an underlying
+     * adapter which does not have stable IDs (see
+     * {@link ListAdapter#hasStableIds()}). This is because without IDs, the
+     * ListView has no way of knowing which items have moved where, and cannot
+     * update the check state accordingly.
+     * <p>
+     * A word of warning about a "feature" in Android that you may run into when
+     * dealing with movable list items: for an adapter that <em>does</em> have
+     * stable IDs, ListView will attempt to locate each item based on its ID and
+     * move the check state from the item's old position to the new position —
+     * which is all fine and good (and removes the need for calling this
+     * function), except for the half-baked approach. Apparently to save time in
+     * the naive algorithm used, ListView will only search for an ID in the
+     * close neighborhood of the old position. If the user moves an item too far
+     * (specifically, more than 20 rows away), ListView will give up and just
+     * force the item to be unchecked. So if there is a reasonable chance that
+     * the user will move items more than 20 rows away from the original
+     * position, you may wish to use an adapter with unstable IDs and call this
+     * method manually instead.
+     * 
+     * @param from
+     * @param to
+     */
+    public void moveCheckState(int from, int to) {
+        // This method runs in O(n log n) time (n being the number of list
+        // items). The bottleneck is the call to AbsListView.setItemChecked,
+        // which is O(log n) because of the binary search involved in calling
+        // SparseBooleanArray.put().
+        //
+        // To improve on the average time, we minimize the number of calls to
+        // setItemChecked by only calling it for items that actually have a
+        // changed state. This is achieved by building a list containing the
+        // start and end of the "runs" of checked items, and then moving the
+        // runs. Note that moving an item from A to B is essentially a rotation
+        // of the range of items in [A, B]. Let's say we have
+        // . . U V X Y Z . . 
+        // and move U after Z. This is equivalent to a rotation one step to the
+        // left within the range you are moving across:
+        // . . V X Y Z U . .
+        //
+        // So, to perform the move we enumerate all the runs within the move
+        // range, then rotate each run one step to the left or right (depending
+        // on move direction). For example, in the list:
+        // X X . X X X . X
+        // we have two runs. One begins at the last item of the list and wraps
+        // around to the beginning, ending at position 1. The second begins at
+        // position 3 and ends at position 5. To rotate a run, regardless of
+        // length, we only need to set a check mark at one end of the run, and
+        // clear a check mark at the other end:
+        // X . X X X . X X
+        SparseBooleanArray cip = getCheckedItemPositions();
+        int rangeStart = from;
+        int rangeEnd = to;
+        if (to<from) {
+            rangeStart = to;
+            rangeEnd = from;
+        }
+        rangeEnd += 1;
+            
+        int[] runStart = new int[cip.size()];
+        int[] runEnd = new int[cip.size()];
+        int runCount = buildRunList(cip, rangeStart, rangeEnd, runStart, runEnd);
+        if (runCount == 1 && (runStart[0] == runEnd[0])) {
+            // Special case where all items are checked, we can never set any
+            // item to false like we do below.
+            return;
+        }
+        
+        if (from < to) {
+            for (int i=0; i!=runCount; i++) {
+                setItemChecked(rotate(runStart[i], -1, rangeStart, rangeEnd), true);
+                setItemChecked(rotate(runEnd[i], -1, rangeStart, rangeEnd), false);
+            }
+            
+        } else {
+            for (int i=0; i!=runCount; i++) {
+                setItemChecked(runStart[i], false);
+                setItemChecked(runEnd[i], true);
+            }
+        }
+    }
+
+    private static int buildRunList(SparseBooleanArray cip, int rangeStart,
+            int rangeEnd, int[] runStart, int[] runEnd) {
+        int runCount = 0;
+        
+        int i = findFirstSetIndex(cip, rangeStart, rangeEnd);
+        if(i == -1)
+            return 0;
+        
+        int position = cip.keyAt(i);
+        int currentRunStart = position;
+        int currentRunEnd = currentRunStart + 1;
+        for(i++; i < cip.size() && (position = cip.keyAt(i)) < rangeEnd; i++) {
+            if (!cip.valueAt(i))    // not checked => not interesting
+                continue;
+            if (position == currentRunEnd) {
+                currentRunEnd++;
+            } else {
+                runStart[runCount] = currentRunStart;
+                runEnd[runCount] = currentRunEnd;
+                runCount++;
+                currentRunStart = position;
+                currentRunEnd = position + 1;
+            }
+        }
+        
+        if (currentRunEnd == rangeEnd) {
+            // rangeStart and rangeEnd are equivalent positions so to be
+            // consistent we translate them to the same integer value. That way
+            // we can check whether a run covers the entire range by just
+            // checking if the start equals the end position.
+            currentRunEnd = rangeStart;
+        }
+        runStart[runCount] = currentRunStart;
+        runEnd[runCount] = currentRunEnd;
+        runCount++;
+        
+        if (runCount > 1) {
+            if (runStart[0] == rangeStart && runEnd[runCount-1] == rangeStart) {
+                // The last run ends at the end of the range, and the first run
+                // starts at the beginning of the range. So they are actually
+                // part of the same run, except they wrap around the end of the
+                // range. To avoid adjacent runs, we need to merge them.
+                runStart[0] = runStart[runCount-1];
+                runCount--;
+            }
+        }
+        return runCount;
+    }
+    
+    private static int rotate(int value, int offset, int lowerBound, int upperBound) {
+        int windowSize = upperBound - lowerBound;
+        
+        value += offset;
+        if(value < lowerBound) {
+            value += windowSize;
+        } else if(value >= upperBound) {
+            value -= windowSize;
+        }
+        return value;
+    }
+
+    private static int findFirstSetIndex(SparseBooleanArray sba, int rangeStart, int rangeEnd) {
+        int size = sba.size();
+        int i = insertionIndexForKey(sba, rangeStart);
+        while (i < size && sba.keyAt(i) < rangeEnd && !sba.valueAt(i))
+            i++;
+        if (i == size || sba.keyAt(i) >= rangeEnd)
+            return -1;
+        return i;
+    }
+
+
+    private static int insertionIndexForKey(SparseBooleanArray sba, int key) {
+        int low = 0;
+        int high = sba.size();
+        while (high - low > 0) {
+            int middle = (low + high) >> 1;
+            if (sba.keyAt(middle) < key)
+                low = middle + 1;
+            else
+                high = middle;
+        }
+        return low;
+    }
+
+
     /**
      * Interface for controlling
      * scroll speed as a function of touch position and time. Use
