@@ -2078,7 +2078,7 @@ public class DragSortListView extends ListView {
      * a drag in progress.
      */
     public boolean startDrag(int position, View floatView, int dragFlags, int deltaX, int deltaY) {
-        if (mDragState != IDLE || !mInTouchEvent || mFloatView != null || floatView == null) {
+        if (mDragState != IDLE || !mInTouchEvent || mFloatView != null || floatView == null || !mDragEnabled) {
             return false;
         }
 
