@@ -175,6 +175,8 @@ public class DragSortListView extends ListView {
 
     /**
      * Enable/Disable item dragging
+     *
+     * @attr name dslv:drag_enabled
      */
     private boolean mDragEnabled = true;
 
