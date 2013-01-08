@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 
 import com.mobeta.android.dslv.DragSortListView;
+import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 
 
 public class MultipleChoiceListView extends ListActivity
@@ -28,6 +29,17 @@ public class MultipleChoiceListView extends ListActivity
             }
         };
 
+    private RemoveListener onRemove =
+        new DragSortListView.RemoveListener() {
+            @Override
+            public void remove(int which) {
+                DragSortListView list = getListView();
+                String item = adapter.getItem(which);
+                adapter.remove(item);
+                list.removeCheckState(which);
+            }
+        };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +54,7 @@ public class MultipleChoiceListView extends ListActivity
         
         DragSortListView list = getListView();
         list.setDropListener(onDrop);
+        list.setRemoveListener(onRemove);
    }
 
     @Override
