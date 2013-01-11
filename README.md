@@ -4,7 +4,7 @@ DragSortListView
 News
 ----
 
-**Dec. 8, 2012**: Version 0.5.0 is released. Supports ListView
+**Jan. 10, 2013**: Version 0.5.0 is released. Supports ListView
 multi-choice and single-choice modes thanks to the hard work of
 [Mattias Flodin](https://github.com/mattiasflodin)! Awesome-sauce.
 Check out the new demos.
@@ -227,6 +227,12 @@ Whether you actually remove the data or not is up to you.
 
 Item removal can now happen outside of a drag event. The method
 `DragSortListView.removeItem(int position)` can be called at any time.
+
+If your DSLV instance `android:choiceMode` is not `"none"`, and your
+ListAdapter does not have stable ids, you must call
+[DragSortListView.removeCheckState(int position)](http://bauerca.github.com/drag-sort-listview/reference/com/mobeta/android/dslv/DragSortListView.html#removeCheckState(int))
+within `remove(which)`. See the documentation in the DSLV API for more
+info.
 
 #### DragSortListView.DragListener
 
