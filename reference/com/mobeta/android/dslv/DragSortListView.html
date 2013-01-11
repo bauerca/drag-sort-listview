@@ -1675,6 +1675,25 @@ android.view.View
             void</nobr>
         </td>
         <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.html#moveCheckState(int, int)">moveCheckState</a></span>(int from, int to)</nobr>
+        
+        <div class="jd-descrdiv">Use this to move the check state of an item from one position to another
+ in a drop operation.</div>
+  
+  </td></tr>
+
+
+	 
+    <tr class=" api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.html#moveItem(int, int)">moveItem</a></span>(int from, int to)</nobr>
         
         <div class="jd-descrdiv">Move an item, bypassing the drag-sort process.</div>
@@ -1683,7 +1702,7 @@ android.view.View
 
 
 	 
-    <tr class=" api apilevel-" >
+    <tr class="alt-color api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1699,7 +1718,7 @@ android.view.View
 
 
 	 
-    <tr class="alt-color api apilevel-" >
+    <tr class=" api apilevel-" >
         <td class="jd-typecol"><nobr>
             
             
@@ -1711,6 +1730,25 @@ android.view.View
         <td class="jd-linkcol" width="100%"><nobr>
         <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.html#onTouchEvent(android.view.MotionEvent)">onTouchEvent</a></span>(<a href="http://d.android.com/reference/android/view/MotionEvent.html">MotionEvent</a> ev)</nobr>
         
+  </td></tr>
+
+
+	 
+    <tr class="alt-color api apilevel-" >
+        <td class="jd-typecol"><nobr>
+            
+            
+            
+            
+            
+            void</nobr>
+        </td>
+        <td class="jd-linkcol" width="100%"><nobr>
+        <span class="sympad"><a href="../../../../com/mobeta/android/dslv/DragSortListView.html#removeCheckState(int)">removeCheckState</a></span>(int position)</nobr>
+        
+        <div class="jd-descrdiv">Use this when an item has been deleted, to move the check state of all
+ following items up one step.</div>
+  
   </td></tr>
 
 
@@ -12588,6 +12626,57 @@ From interface
 </div>
 
 
+<A NAME="moveCheckState(int, int)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">moveCheckState</span>
+      <span class="normal">(int from, int to)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Use this to move the check state of an item from one position to another
+ in a drop operation. If you have a choiceMode which is not none, this
+ method must be called when the order of items changes in an underlying
+ adapter which does not have stable IDs (see
+ <code><a href="http://d.android.com/reference/android/widget/Adapter.html#hasStableIds()">hasStableIds()</a></code>). This is because without IDs, the
+ ListView has no way of knowing which items have moved where, and cannot
+ update the check state accordingly.
+ <p>
+ A word of warning about a "feature" in Android that you may run into when
+ dealing with movable list items: for an adapter that <em>does</em> have
+ stable IDs, ListView will attempt to locate each item based on its ID and
+ move the check state from the item's old position to the new position —
+ which is all fine and good (and removes the need for calling this
+ function), except for the half-baked approach. Apparently to save time in
+ the naive algorithm used, ListView will only search for an ID in the
+ close neighborhood of the old position. If the user moves an item too far
+ (specifically, more than 20 rows away), ListView will give up and just
+ force the item to be unchecked. So if there is a reasonable chance that
+ the user will move items more than 20 rows away from the original
+ position, you may wish to use an adapter with unstable IDs and call this
+ method manually instead.</p></div>
+
+    </div>
+</div>
+
+
 <A NAME="moveItem(int, int)"></A>
 
 <div class="jd-details api apilevel-"> 
@@ -12693,6 +12782,45 @@ From interface
     <div class="jd-details-descr">
       
   <div class="jd-tagdata jd-tagdescr"><p></p></div>
+
+    </div>
+</div>
+
+
+<A NAME="removeCheckState(int)"></A>
+
+<div class="jd-details api apilevel-"> 
+    <h4 class="jd-details-title">
+      <span class="normal">
+        public 
+         
+         
+         
+         
+        void
+      </span>
+      <span class="sympad">removeCheckState</span>
+      <span class="normal">(int position)</span>
+    </h4>
+      <div class="api-level">
+        <div>
+
+</div>
+        
+  
+
+      </div>
+    <div class="jd-details-descr">
+      
+  <div class="jd-tagdata jd-tagdescr"><p>Use this when an item has been deleted, to move the check state of all
+ following items up one step. If you have a choiceMode which is not none,
+ this method must be called when the order of items changes in an
+ underlying adapter which does not have stable IDs (see
+ <code><a href="http://d.android.com/reference/android/widget/Adapter.html#hasStableIds()">hasStableIds()</a></code>). This is because without IDs, the
+ ListView has no way of knowing which items have moved where, and cannot
+ update the check state accordingly.
+ 
+ See also further comments on <code><a href="../../../../com/mobeta/android/dslv/DragSortListView.html#moveCheckState(int, int)">moveCheckState(int, int)</a></code>.</p></div>
 
     </div>
 </div>
@@ -13080,8 +13208,12 @@ From interface
       
   <div class="jd-tagdata jd-tagdescr"><p>This better reorder your ListAdapter! DragSortListView does not do this
  for you; doesn't make sense to. Make sure
- <code><a href="http://d.android.com/reference/android/widget/BaseAdapter.html#notifyDataSetChanged()">notifyDataSetChanged()</a></code> or something like it is
- called in your implementation.</p></div>
+ <code><a href="http://d.android.com/reference/android/widget/BaseAdapter.html#notifyDataSetChanged()">notifyDataSetChanged()</a></code> or something like it is called
+ in your implementation. Furthermore, if you have a choiceMode other than
+ none and the ListAdapter does not return true for
+ <code><a href="http://d.android.com/reference/android/widget/Adapter.html#hasStableIds()">hasStableIds()</a></code>, you will need to call
+ <code><a href="../../../../com/mobeta/android/dslv/DragSortListView.html#moveCheckState(int, int)">moveCheckState(int, int)</a></code> to move the check boxes along with the
+ list items.</p></div>
 
     </div>
 </div>
