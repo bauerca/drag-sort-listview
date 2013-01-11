@@ -208,7 +208,7 @@ DropListener interface. See Issue #20 for a discussion of this.
 
 If your DSLV instance `android:choiceMode` is not `"none"`, and your
 ListAdapter does not have stable ids, you must call
-[DragSortListView.moveCheckState(int from, int to)](http://bauerca.github.com/drag-sort-listview/reference/com/mobeta/android/dslv/DragSortListView.html#moveCheckState(int, int))
+[DragSortListView.moveCheckState(int from, int to)](http://bauerca.github.com/drag-sort-listview/reference/com/mobeta/android/dslv/DragSortListView.html#moveCheckState(int, int\))
 within `drop(from, to)`. See the documentation in the DSLV API for more
 info.
 
