@@ -11,6 +11,7 @@
       <enum name="flingLeft" value="2" />
       <enum name="slideRight" value="3" />
       <enum name="slideLeft" value="4" />
+      <enum name="flingOrSlide" value="5" />
     </attr>
     <attr name="track_drag_sort" format="boolean"/>
     <attr name="float_alpha" format="float"/>
