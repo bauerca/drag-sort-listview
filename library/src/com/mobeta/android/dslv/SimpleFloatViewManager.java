@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.widget.ListView;
 import android.widget.ImageView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.util.Log;
 
 /**
@@ -59,6 +60,7 @@ public class SimpleFloatViewManager implements DragSortListView.FloatViewManager
         mImageView.setBackgroundColor(mFloatBGColor);
         mImageView.setPadding(0, 0, 0, 0);
         mImageView.setImageBitmap(mFloatBitmap);
+        mImageView.setLayoutParams(new ViewGroup.LayoutParams(v.getWidth(), v.getHeight()));
 
         return mImageView;
     }
