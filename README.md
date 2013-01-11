@@ -230,7 +230,7 @@ Item removal can now happen outside of a drag event. The method
 
 If your DSLV instance `android:choiceMode` is not `"none"`, and your
 ListAdapter does not have stable ids, you must call
-[DragSortListView.removeCheckState(int position)](http://bauerca.github.com/drag-sort-listview/reference/com/mobeta/android/dslv/DragSortListView.html#removeCheckState(int))
+[DragSortListView.removeCheckState(int position)](http://bauerca.github.com/drag-sort-listview/reference/com/mobeta/android/dslv/DragSortListView.html#removeCheckState(int\))
 within `remove(which)`. See the documentation in the DSLV API for more
 info.
 
