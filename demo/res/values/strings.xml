@@ -61,6 +61,7 @@
       <item>Fling left</item>
       <item>Slide right</item>
       <item>Slide left</item>
+      <item>Fling or Slide</item>
     </string-array>
     <string-array name="drag_init_mode_labels">
       <item>On down</item>
