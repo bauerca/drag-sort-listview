@@ -36,7 +36,7 @@ public class DragSortItemView extends ViewGroup implements Checkable {
                 ViewGroup.LayoutParams.FILL_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        setClipChildren(true);
+        //setClipChildren(true);
     }
 
     public void setGravity(int gravity) {

@@ -1729,9 +1729,13 @@ public class DragSortListView extends ListView {
     private void adjustItem(int position, View v, boolean invalidChildHeight) {
 
         // Adjust item height
-
-        int height = calcItemHeight(position, v, invalidChildHeight);
         ViewGroup.LayoutParams lp = v.getLayoutParams();
+        int height;
+        if (position != mSrcPos && position != mFirstExpPos && position != mSecondExpPos) {
+            height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        } else {
+            height = calcItemHeight(position, v, invalidChildHeight);
+        }
 
         if (height != lp.height) {
             lp.height = height;
@@ -1739,7 +1743,6 @@ public class DragSortListView extends ListView {
         }
 
         // Adjust item gravity
-
         if (position == mFirstExpPos || position == mSecondExpPos) {
             if (position < mSrcPos) {
                 ((DragSortItemView) v).setGravity(Gravity.BOTTOM);
