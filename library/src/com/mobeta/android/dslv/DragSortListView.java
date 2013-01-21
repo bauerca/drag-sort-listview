@@ -1347,8 +1347,6 @@ public class DragSortListView extends ListView {
     public void removeItem(int which, float velocityX) {
         if (mDragState == IDLE || mDragState == DRAGGING) {
 
-            mDragState = REMOVING;
-        	mRemoveVelocityX = velocityX;
             if (mDragState == IDLE) {
                 // called from outside drag-sort
                 mSrcPos = getHeaderViewsCount() + which;
@@ -1360,6 +1358,9 @@ public class DragSortListView extends ListView {
                     v.setVisibility(View.INVISIBLE);
                 }
             }
+            
+            mDragState = REMOVING;
+        	mRemoveVelocityX = velocityX;
 
             if (mInTouchEvent) {
                 switch (mCancelMethod) {
