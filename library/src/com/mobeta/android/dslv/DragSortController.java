@@ -274,6 +274,7 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
                 }
             }
         case MotionEvent.ACTION_CANCEL:
+        	mIsRemoving = false; 
             mDragging = false;
             break;
         }
@@ -407,10 +408,12 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
         }
 
         mHitPos = startDragPosition(ev);
-        if (mHitPos != MISS && mDragInitMode == ON_DOWN && mRemoveMode!=FLING_OR_SLIDE_REMOVE) {
-            startDrag(mHitPos, (int) ev.getX() - mItemX, (int) ev.getY() - mItemY);
+        mRemoveHitPos = MISS;
+        boolean startedDrag = false;
+        if (mHitPos != MISS && mDragInitMode == ON_DOWN ) {
+        	startedDrag = startDrag(mHitPos, (int) ev.getX() - mItemX, (int) ev.getY() - mItemY);
         }
-        if( mRemoveMode == FLING_OR_SLIDE_REMOVE )
+        if( !startedDrag && mRemoveMode == FLING_OR_SLIDE_REMOVE )
         {
             mCanDrag = true;
             mPositionX = 0;
@@ -476,7 +479,7 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
     @Override
     public void onLongPress(MotionEvent e) {
         //Log.d("mobeta", "lift listener long pressed");
-        if (mHitPos != MISS && mDragInitMode == ON_LONG_PRESS && mRemoveMode!=FLING_OR_SLIDE_REMOVE) {
+        if (mHitPos != MISS && mDragInitMode == ON_LONG_PRESS ) {
             mDslv.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
             startDrag(mHitPos, mCurrX - mItemX, mCurrY - mItemY);
         }
@@ -510,6 +513,7 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
                 @Override
                 public final boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                     //Log.d("mobeta", "on fling remove called");
+                   	mIsRemoving = false;
                     if (mRemoveEnabled) {
                     	switch (mRemoveMode) {
                     	case FLING_OR_SLIDE_REMOVE:
@@ -522,20 +526,12 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
                                 	{
                                 		mDslv.stopDragWithVelocity(true,velocityX);
                                 	}
-                                	else
-                                	{	
-                                		mIsRemoving = false;
-                                	}
                                 }
                                 else if (velocityX < -mFlingSpeed ) 
                                 {
                                 	if( mPositionX < minPos )
                                 	{
                                 		mDslv.stopDragWithVelocity(true,velocityX);
-                                	}
-                                	else
-                                	{
-                                		mIsRemoving = false;
                                 	}
                                 }
                     		}
