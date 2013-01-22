@@ -7,11 +7,7 @@
     <attr name="float_background_color" format="color" />
     <attr name="remove_mode">
       <enum name="clickRemove" value="0" />
-      <enum name="flingRight" value="1" />
-      <enum name="flingLeft" value="2" />
-      <enum name="slideRight" value="3" />
-      <enum name="slideLeft" value="4" />
-      <enum name="flingOrSlide" value="5" />
+      <enum name="flingRemove" value="1" />
     </attr>
     <attr name="track_drag_sort" format="boolean"/>
     <attr name="float_alpha" format="float"/>

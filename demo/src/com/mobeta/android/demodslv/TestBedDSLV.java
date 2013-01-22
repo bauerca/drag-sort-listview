@@ -29,7 +29,7 @@ EnablesDialog.EnabledOkListener
 
     private int mDragStartMode = DragSortController.ON_DRAG;
     private boolean mRemoveEnabled = true;
-    private int mRemoveMode = DragSortController.FLING_OR_SLIDE_REMOVE;
+    private int mRemoveMode = DragSortController.FLING_REMOVE;
     private boolean mSortEnabled = true;
     private boolean mDragEnabled = true;
 

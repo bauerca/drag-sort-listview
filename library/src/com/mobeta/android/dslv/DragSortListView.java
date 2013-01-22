@@ -503,7 +503,7 @@ public class DragSortListView extends ListView {
                         false);
                 int removeMode = a.getInt(
                         R.styleable.DragSortListView_remove_mode,
-                        DragSortController.FLING_RIGHT_REMOVE);
+                        DragSortController.FLING_REMOVE);
                 boolean sortEnabled = a.getBoolean(
                         R.styleable.DragSortListView_sort_enabled,
                         true);
