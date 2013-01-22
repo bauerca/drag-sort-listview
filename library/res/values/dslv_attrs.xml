@@ -27,6 +27,7 @@
       <enum name="onLongPress" value="2"/>
     </attr>
     <attr name="drag_handle_id" format="integer" />
+    <attr name="fling_handle_id" format="integer" />
     <attr name="click_remove_id" format="integer" />
     <attr name="use_default_controller" format="boolean" />
   </declare-styleable>
