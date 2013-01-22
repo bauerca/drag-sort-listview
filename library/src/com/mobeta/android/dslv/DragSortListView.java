@@ -431,12 +431,15 @@ public class DragSortListView extends ListView {
      */
     private static final int sCacheSize = 3;
     private HeightCache mChildHeightCache = new HeightCache(sCacheSize);
-
+	
     private RemoveAnimator mRemoveAnimator;
 
     private LiftAnimator mLiftAnimator;
 
     private DropAnimator mDropAnimator;
+
+	private boolean mUseRemoveVelocity;
+    private float mRemoveVelocityX = 0;
 
     public DragSortListView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -500,7 +503,7 @@ public class DragSortListView extends ListView {
                         false);
                 int removeMode = a.getInt(
                         R.styleable.DragSortListView_remove_mode,
-                        DragSortController.FLING_RIGHT_REMOVE);
+                        DragSortController.FLING_REMOVE);
                 boolean sortEnabled = a.getBoolean(
                         R.styleable.DragSortListView_sort_enabled,
                         true);
@@ -509,6 +512,9 @@ public class DragSortListView extends ListView {
                         DragSortController.ON_DOWN);
                 int dragHandleId = a.getResourceId(
                         R.styleable.DragSortListView_drag_handle_id,
+                        0);
+                int flingHandleId = a.getResourceId(
+                        R.styleable.DragSortListView_fling_handle_id,
                         0);
                 int clickRemoveId = a.getResourceId(
                         R.styleable.DragSortListView_click_remove_id,
@@ -519,7 +525,7 @@ public class DragSortListView extends ListView {
                 
                 DragSortController controller = new DragSortController(
                         this, dragHandleId, dragInitMode, removeMode,
-                        clickRemoveId);
+                        clickRemoveId,flingHandleId);
                 controller.setRemoveEnabled(removeEnabled);
                 controller.setSortEnabled(sortEnabled);
                 controller.setBackgroundColor(bgColor);
@@ -732,7 +738,21 @@ public class DragSortListView extends ListView {
             // draw the float view over everything
             final int w = mFloatView.getWidth();
             final int h = mFloatView.getHeight();
-            final int alpha = (int) (255f * mCurrFloatAlpha);
+            
+            int x = mFloatLoc.x;
+
+            int width = getWidth();
+            if(x<0) 
+            	x = -x;
+			float alphaMod;
+			if (x < width) {
+				alphaMod = ((float) (width - x)) / ((float) width);
+			    alphaMod *= alphaMod;
+			} else {
+				alphaMod = 0;
+			}
+			
+            final int alpha = (int) (255f * mCurrFloatAlpha * alphaMod );
 
             canvas.save();
             //Log.d("mobeta", "clip rect bounds: " + canvas.getClipBounds());
@@ -1041,7 +1061,7 @@ public class DragSortListView extends ListView {
     }
 
     private class SmoothAnimator implements Runnable {
-        private long mStartTime;
+        protected long mStartTime;
 
         private float mDurationF;
 
@@ -1188,9 +1208,11 @@ public class DragSortListView extends ListView {
         @Override
         public void onUpdate(float frac, float smoothFrac) {
             final int targetY = getTargetY();
+            final int targetX = getPaddingLeft();
             final float deltaY = mFloatLoc.y - targetY;
+            final float deltaX = mFloatLoc.x - targetX;
             final float f = 1f - smoothFrac;
-            if (f < Math.abs(deltaY / mInitDeltaY)) {
+            if (f < Math.abs(deltaY / mInitDeltaY) || f<Math.abs(deltaX / mInitDeltaX)) {
                 mFloatLoc.y = targetY + (int) (mInitDeltaY * f);
                 mFloatLoc.x = getPaddingLeft() + (int) (mInitDeltaX * f);
                 doDragFloatView(true);
@@ -1209,6 +1231,7 @@ public class DragSortListView extends ListView {
      */
     private class RemoveAnimator extends SmoothAnimator {
 
+    	private float mFloatLocX;
         private float mFirstStartBlank;
         private float mSecondStartBlank;
 
@@ -1231,7 +1254,26 @@ public class DragSortListView extends ListView {
             mSecondPos = mSecondExpPos;
             srcPos = mSrcPos;
             mDragState = REMOVING;
-            destroyFloatView();
+
+            mFloatLocX = mFloatLoc.x;
+            if( mUseRemoveVelocity )
+            {
+            	float minVelocity = 2f*getWidth();
+            	if( mRemoveVelocityX == 0)
+            		mRemoveVelocityX = (mFloatLocX < 0 ? -1 : 1)*minVelocity;
+            	else
+            	{
+            		minVelocity *= 2;
+            		if( mRemoveVelocityX < 0 && mRemoveVelocityX > -minVelocity)
+            			mRemoveVelocityX = -minVelocity;
+            		else if( mRemoveVelocityX > 0 && mRemoveVelocityX < minVelocity)
+            			mRemoveVelocityX = minVelocity;
+            	}
+            }
+			else
+			{	
+	            destroyFloatView();
+			}
         }
 
         @Override
@@ -1242,6 +1284,25 @@ public class DragSortListView extends ListView {
             View item = getChildAt(mFirstPos - firstVis);
             ViewGroup.LayoutParams lp;
             int blank;
+            
+            if( mUseRemoveVelocity )
+            {
+				float dt = (float)(SystemClock.uptimeMillis() - mStartTime)/1000;
+				if( dt == 0 )
+					return;
+				float dx =  mRemoveVelocityX*dt;
+				int w = getWidth();
+				mRemoveVelocityX += (mRemoveVelocityX > 0 ? 1 :-1)*dt*w; 
+				mFloatLocX += dx;
+				mFloatLoc.x = (int) mFloatLocX;
+				if( mFloatLocX < w && mFloatLocX > -w)
+				{
+					mStartTime = SystemClock.uptimeMillis();
+					doDragFloatView(true);
+					return;
+				}
+            }
+			
             if (item != null) {
                 if (mFirstChildHeight == -1) {
                     mFirstChildHeight = getChildHeight(mFirstPos, item, false);
@@ -1273,14 +1334,22 @@ public class DragSortListView extends ListView {
         }
     }
 
+
+    public void removeItem(int which ) {
+
+    	mUseRemoveVelocity = false;
+    	removeItem( which, 0 );
+    }
     /**
      * Removes an item from the list and animates the removal.
      *
      * @param which Position to remove (NOTE: headers/footers ignored!
      * this is a position in your input ListAdapter).
+     * @param velocityX 
      */
-    public void removeItem(int which) {
+    public void removeItem(int which, float velocityX) {
         if (mDragState == IDLE || mDragState == DRAGGING) {
+
             if (mDragState == IDLE) {
                 // called from outside drag-sort
                 mSrcPos = getHeaderViewsCount() + which;
@@ -1292,6 +1361,9 @@ public class DragSortListView extends ListView {
                     v.setVisibility(View.INVISIBLE);
                 }
             }
+            
+            mDragState = REMOVING;
+        	mRemoveVelocityX = velocityX;
 
             if (mInTouchEvent) {
                 switch (mCancelMethod) {
@@ -1439,11 +1511,20 @@ public class DragSortListView extends ListView {
      * no floating View.
      */
     public boolean stopDrag(boolean remove) {
+    	mUseRemoveVelocity = false;
+    	return stopDrag( remove, 0 );
+    }
+    public boolean stopDragWithVelocity(boolean remove, float velocityX) {
+    	
+    	mUseRemoveVelocity = true;
+    	return stopDrag( remove, velocityX );
+    }
+    public boolean stopDrag(boolean remove, float velocityX) {
         if (mFloatView != null) {
             mDragScroller.stopScrolling(true);
             
             if (remove) {
-                removeItem(mSrcPos - getHeaderViewsCount());
+                removeItem(mSrcPos - getHeaderViewsCount(),velocityX);
             } else {
                 if (mDropAnimator != null) {
                     mDropAnimator.start();

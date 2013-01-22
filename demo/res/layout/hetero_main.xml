@@ -22,4 +22,4 @@
     dslv:sort_enabled="true"
     dslv:remove_enabled="true"
     dslv:drag_start_mode="onDown"
-    dslv:remove_mode="flingLeft" />
+    dslv:remove_mode="flingRemove" />

@@ -57,10 +57,7 @@
     <string name="add_footer">Add footer</string>
     <string-array name="remove_mode_labels">
       <item>Click remove</item>
-      <item>Fling right</item>
-      <item>Fling left</item>
-      <item>Slide right</item>
-      <item>Slide left</item>
+      <item>Fling remove</item>
     </string-array>
     <string-array name="drag_init_mode_labels">
       <item>On down</item>
