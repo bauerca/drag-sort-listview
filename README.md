@@ -4,6 +4,11 @@ DragSortListView
 News
 ----
 
+**Feb. 9, 2013**: Version 0.6.0. Consolidated remove modes to
+`click_remove` and `fling_remove`. No more fling remove while
+dragging; fling anywhere on item to remove it.
+[Leszek Mzyk](https://github.com/imbryk) is a bona fide code-slanger.
+
 **Jan. 10, 2013**: Version 0.5.0 is released. Supports ListView
 multi-choice and single-choice modes thanks to the hard work of
 [Mattias Flodin](https://github.com/mattiasflodin)! Awesome-sauce.
@@ -152,16 +157,16 @@ of 1 means items snap from position to position without animation.
 * `remove_mode`: (enum, "flingRight") Sets the gesture for removing the
   dragged item.
     + "clickRemove": Click on item child View with id `click_remove_id`.
-    + "flingRight": Fling to the right; get outta here! 
-    + "flingLeft": Fling to the left; sayonara sucker! 
-    + "slideRight": Floating View fades as you slide your finger
-      to the right; lifting while faded removes item.
-    + "slideLeft": Floating View fades as you slide your finger
-      to the right; lifting while faded removes item.
+    + "flingRemove": Fling horizontal anywhere on item.
 * `click_remove_id`: (id, 0) Android resource id that points to a
   child View of a list item. When `remove_mode="clickRemove"` and
   `remove_enabled="true"`, a click on this child View removes the
   containing item. This attr is used by DragSortController.
+* `fling_handle_id`: (id, 0) Android resource id that points to a
+  child View of a list item. When `remove_mode="flingRemove"` and
+  `remove_enabled="true"`, a fling that originates on this child
+  View removes the containing item. This attr is used by
+  DragSortController.
 
 ### Listeners
 
@@ -355,7 +360,7 @@ dependency to your pom.xml:
 <dependency>
     <groupId>com.mobeta.android.dslv</groupId>
     <artifactId>drag-sort-listview</artifactId>
-    <version>0.3.0-SNAPSHOT</version>
+    <version>0.6.0-SNAPSHOT</version>
     <type>apklib</type>
 </dependency>
 ```

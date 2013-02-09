@@ -1,6 +1,16 @@
 Changelog
 =========
 
+0.6.0
+-----
+
+* Remove modes are now `fling_remove` and `click_remove`.
+ 
+0.5.0
+-----
+
+* Multiple-choice and single-choice selections handled.
+
 0.4.0
 -----
 

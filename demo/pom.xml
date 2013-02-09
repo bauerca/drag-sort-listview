@@ -20,14 +20,14 @@ Copyright 2012 Andreas Schildbach
     <parent>
         <groupId>com.mobeta.android.dslv</groupId>
         <artifactId>parent</artifactId>
-        <version>0.5.0-SNAPSHOT</version>
+        <version>0.6.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
 	<groupId>com.mobeta.android.demodslv</groupId>
 	<artifactId>drag-sort-listview-demo</artifactId>
 	<packaging>apk</packaging>
-	<version>0.5.0-SNAPSHOT</version>
+	<version>0.6.0-SNAPSHOT</version>
 
 	<dependencies>
         <dependency>

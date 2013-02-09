@@ -21,7 +21,7 @@ public class RemoveModeDialog extends DialogFragment {
 
     public RemoveModeDialog() {
         super();
-        mRemoveMode = DragSortController.FLING_RIGHT_REMOVE;
+        mRemoveMode = DragSortController.FLING_REMOVE;
     }
 
     public RemoveModeDialog(int inRemoveMode) {
