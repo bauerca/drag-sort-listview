@@ -83,7 +83,40 @@
 <parameter name="clickRemoveId" type="int">
 </parameter>
 </constructor>
+<constructor name="DragSortController"
+ type="com.mobeta.android.dslv.DragSortController"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="dslv" type="com.mobeta.android.dslv.DragSortListView">
+</parameter>
+<parameter name="dragHandleId" type="int">
+</parameter>
+<parameter name="dragInitMode" type="int">
+</parameter>
+<parameter name="removeMode" type="int">
+</parameter>
+<parameter name="clickRemoveId" type="int">
+</parameter>
+<parameter name="flingHandleId" type="int">
+</parameter>
+</constructor>
 <method name="dragHandleHitPosition"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="ev" type="android.view.MotionEvent">
+</parameter>
+</method>
+<method name="flingHandleHitPosition"
  return="int"
  abstract="false"
  native="false"
@@ -284,6 +317,19 @@
 <parameter name="mode" type="int">
 </parameter>
 </method>
+<method name="setFlingHandleId"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="id" type="int">
+</parameter>
+</method>
 <method name="setRemoveEnabled"
  return="void"
  abstract="false"
@@ -353,6 +399,19 @@
 <parameter name="ev" type="android.view.MotionEvent">
 </parameter>
 </method>
+<method name="startFlingPosition"
+ return="int"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="ev" type="android.view.MotionEvent">
+</parameter>
+</method>
 <method name="viewIdHitPosition"
  return="int"
  abstract="false"
@@ -379,18 +438,7 @@
  visibility="public"
 >
 </field>
-<field name="FLING_LEFT_REMOVE"
- type="int"
- transient="false"
- volatile="false"
- value="2"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="FLING_RIGHT_REMOVE"
+<field name="FLING_REMOVE"
  type="int"
  transient="false"
  volatile="false"
@@ -439,28 +487,6 @@
  transient="false"
  volatile="false"
  value="2"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="SLIDE_LEFT_REMOVE"
- type="int"
- transient="false"
- volatile="false"
- value="4"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="SLIDE_RIGHT_REMOVE"
- type="int"
- transient="false"
- volatile="false"
- value="3"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -853,6 +879,21 @@
 <parameter name="which" type="int">
 </parameter>
 </method>
+<method name="removeItem"
+ return="void"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="which" type="int">
+</parameter>
+<parameter name="velocityX" type="float">
+</parameter>
+</method>
 <method name="setDragEnabled"
  return="void"
  abstract="false"
@@ -1049,6 +1090,36 @@
  visibility="public"
 >
 <parameter name="remove" type="boolean">
+</parameter>
+</method>
+<method name="stopDrag"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="remove" type="boolean">
+</parameter>
+<parameter name="velocityX" type="float">
+</parameter>
+</method>
+<method name="stopDragWithVelocity"
+ return="boolean"
+ abstract="false"
+ native="false"
+ synchronized="false"
+ static="false"
+ final="false"
+ deprecated="not deprecated"
+ visibility="public"
+>
+<parameter name="remove" type="boolean">
+</parameter>
+<parameter name="velocityX" type="float">
 </parameter>
 </method>
 <field name="DRAG_NEG_X"
@@ -1288,7 +1359,7 @@
  type="int"
  transient="false"
  volatile="false"
- value="2130771983"
+ value="2130771984"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -1355,6 +1426,17 @@
  transient="false"
  volatile="false"
  value="2130771977"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="fling_handle_id"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="2130771983"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -1464,7 +1546,7 @@
  type="int"
  transient="false"
  volatile="false"
- value="2130771984"
+ value="2130771985"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -1499,18 +1581,7 @@
  visibility="public"
 >
 </field>
-<field name="flingLeft"
- type="int"
- transient="false"
- volatile="false"
- value="2130837506"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="flingRight"
+<field name="flingRemove"
  type="int"
  transient="false"
  volatile="false"
@@ -1525,7 +1596,7 @@
  type="int"
  transient="false"
  volatile="false"
- value="2130837509"
+ value="2130837506"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -1536,28 +1607,6 @@
  type="int"
  transient="false"
  volatile="false"
- value="2130837511"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="onMove"
- type="int"
- transient="false"
- volatile="false"
- value="2130837510"
- static="true"
- final="true"
- deprecated="not deprecated"
- visibility="public"
->
-</field>
-<field name="slideLeft"
- type="int"
- transient="false"
- volatile="false"
  value="2130837508"
  static="true"
  final="true"
@@ -1565,7 +1614,7 @@
  visibility="public"
 >
 </field>
-<field name="slideRight"
+<field name="onMove"
  type="int"
  transient="false"
  volatile="false"
@@ -1608,7 +1657,7 @@
  type="int"
  transient="false"
  volatile="false"
- value="15"
+ value="16"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -1675,6 +1724,17 @@
  transient="false"
  volatile="false"
  value="9"
+ static="true"
+ final="true"
+ deprecated="not deprecated"
+ visibility="public"
+>
+</field>
+<field name="DragSortListView_fling_handle_id"
+ type="int"
+ transient="false"
+ volatile="false"
+ value="15"
  static="true"
  final="true"
  deprecated="not deprecated"
@@ -1784,7 +1844,7 @@
  type="int"
  transient="false"
  volatile="false"
- value="16"
+ value="17"
  static="true"
  final="true"
  deprecated="not deprecated"
