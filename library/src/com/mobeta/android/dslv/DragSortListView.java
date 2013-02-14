@@ -907,6 +907,339 @@ public class DragSortListView extends ListView {
         return edge;
     }
 
+    /**
+     * Source gap.
+     */
+    private final static int GAP_FLAG_SOURCE = 0x1;
+
+    /**
+     * Drop gap.
+     */
+    private final static int GAP_FLAG_DROP = 0x2;
+
+    /**
+     * The gap above the sliding position.
+     */
+    private final static int GAP_FLAG_ABOVE_SLIDE = 0x4;
+
+    /**
+     * The gap below the sliding position.
+     */
+    private final static int GAP_FLAG_BELOW_SLIDE = 0x8;
+
+    private static class Gap {
+        int index;
+        int height;
+        int flags;
+
+        boolean isAbove(int position) {
+            return position >= index;
+        }
+
+        boolean isBelow(int position) {
+            return position < index;
+        }
+
+        int getPositionAbove() {
+            return index - 1;
+        }
+
+        int getPositionBelow() {
+            return index;
+        }
+    }
+
+    private HashMap<Integer, Gap> mGaps = new HashMap<Integer, Gap>();
+
+    private static final int sGapPoolCapacity = 5;
+    private ArrayList<Gap> mGapPool = new ArrayList<Gap>(sGapPoolCapacity);
+
+    private void recycleGap(Gap gap) {
+        if (mGapPool.size() != sGapPoolCapacity) {
+            mGapPool.add(gap);
+        }
+    }
+
+    private Gap obtainGap() {
+        final int size = mGapPool.size();
+        if (size == 0) {
+            return new Gap();
+        } else {
+            return mGapPool.remove(size - 1);
+        }
+    }
+
+    private Gap setGap(int index, int height, int flags) {
+        Gap gap = mGaps.get(index);
+        if (gap == null) {
+            gap = obtainGap();
+            mGaps.put(index, gap);
+        }
+        gap.height = height;
+        gap.flags = flags;
+        return gap;
+    }
+
+    private Gap insertGapBelow(int position, int height, int flags) {
+        final int index = position + 1;
+        return setGap(index, height, flags);
+    }
+
+    private Gap insertGapAbove(int height, int position, int flags) {
+        final int index = position;
+        return setGap(index, height, flags);
+    }
+
+    /**
+     * Call this when drag point has moved relative to the list.
+     * Starts at current drop slot, and shuffles items toward
+     * drag point.
+     */
+    private boolean updateShuffle2() {
+        final int numHeaders = getHeaderViewsCount();
+        final int numFooters = getFooterViewsCount();
+        final int count = getCount();
+        final int firstNonHeader = numHeaders;
+        final int lastNonFooter = count - numFooters - 1;
+
+        final int first = getFirstVisiblePosition();
+        final int last = getLastVisiblePosition();
+
+        final int divHeight = getDividerHeight();
+        float top;
+        float bottom;
+
+        if (mDragY == mLastDragY) {
+            return;
+        }
+
+        // Where to start?
+        int position = INVALID_POSITION;
+        for (Gap gap : mGaps.values()) {
+            if (gap.flags & GAP_FLAG_ABOVE_SLIDE == GAP_FLAG_ABOVE_SLIDE) {
+                position = gap.getPositionBelow();
+            } else if (gap.flags & GAP_FLAG_BELOW_SLIDE == GAP_FLAG_BELOW_SLIDE) {
+                position = gap.getPositionAbove();
+            } else if (gap.flags & GAP_FLAG_DROP == GAP_FLAG_DROP) {
+                final int above = gap.getPositionAbove();
+                final int below = gap.getPositionBelow();
+                if (below <= first) {
+                    position = first;
+                } else if (above >= last) {
+                    position = last;
+                } else {
+                    // Get middle of drop gap. If
+                    // drag point is below, start with position below
+                    // drop gap, b/c it might move up. Otherwise
+                    // choose position above.
+                    final int top = getChildAt(above).getBottom();
+                    final int bottom = getChildAt(below).getTop();
+                    if (mDragY >= (top + bottom) / 2) {
+                        position = below;
+                    } else {
+                        position = above;
+                    }
+                }
+            }
+
+            if (position != INVALID_POSITION) {
+                break;
+            }
+        }
+
+        if (position < first) {
+            position = first;
+        } else if (position > last) {
+            position = last;
+        }
+
+        View child;
+        int topLimit;
+        int bottomLimit;
+        int mid;
+        int slideHeight;
+        int slideTop;
+        int slideBottom;
+        while (position <= last && position >= first) {
+            if (position == firstFooter) {
+                mDropSlot = firstFooter;
+                break;
+            }
+            //
+            //      |----------|
+            //      |          |
+            //      |----------| topLimit
+            //      ||||||||||||
+            //      |----------|
+            //      | position |
+            //      |----------|
+            //      ||||||||||||
+            //      |----------| bottomLimit
+            //      |          |
+            //      |----------|
+            //
+            // topLimit is farthest we can shift item at position
+            // up. bottomLimit is farthest we can shift item
+            // down.
+            //
+
+            child = getChildAt(position);
+            top = child.getTop();
+            height = child.getHeight();
+
+            for (Gap gap : mGaps.values()) {
+                if (gap.flags & GAP_FLAG_SOURCE == GAP_FLAG_SOURCE) {
+                    if (gap.isAbove(position) {
+                        topLimit -= gap.height - mSrcIndicatorHeight;
+                    } else {
+                        bottomLimit += gap.height - mSrcIndicatorHeight;
+                    }
+                } else {
+                    if (gap.isAbove(position) {
+                        topLimit -= gap.height;
+                    } else {
+                        bottomLimit += gap.height;
+                    }
+                }
+            }
+
+            mid = 0.5f * (topLimit + bottomLimit);
+
+            slideHeight = mSlideRegionFrac * (height + divHeight);
+            slideTop = mid - 0.5f * slideHeight;
+            slideBottom = mid + 0.5f * slideHeight;
+
+            if (mDragY >= slideBottom) {
+                // Item at position needs to slide up
+                offset = topLimit - top;
+
+                if (offset == 0) {
+                    // Item cannot slide up any farther, so
+                    // the shuffle is done
+                    mDropSlot = position + 1;
+                    break;
+                }
+
+                // Remove/Update gaps above
+                Iterator<Gap> iter = mGaps.iterator();
+                while (iter.hasNext()) {
+                    gap = iter.next();
+                    if (gap.isAbove(position) {
+                        if (gap.flags & GAP_FLAG_SOURCE == GAP_FLAG_SOURCE) {
+                            gap.height = mSrcIndicatorHeight;
+                            gap.flags = GAP_FLAG_SOURCE;
+                        } else {
+                            iter.remove();
+                            recycleGap(gap);
+                        }
+                    }
+                }
+
+                // Add/Update gap below
+                int gapFlags = GAP_FLAG_DROP;
+                if (position == mSrcSlot - 1) {
+                    gapFlags |= GAP_FLAG_SOURCE;
+                }
+                insertGapBelow(position, bottomLimit - topLimit + height, gapType);
+
+                // Offset child
+                child.offsetTopAndBottom(offset);
+                mSlidePos = INVALID_POSITION;
+                position++;
+            } else if (mDragY < slideTop) {
+                offset = bottomLimit - height - top;
+                if (offset == 0) {
+                    mDropSlot = position;
+                    break;
+                }
+
+                // Remove/Update gaps below
+                Iterator<Gap> iter = mGaps.iterator();
+                while (iter.hasNext()) {
+                    gap = iter.next();
+                    if (gap.isBelow(position) {
+                        if (gap.flags & GAP_FLAG_SOURCE == GAP_FLAG_SOURCE) {
+                            gap.height = mSrcIndicatorHeight;
+                            gap.flags = GAP_FLAG_SOURCE;
+                        } else {
+                            iter.remove();
+                            recycleGap(gap);
+                        }
+                    }
+                }
+
+                // Add/Update gap above
+                int gapFlags = GAP_FLAG_DROP;
+                if (position == mSrcSlot - 1) {
+                    gapFlags |= GAP_FLAG_SOURCE;
+                }
+                insertGapAbove(position, topLimit - top, gapFlags);
+
+                child.offsetTopAndBottom(offset);
+                mSlidePos = INVALID_POSITION;
+                position--;
+            } else {
+                final float frac = (slideBottom - mDragY) / slideHeight;
+                offset = topLimit + (int) (frac * (bottomLimit - height - topLimit)) - top;
+                child.offsetTopAndBottom(offset);
+                mSlidePos = position;
+                mDropSlot = mDragY >= mid ? position + 1 : position;
+                break;
+            }
+        }
+
+        // Set gaps for next layout
+        if (mSlidePos == INVALID_POSITION) {
+            if (mDropSlot == mSrcSlot || mSrcSlot == INVALID_SLOT || mSrcIndicatorHeight == 0) {
+                mDropGap = mDropSlotHeight + divHeight;
+                mSrcGap = 0;
+            } else {
+                mSrcGap = mSrcIndicatorHeight;
+                mDropGap = mDropSlotHeight + divHeight - mSrcGap;
+            }
+            mSlideGapAbove = 0;
+            mSlideGapBelow = 0;
+        } else {
+            final View slider = getChildAt(mSlidePos);
+
+
+        }
+
+
+        removeGap(mSlideGapAbove);
+        removeGap(mSlideGapBelow);
+
+
+        if (dragY < top) {
+            while (dragY < top) {
+                child = getChildAt(--position);
+                if (child != null) {
+                    bottom = child.getBottom() + halfDiv;
+
+                    if (dragY >= bottom) {
+                        // Drag point is below current item and above
+                        // 
+
+                    }
+
+
+                    bottom = top;
+                    top = child.getTop() - halfDiv;
+                } else {
+                    break;
+                }
+            }
+        } else {
+            while (mDragY > bottom) {
+
+            }
+        }
+
+        if (position == mSlidePos) 
+
+
+    }
+
     private boolean updatePositions() {
 
         final int first = getFirstVisiblePosition();
