@@ -360,7 +360,7 @@ dependency to your pom.xml:
 <dependency>
     <groupId>com.mobeta.android.dslv</groupId>
     <artifactId>drag-sort-listview</artifactId>
-    <version>0.6.0-SNAPSHOT</version>
+    <version>0.6.1-SNAPSHOT</version>
     <type>apklib</type>
 </dependency>
 ```

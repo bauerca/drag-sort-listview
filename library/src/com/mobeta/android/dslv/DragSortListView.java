@@ -1604,6 +1604,7 @@ public class DragSortListView extends ListView {
             mDragState = IDLE;
         }
         mCurrFloatAlpha = mFloatAlpha;
+        mListViewIntercepted = false;
         mChildHeightCache.clear();
     }
 
@@ -1622,6 +1623,12 @@ public class DragSortListView extends ListView {
         mOffsetX = (int) ev.getRawX() - mX;
         mOffsetY = (int) ev.getRawY() - mY;
     }
+
+    public boolean listViewIntercepted() {
+        return mListViewIntercepted;
+    }
+
+    private boolean mListViewIntercepted = false;
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -1651,6 +1658,7 @@ public class DragSortListView extends ListView {
             intercept = true;
         } else {
             if (super.onInterceptTouchEvent(ev)) {
+                mListViewIntercepted = true;
                 intercept = true;
             }
 

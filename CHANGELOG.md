@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.6.1
+-----
+
+* Fix #77: OnClickListener in list item crashes
+DragSortController.
+
 0.6.0
 -----
 

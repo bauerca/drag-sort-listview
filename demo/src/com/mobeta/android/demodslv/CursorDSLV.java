@@ -6,7 +6,11 @@ import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
 import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.database.Cursor;
+import android.widget.Toast;
 
 public class CursorDSLV extends FragmentActivity {
 
@@ -20,7 +24,7 @@ public class CursorDSLV extends FragmentActivity {
 
         String[] cols = {"name"};
         int[] ids = {R.id.text};
-        adapter = new SimpleDragSortCursorAdapter(this,
+        adapter = new MAdapter(this,
                 R.layout.list_item_click_remove, null, cols, ids, 0);
 
         DragSortListView dslv = (DragSortListView) findViewById(android.R.id.list);
@@ -35,5 +39,27 @@ public class CursorDSLV extends FragmentActivity {
                     .add(artistNames[i]);
         }
         adapter.changeCursor(cursor);
+    }
+
+    private class MAdapter extends SimpleDragSortCursorAdapter {
+        private Context mContext;
+
+        public MAdapter(Context ctxt, int rmid, Cursor c, String[] cols, int[] ids, int something) {
+            super(ctxt, rmid, c, cols, ids, something);
+            mContext = ctxt;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View v = super.getView(position, convertView, parent);
+            View tv = v.findViewById(R.id.text);
+            tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(mContext, "text clicked", Toast.LENGTH_SHORT).show();
+                }
+            });
+            return v;
+        }
     }
 }
