@@ -42,12 +42,14 @@ import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.HeaderViewListAdapter;
 import android.widget.ListAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * ListView subclass that mediates drag and drop resorting of items.
@@ -78,7 +80,9 @@ public class DragSortListView extends ListView {
     /**
      * The middle (in the y-direction) of the floating View.
      */
-    private int mFloatViewMid;
+    private int mDragY;
+
+    private int mLastDragY;
 
     /**
      * Flag to make sure float View isn't measured twice
@@ -101,7 +105,7 @@ public class DragSortListView extends ListView {
      * While drag-sorting, the current position of the floating
      * View. If dropped, the dragged item will land in this position.
      */
-    private int mFloatPos;
+    private int mDropSlot;
 
     /**
      * The first expanded ListView position that helps represent
@@ -125,7 +129,7 @@ public class DragSortListView extends ListView {
     /**
      * The user dragged from this position.
      */
-    private int mSrcPos;
+    private int mSrcSlot;
 
     /**
      * Offset (in x) within the dragged item at which the user
@@ -386,12 +390,10 @@ public class DragSortListView extends ListView {
     private float mSlideFrac = 0.0f;
 
     /**
-     * Wraps the user-provided ListAdapter. This is used to wrap each
-     * item View given by the user inside another View (currenly
-     * a RelativeLayout) which
-     * expands and collapses to simulate the item shuffling.
+     * Wraps the user-provided ListAdapter. During a drag, this
+     * wrapper hides the dragged item.
      */
-    private AdapterWrapper mAdapterWrapper;
+    private HideAdapter mHideAdapter;
 
     /**
      * Turn on custom debugger.
@@ -427,7 +429,7 @@ public class DragSortListView extends ListView {
      * drag-sort.
      */
     private static final int sCacheSize = 3;
-    private HeightCache mChildHeightCache = new HeightCache(sCacheSize);
+    private HeightCache mItemHeightCache = new HeightCache(sCacheSize);
 
     private RemoveAnimator mRemoveAnimator;
 
@@ -603,7 +605,7 @@ public class DragSortListView extends ListView {
      */
     @Override
     public void setAdapter(ListAdapter adapter) {
-        mAdapterWrapper = new AdapterWrapper(adapter);
+        mHideAdapter = new HideAdapter(adapter);
 
         if (adapter != null) {
             adapter.registerDataSetObserver(mObserver);
@@ -619,7 +621,7 @@ public class DragSortListView extends ListView {
             }
         }
 
-        super.setAdapter(mAdapterWrapper);
+        super.setAdapter(mHideAdapter);
     }
 
     /**
@@ -630,57 +632,10 @@ public class DragSortListView extends ListView {
      * @return The ListAdapter set as the argument of {@link setAdapter()}
      */
     public ListAdapter getInputAdapter() {
-        if (mAdapterWrapper == null) {
+        if (mHideAdapter == null) {
             return null;
         } else {
-            return mAdapterWrapper.getAdapter();
-        }
-    }
-
-    private class AdapterWrapper extends HeaderViewListAdapter {
-        private ListAdapter mAdapter;
-
-        public AdapterWrapper(ListAdapter adapter) {
-            super(null, null, adapter);
-            mAdapter = adapter;
-        }
-
-        public ListAdapter getAdapter() {
-            return mAdapter;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            DragSortItemView v;
-            View child;
-            // Log.d("mobeta",
-            // "getView: position="+position+" convertView="+convertView);
-            if (convertView != null) {
-                v = (DragSortItemView) convertView;
-                View oldChild = v.getChildAt(0);
-
-                child = mAdapter.getView(position, oldChild, v);
-                if (child != oldChild) {
-                    // shouldn't get here if user is reusing convertViews
-                    // properly
-                    v.removeViewAt(0);
-                    v.addView(child);
-                }
-            } else {
-                v = new DragSortItemView(getContext());
-                v.setLayoutParams(new AbsListView.LayoutParams(
-                        ViewGroup.LayoutParams.FILL_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT));
-                child = mAdapter.getView(position, null, v);
-                v.addView(child);
-            }
-
-            // Set the correct item height given drag state; passed
-            // View needs to be measured if measurement is required.
-            adjustItem(position + getHeaderViewsCount(), v, true);
-
-            return v;
+            return mHideAdapter.getAdapter();
         }
     }
 
@@ -701,7 +656,7 @@ public class DragSortListView extends ListView {
 
                 final int childHeight = expItem.getChildAt(0).getHeight();
 
-                if (expPosition > mSrcPos) {
+                if (expPosition > mSrcSlot) {
                     t = expItem.getTop() + childHeight;
                     b = t + dividerHeight;
                 } else {
@@ -723,16 +678,6 @@ public class DragSortListView extends ListView {
     @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
-
-        if (mDragState != IDLE) {
-            // draw the divider over the expanded item
-            if (mFirstExpPos != mSrcPos) {
-                drawDivider(mFirstExpPos, canvas);
-            }
-            if (mSecondExpPos != mFirstExpPos && mSecondExpPos != mSrcPos) {
-                drawDivider(mSecondExpPos, canvas);
-            }
-        }
 
         if (mFloatView != null) {
             // draw the float view over everything
@@ -765,24 +710,6 @@ public class DragSortListView extends ListView {
             canvas.restore();
             canvas.restore();
         }
-    }
-
-    private int getItemHeight(int position) {
-        View v = getChildAt(position - getFirstVisiblePosition());
-
-        if (v != null) {
-            // item is onscreen, just get the height of the View
-            return v.getHeight();
-        } else {
-            // item is offscreen. get child height and calculate
-            // item height based on current shuffle state
-            return calcItemHeight(position, getChildHeight(position));
-        }
-    }
-
-    private void printPosData() {
-        Log.d("mobeta", "mSrcPos=" + mSrcPos + " mFirstExpPos=" + mFirstExpPos + " mSecondExpPos="
-                + mSecondExpPos);
     }
 
     private class HeightCache {
@@ -825,86 +752,135 @@ public class DragSortListView extends ListView {
             mMap.clear();
             mOrder.clear();
         }
-
     }
 
-    /**
-     * Get the shuffle edge for item at position when top of
-     * item is at y-coord top. Assumes that current item heights
-     * are consistent with current float view location and
-     * thus expanded positions and slide fraction. i.e. Should not be
-     * called between update of expanded positions/slide fraction
-     * and layoutChildren.
+    /** 
+     * Return the height of <em>any</em> list item, even if
+     * offscreen. A call to this function caches
+     * the result internally (for a while) so that future calls
+     * to this may be faster (especially if later calls request
+     * the same <code>position</code>). This function could be
+     * slow for offscreen items because it has to call
+     * {@link ListAdapter#getView(int, View, ViewGroup)}.
      *
-     * @param position 
-     * @param top
-     * @param height Height of item at position. If -1, this function
-     * calculates this height.
-     *
-     * @return Shuffle line between position-1 and position (for
-     * the given view of the list; that is, for when top of item at
-     * position has y-coord of given `top`). If
-     * floating View (treated as horizontal line) is dropped
-     * immediately above this line, it lands in position-1. If
-     * dropped immediately below this line, it lands in position.
+     * @param position The item position (including headers).
      */
-    private int getShuffleEdge(int position, int top) {
+    public int getItemHeight(int position) {
+        View v = getChildAt(position - getFirstVisiblePosition());
 
-        final int numHeaders = getHeaderViewsCount();
-        final int numFooters = getFooterViewsCount();
+        if (v != null) {
+            // item is onscreen, just get the height of the View
+            return v.getHeight();
+        } else {
+            Log.w("mobeta", "Getting offscreen height!");
+            // item is offscreen
+            // first check cache for child height at this position
+            int height = mItemHeightCache.get(position);
+            if (height != -1) {
+                // Log.d("mobeta", "found child height in cache!");
+                return height;
+            }
 
-        // shuffle edges are defined between items that can be
-        // dragged; there are N-1 of them if there are N draggable
-        // items.
+            final ListAdapter adapter = getAdapter();
+            int type = adapter.getItemViewType(position);
 
-        if (position <= numHeaders || (position >= getCount() - numFooters)) {
+            // There might be a better place for checking for the following
+            final int typeCount = adapter.getViewTypeCount();
+            if (typeCount != mSampleViewTypes.length) {
+                mSampleViewTypes = new View[typeCount];
+            }
+
+            if (type >= 0) {
+                if (mSampleViewTypes[type] == null) {
+                    v = adapter.getView(position, null, this);
+                    mSampleViewTypes[type] = v;
+                } else {
+                    v = adapter.getView(position, mSampleViewTypes[type], this);
+                }
+            } else {
+                // type is HEADER_OR_FOOTER or IGNORE
+                v = adapter.getView(position, null, this);
+            }
+
+            ViewGroup.LayoutParams lp = v.getLayoutParams();
+            if (lp != null && lp.height > 0) {
+                height = lp.height;
+            } else {
+                measureItem(v);
+                height = v.getMeasuredHeight();
+            }
+
+            // cache it because this could have been expensive
+            mItemHeightCache.add(position, height);
+
+            return height;
+        }
+    }
+
+    private int getItemTop(int position) {
+        final int first = getFirstVisiblePosition();
+        View child = getChildAt(position - first);
+        if (child != null) {
+            return child.getTop();
+        } else if (position < first) {
+            final int divHeight = getDividerHeight();
+            int top = getChildAt(0).getTop();
+            Gap gap;
+            for (int pos = first - 1; pos >= position; pos--) {
+                gap = getGapBelow(pos);
+                if (gap != null) {
+                    top -= gap.height;
+                }
+                top -= divHeight + getItemHeight(pos);
+            }
+            return top;
+        } else {
+            final int last = getLastVisiblePosition();
+            final int divHeight = getDividerHeight();
+            int top = getChildAt(getChildCount() - 1).getTop();
+            Gap gap;
+            for (int pos = last; pos < position; pos++) {
+                top += divHeight + getItemHeight(pos);
+                gap = getGapBelow(pos);
+                if (gap != null) {
+                    top += gap.height;
+                }
+            }
             return top;
         }
+    }
 
-        int divHeight = getDividerHeight();
-
-        int edge;
-
-        int maxBlankHeight = mFloatViewHeight - mItemHeightCollapsed;
-        int childHeight = getChildHeight(position);
-        int itemHeight = getItemHeight(position);
-
-        // first calculate top of item given that floating View is
-        // centered over src position
-        int otop = top;
-        if (mSecondExpPos <= mSrcPos) {
-            // items are expanded on and/or above the source position
-
-            if (position == mSecondExpPos && mFirstExpPos != mSecondExpPos) {
-                if (position == mSrcPos) {
-                    otop = top + itemHeight - mFloatViewHeight;
-                } else {
-                    int blankHeight = itemHeight - childHeight;
-                    otop = top + blankHeight - maxBlankHeight;
+    private int getItemBottom(int position) {
+        final int first = getFirstVisiblePosition();
+        View child = getChildAt(position - first);
+        if (child != null) {
+            return child.getBottom();
+        } else if (position < first) {
+            final int divHeight = getDividerHeight();
+            int bottom = getChildAt(0).getBottom();
+            Gap gap;
+            for (int pos = first; pos > position; pos--) {
+                bottom -= divHeight + getItemHeight(pos);
+                gap = getGapAbove(pos);
+                if (gap != null) {
+                    bottom -= gap.height;
                 }
-            } else if (position > mSecondExpPos && position <= mSrcPos) {
-                otop = top - maxBlankHeight;
             }
-
+            return bottom;
         } else {
-            // items are expanded on and/or below the source position
-
-            if (position > mSrcPos && position <= mFirstExpPos) {
-                otop = top + maxBlankHeight;
-            } else if (position == mSecondExpPos && mFirstExpPos != mSecondExpPos) {
-                int blankHeight = itemHeight - childHeight;
-                otop = top + blankHeight;
+            final int last = getLastVisiblePosition();
+            final int divHeight = getDividerHeight();
+            int bottom = getChildAt(getChildCount() - 1).getBottom();
+            Gap gap;
+            for (int pos = last + 1; pos <= position; pos++) {
+                gap = getGapAbove(pos);
+                if (gap != null) {
+                    bottom += gap.height;
+                }
+                bottom += divHeight + getItemHeight(pos);
             }
+            return bottom;
         }
-
-        // otop is set
-        if (position <= mSrcPos) {
-            edge = otop + (mFloatViewHeight - divHeight - getChildHeight(position - 1)) / 2;
-        } else {
-            edge = otop + (childHeight - divHeight - mFloatViewHeight) / 2;
-        }
-
-        return edge;
     }
 
     /**
@@ -969,12 +945,13 @@ public class DragSortListView extends ListView {
         }
     }
 
-    private Gap setGap(int index, int height, int flags) {
+    private Gap insertGap(int index, int height, int flags) {
         Gap gap = mGaps.get(index);
         if (gap == null) {
             gap = obtainGap();
             mGaps.put(index, gap);
         }
+        gap.index = index;
         gap.height = height;
         gap.flags = flags;
         return gap;
@@ -982,45 +959,100 @@ public class DragSortListView extends ListView {
 
     private Gap insertGapBelow(int position, int height, int flags) {
         final int index = position + 1;
-        return setGap(index, height, flags);
+        return insertGap(index, height, flags);
     }
 
-    private Gap insertGapAbove(int height, int position, int flags) {
+    private Gap insertGapAbove(int position, int height, int flags) {
         final int index = position;
-        return setGap(index, height, flags);
+        return insertGap(index, height, flags);
     }
+
+    private Gap getGapAbove(int position) {
+        return mGaps.get(position);
+    }
+
+    private Gap getGapBelow(int position) {
+        return mGaps.get(position + 1);
+    }
+
+    private int getGapHeightAbove(int position) {
+        final Gap gap = getGapAbove(position);
+        return gap == null ? 0 : gap.height;
+    }
+
+    private int getGapHeightBelow(int position) {
+        final Gap gap = getGapBelow(position);
+        return gap == null ? 0 : gap.height;
+    }
+
+    private Gap findGap(int flags) {
+        for (Gap gap : mGaps.values()) {
+            if ((gap.flags & flags) == flags) {
+                return gap;
+            }
+        }
+        return null;
+    }
+
+    private void removeGaps() {
+        for (Gap gap : mGaps.values()) {
+            recycleGap(gap);
+        }
+        mGaps.clear();
+    }
+
+    private void removeGap(Gap gap) {
+        mGaps.remove(gap.index);
+        recycleGap(gap);
+    }
+
+    private ArrayList<Gap> mGapRemovals = new ArrayList<Gap>(3);
+
+    private final static int NOWHERE = -1;
+    private final static int ABOVE = 0;
+    private final static int BELOW = 1;
+    private final static int ON = 2;
 
     /**
      * Call this when drag point has moved relative to the list.
      * Starts at current drop slot, and shuffles items toward
      * drag point.
      */
-    private boolean updateShuffle2() {
-        final int numHeaders = getHeaderViewsCount();
-        final int numFooters = getFooterViewsCount();
-        final int count = getCount();
-        final int firstNonHeader = numHeaders;
-        final int lastNonFooter = count - numFooters - 1;
+    private void updateShuffle2() {
+        if (mDragY == mLastDragY) {
+            return;
+        }
 
         final int first = getFirstVisiblePosition();
         final int last = getLastVisiblePosition();
 
-        final int divHeight = getDividerHeight();
-        float top;
-        float bottom;
-
-        if (mDragY == mLastDragY) {
-            return;
+        if (false) {
+            Log.d("mobeta", "update shuffle. mDragY="+mDragY+" mY="+mY+" listH="+getHeight()+". gaps:");
+            for (Gap gap : mGaps.values()) {
+                Log.d("mobeta", "  index="+gap.index+" height="+gap.height);
+                if ((gap.flags & GAP_FLAG_ABOVE_SLIDE) == GAP_FLAG_ABOVE_SLIDE) {
+                    Log.d("mobeta", "    - above slide");
+                }
+                if ((gap.flags & GAP_FLAG_BELOW_SLIDE) == GAP_FLAG_BELOW_SLIDE) {
+                    Log.d("mobeta", "    - below slide");
+                }
+                if ((gap.flags & GAP_FLAG_SOURCE) == GAP_FLAG_SOURCE) {
+                    Log.d("mobeta", "    - source");
+                }
+                if ((gap.flags & GAP_FLAG_DROP) == GAP_FLAG_DROP) {
+                    Log.d("mobeta", "    - drop");
+                }
+            }
         }
 
         // Where to start?
         int position = INVALID_POSITION;
         for (Gap gap : mGaps.values()) {
-            if (gap.flags & GAP_FLAG_ABOVE_SLIDE == GAP_FLAG_ABOVE_SLIDE) {
+            if ((gap.flags & GAP_FLAG_ABOVE_SLIDE) == GAP_FLAG_ABOVE_SLIDE) {
                 position = gap.getPositionBelow();
-            } else if (gap.flags & GAP_FLAG_BELOW_SLIDE == GAP_FLAG_BELOW_SLIDE) {
+            } else if ((gap.flags & GAP_FLAG_BELOW_SLIDE) == GAP_FLAG_BELOW_SLIDE) {
                 position = gap.getPositionAbove();
-            } else if (gap.flags & GAP_FLAG_DROP == GAP_FLAG_DROP) {
+            } else if ((gap.flags & GAP_FLAG_DROP) == GAP_FLAG_DROP) {
                 final int above = gap.getPositionAbove();
                 final int below = gap.getPositionBelow();
                 if (below <= first) {
@@ -1032,8 +1064,8 @@ public class DragSortListView extends ListView {
                     // drag point is below, start with position below
                     // drop gap, b/c it might move up. Otherwise
                     // choose position above.
-                    final int top = getChildAt(above).getBottom();
-                    final int bottom = getChildAt(below).getTop();
+                    final int top = getChildAt(above - first).getBottom();
+                    final int bottom = getChildAt(below - first).getTop();
                     if (mDragY >= (top + bottom) / 2) {
                         position = below;
                     } else {
@@ -1054,17 +1086,22 @@ public class DragSortListView extends ListView {
         }
 
         View child;
+        final int divHeight = getDividerHeight();
+        final int lastHeader = getHeaderViewsCount() - 1;
+        final int firstFooter = getCount() - getFooterViewsCount();
+        int lastRegion = NOWHERE;
+        int top;
+        int height;
         int topLimit;
         int bottomLimit;
         int mid;
         int slideHeight;
         int slideTop;
         int slideBottom;
+        int offset;
+        //Log.d("mobeta", "shuffle");
         while (position <= last && position >= first) {
-            if (position == firstFooter) {
-                mDropSlot = firstFooter;
-                break;
-            }
+            //Log.d("mobeta", "  position="+position+" first="+first);
             //
             //      |----------|
             //      |          |
@@ -1083,315 +1120,216 @@ public class DragSortListView extends ListView {
             // down.
             //
 
-            child = getChildAt(position);
+            child = getChildAt(position - first);
             top = child.getTop();
             height = child.getHeight();
+            //Log.d("mobeta", "    child top="+top+" height="+height);
 
+            // Set top and bottom slide limits.
+            topLimit = top;
+            bottomLimit = top + height;
             for (Gap gap : mGaps.values()) {
-                if (gap.flags & GAP_FLAG_SOURCE == GAP_FLAG_SOURCE) {
-                    if (gap.isAbove(position) {
-                        topLimit -= gap.height - mSrcIndicatorHeight;
-                    } else {
-                        bottomLimit += gap.height - mSrcIndicatorHeight;
-                    }
+                final int shift = gap.height - ((gap.flags & GAP_FLAG_SOURCE) == GAP_FLAG_SOURCE ? mItemHeightCollapsed : 0);
+                if (gap.isAbove(position)) {
+                    topLimit -= shift;
                 } else {
-                    if (gap.isAbove(position) {
-                        topLimit -= gap.height;
-                    } else {
-                        bottomLimit += gap.height;
-                    }
+                    bottomLimit += shift;
                 }
             }
+            //Log.d("mobeta", "    topLimit="+topLimit+" bottomLimit="+bottomLimit);
 
-            mid = 0.5f * (topLimit + bottomLimit);
+            mid = (topLimit + bottomLimit) / 2;
 
-            slideHeight = mSlideRegionFrac * (height + divHeight);
-            slideTop = mid - 0.5f * slideHeight;
-            slideBottom = mid + 0.5f * slideHeight;
+            slideHeight = (int) (mSlideRegionFrac * (height + divHeight));
+            slideTop = mid - slideHeight / 2;
+            slideBottom = slideTop + slideHeight;
+            //Log.d("mobeta", "    slideTop="+slideTop+" slideBottom="+slideBottom);
 
             if (mDragY >= slideBottom) {
-                // Item at position needs to slide up
-                offset = topLimit - top;
-
-                if (offset == 0) {
-                    // Item cannot slide up any farther, so
-                    // the shuffle is done
+                //Log.d("mobeta", "    below slide region");
+                if (lastRegion == ABOVE) {
                     mDropSlot = position + 1;
                     break;
                 }
+                // Item at position needs to slide up
+                offset = topLimit - top;
+
+                //if (offset == 0) {
+                //    // Item cannot slide up any farther, so
+                //    // the shuffle is done
+                //    mDropSlot = position + 1;
+                //    break;
+                //}
 
                 // Remove/Update gaps above
-                Iterator<Gap> iter = mGaps.iterator();
-                while (iter.hasNext()) {
-                    gap = iter.next();
-                    if (gap.isAbove(position) {
-                        if (gap.flags & GAP_FLAG_SOURCE == GAP_FLAG_SOURCE) {
-                            gap.height = mSrcIndicatorHeight;
+                for (Gap gap : mGaps.values()) {
+                    if (gap.isAbove(position)) {
+                        if ((gap.flags & GAP_FLAG_SOURCE) == GAP_FLAG_SOURCE) {
+                            gap.height = mItemHeightCollapsed;
                             gap.flags = GAP_FLAG_SOURCE;
                         } else {
-                            iter.remove();
-                            recycleGap(gap);
+                            mGapRemovals.add(gap);
                         }
                     }
                 }
+                for (Gap gap : mGapRemovals) {
+                    removeGap(gap);
+                }
+                mGapRemovals.clear();
 
                 // Add/Update gap below
-                int gapFlags = GAP_FLAG_DROP;
-                if (position == mSrcSlot - 1) {
-                    gapFlags |= GAP_FLAG_SOURCE;
+                Gap gapBelow = getGapBelow(position);
+                if (gapBelow == null) {
+                    gapBelow = insertGapBelow(position, 0, 0);
+                } else {
+                    gapBelow.flags &= (~GAP_FLAG_ABOVE_SLIDE & ~GAP_FLAG_BELOW_SLIDE);
                 }
-                insertGapBelow(position, bottomLimit - topLimit + height, gapType);
+                gapBelow.flags |= GAP_FLAG_DROP;
+                gapBelow.height = bottomLimit - (topLimit + height);
+                if ((gapBelow.flags & GAP_FLAG_SOURCE) == GAP_FLAG_SOURCE) {
+                    gapBelow.height += mItemHeightCollapsed;
+                }
 
                 // Offset child
                 child.offsetTopAndBottom(offset);
-                mSlidePos = INVALID_POSITION;
+                lastRegion = BELOW;
                 position++;
             } else if (mDragY < slideTop) {
-                offset = bottomLimit - height - top;
-                if (offset == 0) {
+                //Log.d("mobeta", "    above slide region");
+                if (lastRegion == BELOW) {
                     mDropSlot = position;
                     break;
                 }
+                offset = bottomLimit - height - top;
+                //Log.d("mobeta", "    offsetting by "+offset);
+                //if (offset == 0) {
+                //    mDropSlot = position;
+                //    break;
+                //}
 
                 // Remove/Update gaps below
-                Iterator<Gap> iter = mGaps.iterator();
-                while (iter.hasNext()) {
-                    gap = iter.next();
-                    if (gap.isBelow(position) {
-                        if (gap.flags & GAP_FLAG_SOURCE == GAP_FLAG_SOURCE) {
-                            gap.height = mSrcIndicatorHeight;
+                for (Gap gap : mGaps.values()) {
+                    if (gap.isBelow(position)) {
+                        if ((gap.flags & GAP_FLAG_SOURCE) == GAP_FLAG_SOURCE) {
+                            gap.height = mItemHeightCollapsed;
                             gap.flags = GAP_FLAG_SOURCE;
                         } else {
-                            iter.remove();
-                            recycleGap(gap);
+                            mGapRemovals.add(gap);
                         }
                     }
                 }
+                for (Gap gap : mGapRemovals) {
+                    removeGap(gap);
+                }
+                mGapRemovals.clear();
 
                 // Add/Update gap above
-                int gapFlags = GAP_FLAG_DROP;
-                if (position == mSrcSlot - 1) {
-                    gapFlags |= GAP_FLAG_SOURCE;
+                Gap gapAbove = getGapAbove(position);
+                if (gapAbove == null) {
+                    gapAbove = insertGapAbove(position, 0, 0);
+                } else {
+                    gapAbove.flags &= (~GAP_FLAG_ABOVE_SLIDE & ~GAP_FLAG_BELOW_SLIDE);
                 }
-                insertGapAbove(position, topLimit - top, gapFlags);
+                gapAbove.flags |= GAP_FLAG_DROP;
+                gapAbove.height = bottomLimit - height - topLimit;
+                if ((gapAbove.flags & GAP_FLAG_SOURCE) == GAP_FLAG_SOURCE) {
+                    gapAbove.height += mItemHeightCollapsed;
+                }
 
                 child.offsetTopAndBottom(offset);
-                mSlidePos = INVALID_POSITION;
+                lastRegion = ABOVE;
                 position--;
             } else {
-                final float frac = (slideBottom - mDragY) / slideHeight;
+                final float frac = ((float) (slideBottom - mDragY)) / ((float) slideHeight);
+                //Log.d("mobeta", "    in slide region, frac="+frac);
                 offset = topLimit + (int) (frac * (bottomLimit - height - topLimit)) - top;
+
+                // Remove/Update gaps if they are not immediately
+                // above/below the current position.
+                for (Gap gap : mGaps.values()) {
+                    if (gap.getPositionBelow() != position && gap.getPositionAbove() != position) {
+                        if ((gap.flags & GAP_FLAG_SOURCE) == GAP_FLAG_SOURCE) {
+                            gap.height = mItemHeightCollapsed;
+                            gap.flags = GAP_FLAG_SOURCE;
+                        } else {
+                            mGapRemovals.add(gap);
+                        }
+                    }
+                }
+                for (Gap gap : mGapRemovals) {
+                    removeGap(gap);
+                }
+                mGapRemovals.clear();
+
+                // Set gap above sliding position
+                Gap gapAbove = getGapAbove(position);
+                if (gapAbove == null) {
+                    gapAbove = insertGapAbove(position, 0, 0);
+                }
+                gapAbove.height = top + offset - topLimit;
+                if ((gapAbove.flags & GAP_FLAG_SOURCE) == GAP_FLAG_SOURCE) {
+                    gapAbove.height += mItemHeightCollapsed;
+                }
+                gapAbove.flags |= GAP_FLAG_ABOVE_SLIDE;
+                if (mDragY < mid) {
+                    gapAbove.flags |= GAP_FLAG_DROP;
+                } else {
+                    gapAbove.flags &= ~GAP_FLAG_DROP;
+                }
+
+                // Set gap below sliding position
+                Gap gapBelow = getGapBelow(position);
+                if (gapBelow == null) {
+                    gapBelow = insertGapBelow(position, 0, 0);
+                }
+                gapBelow.height = bottomLimit - (top + offset + height);
+                if ((gapBelow.flags & GAP_FLAG_SOURCE) == GAP_FLAG_SOURCE) {
+                    gapBelow.height += mItemHeightCollapsed;
+                }
+                gapBelow.flags |= GAP_FLAG_BELOW_SLIDE;
+                if (mDragY >= mid) {
+                    gapBelow.flags |= GAP_FLAG_DROP;
+                } else {
+                    gapBelow.flags &= ~GAP_FLAG_DROP;
+                }
+
                 child.offsetTopAndBottom(offset);
-                mSlidePos = position;
                 mDropSlot = mDragY >= mid ? position + 1 : position;
                 break;
             }
-        }
 
-        // Set gaps for next layout
-        if (mSlidePos == INVALID_POSITION) {
-            if (mDropSlot == mSrcSlot || mSrcSlot == INVALID_SLOT || mSrcIndicatorHeight == 0) {
-                mDropGap = mDropSlotHeight + divHeight;
-                mSrcGap = 0;
-            } else {
-                mSrcGap = mSrcIndicatorHeight;
-                mDropGap = mDropSlotHeight + divHeight - mSrcGap;
-            }
-            mSlideGapAbove = 0;
-            mSlideGapBelow = 0;
-        } else {
-            final View slider = getChildAt(mSlidePos);
-
-
-        }
-
-
-        removeGap(mSlideGapAbove);
-        removeGap(mSlideGapBelow);
-
-
-        if (dragY < top) {
-            while (dragY < top) {
-                child = getChildAt(--position);
-                if (child != null) {
-                    bottom = child.getBottom() + halfDiv;
-
-                    if (dragY >= bottom) {
-                        // Drag point is below current item and above
-                        // 
-
-                    }
-
-
-                    bottom = top;
-                    top = child.getTop() - halfDiv;
-                } else {
-                    break;
-                }
-            }
-        } else {
-            while (mDragY > bottom) {
-
+            if (position == firstFooter) {
+                mDropSlot = firstFooter;
+                break;
+            } else if (position == lastHeader) {
+                mDropSlot = lastHeader + 1;
+                break;
             }
         }
+        //Log.d("mobeta", " ");
 
-        if (position == mSlidePos) 
-
-
+        invalidate();
     }
 
-    private boolean updatePositions() {
-
-        final int first = getFirstVisiblePosition();
-        int startPos = mFirstExpPos;
-        View startView = getChildAt(startPos - first);
-
-        if (startView == null) {
-            startPos = first + getChildCount() / 2;
-            startView = getChildAt(startPos - first);
-        }
-        int startTop = startView.getTop();
-
-        int itemHeight = startView.getHeight();
-
-        int edge = getShuffleEdge(startPos, startTop);
-        int lastEdge = edge;
-
-        int divHeight = getDividerHeight();
-
-        // Log.d("mobeta", "float mid="+mFloatViewMid);
-
-        int itemPos = startPos;
-        int itemTop = startTop;
-        if (mFloatViewMid < edge) {
-            // scanning up for float position
-            // Log.d("mobeta", "    edge="+edge);
-            while (itemPos >= 0) {
-                itemPos--;
-                itemHeight = getItemHeight(itemPos);
-
-                if (itemPos == 0) {
-                    edge = itemTop - divHeight - itemHeight;
-                    break;
-                }
-
-                itemTop -= itemHeight + divHeight;
-                edge = getShuffleEdge(itemPos, itemTop);
-                // Log.d("mobeta", "    edge="+edge);
-
-                if (mFloatViewMid >= edge) {
-                    break;
-                }
-
-                lastEdge = edge;
-            }
-        } else {
-            // scanning down for float position
-            // Log.d("mobeta", "    edge="+edge);
-            final int count = getCount();
-            while (itemPos < count) {
-                if (itemPos == count - 1) {
-                    edge = itemTop + divHeight + itemHeight;
-                    break;
-                }
-
-                itemTop += divHeight + itemHeight;
-                itemHeight = getItemHeight(itemPos + 1);
-                edge = getShuffleEdge(itemPos + 1, itemTop);
-                // Log.d("mobeta", "    edge="+edge);
-
-                // test for hit
-                if (mFloatViewMid < edge) {
-                    break;
-                }
-
-                lastEdge = edge;
-                itemPos++;
-            }
-        }
-
-        final int numHeaders = getHeaderViewsCount();
-        final int numFooters = getFooterViewsCount();
-
-        boolean updated = false;
-
-        int oldFirstExpPos = mFirstExpPos;
-        int oldSecondExpPos = mSecondExpPos;
-        float oldSlideFrac = mSlideFrac;
-
-        if (mAnimate) {
-            int edgeToEdge = Math.abs(edge - lastEdge);
-
-            int edgeTop, edgeBottom;
-            if (mFloatViewMid < edge) {
-                edgeBottom = edge;
-                edgeTop = lastEdge;
-            } else {
-                edgeTop = edge;
-                edgeBottom = lastEdge;
-            }
-            // Log.d("mobeta", "edgeTop="+edgeTop+" edgeBot="+edgeBottom);
-
-            int slideRgnHeight = (int) (0.5f * mSlideRegionFrac * edgeToEdge);
-            float slideRgnHeightF = (float) slideRgnHeight;
-            int slideEdgeTop = edgeTop + slideRgnHeight;
-            int slideEdgeBottom = edgeBottom - slideRgnHeight;
-
-            // Three regions
-            if (mFloatViewMid < slideEdgeTop) {
-                mFirstExpPos = itemPos - 1;
-                mSecondExpPos = itemPos;
-                mSlideFrac = 0.5f * ((float) (slideEdgeTop - mFloatViewMid)) / slideRgnHeightF;
-                // Log.d("mobeta",
-                // "firstExp="+mFirstExpPos+" secExp="+mSecondExpPos+" slideFrac="+mSlideFrac);
-            } else if (mFloatViewMid < slideEdgeBottom) {
-                mFirstExpPos = itemPos;
-                mSecondExpPos = itemPos;
-            } else {
-                mFirstExpPos = itemPos;
-                mSecondExpPos = itemPos + 1;
-                mSlideFrac = 0.5f * (1.0f + ((float) (edgeBottom - mFloatViewMid))
-                        / slideRgnHeightF);
-                // Log.d("mobeta",
-                // "firstExp="+mFirstExpPos+" secExp="+mSecondExpPos+" slideFrac="+mSlideFrac);
-            }
-
-        } else {
-            mFirstExpPos = itemPos;
-            mSecondExpPos = itemPos;
-        }
-
-        // correct for headers and footers
-        if (mFirstExpPos < numHeaders) {
-            itemPos = numHeaders;
-            mFirstExpPos = itemPos;
-            mSecondExpPos = itemPos;
-        } else if (mSecondExpPos >= getCount() - numFooters) {
-            itemPos = getCount() - numFooters - 1;
-            mFirstExpPos = itemPos;
-            mSecondExpPos = itemPos;
-        }
-
-        if (mFirstExpPos != oldFirstExpPos || mSecondExpPos != oldSecondExpPos
-                || mSlideFrac != oldSlideFrac) {
-            updated = true;
-        }
-
-        if (itemPos != mFloatPos) {
-            if (mDragListener != null) {
-                mDragListener.drag(mFloatPos - numHeaders, itemPos - numHeaders);
-            }
-
-            mFloatPos = itemPos;
-            updated = true;
-        }
-
-        return updated;
-    }
+    private float frameCount = 0f;
+    private long frDt = 500; // ms
+    private long frStart = 0;
+    private boolean frShow = true;
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        if (frShow) {
+            final long now = SystemClock.uptimeMillis();
+            if (now - frStart > frDt) {
+                Log.d("mobeta", "frame rate = " + (1000f * frameCount / ((float) (now - frStart))));
+                frameCount = 0f;
+                frStart = now;
+            } else {
+                frameCount += 1f;
+            }
+        }
 
         if (mTrackDragSort) {
             mDragSortTracker.appendState();
@@ -1493,7 +1431,7 @@ public class DragSortListView extends ListView {
                 mDragDeltaY = (int) (smoothFrac * mFinalDragDeltaY + (1f - smoothFrac)
                         * mInitDragDeltaY);
                 mFloatLoc.y = mY - mDragDeltaY;
-                doDragFloatView(true);
+                updateShuffle2();
             }
         }
     }
@@ -1503,10 +1441,10 @@ public class DragSortListView extends ListView {
      */
     private class DropAnimator extends SmoothAnimator {
 
-        private int mDropPos;
-        private int srcPos;
         private float mInitDeltaY;
         private float mInitDeltaX;
+
+        private Gap mDropGap;
 
         public DropAnimator(float smoothness, int duration) {
             super(smoothness, duration);
@@ -1514,8 +1452,7 @@ public class DragSortListView extends ListView {
 
         @Override
         public void onStart() {
-            mDropPos = mFloatPos;
-            srcPos = mSrcPos;
+            mDropGap = findGap(GAP_FLAG_DROP);
             mDragState = DROPPING;
             mInitDeltaY = mFloatLoc.y - getTargetY();
             mInitDeltaX = mFloatLoc.x - getPaddingLeft();
@@ -1523,25 +1460,13 @@ public class DragSortListView extends ListView {
 
         private int getTargetY() {
             final int first = getFirstVisiblePosition();
-            final int otherAdjust = (mItemHeightCollapsed + getDividerHeight()) / 2;
-            View v = getChildAt(mDropPos - first);
-            int targetY = -1;
-            if (v != null) {
-                if (mDropPos == srcPos) {
-                    targetY = v.getTop();
-                } else if (mDropPos < srcPos) {
-                    // expanded down
-                    targetY = v.getTop() - otherAdjust;
-                } else {
-                    // expanded up
-                    targetY = v.getBottom() + otherAdjust - mFloatViewHeight;
-                }
+            final int above = mDropGap.getPositionAbove();
+            if (above >= 0) {
+                final int y = getItemBottom(above) + getDividerHeight();
+                return y > 0 ? y : 0;
             } else {
-                // drop position is not on screen?? no animation
-                cancel();
+                return 0;
             }
-
-            return targetY;
         }
 
         @Override
@@ -1554,7 +1479,8 @@ public class DragSortListView extends ListView {
             if (f < Math.abs(deltaY / mInitDeltaY) || f < Math.abs(deltaX / mInitDeltaX)) {
                 mFloatLoc.y = targetY + (int) (mInitDeltaY * f);
                 mFloatLoc.x = getPaddingLeft() + (int) (mInitDeltaX * f);
-                doDragFloatView(true);
+                updateFloatView();
+                updateShuffle2();
             }
         }
 
@@ -1571,15 +1497,7 @@ public class DragSortListView extends ListView {
     private class RemoveAnimator extends SmoothAnimator {
 
         private float mFloatLocX;
-        private float mFirstStartBlank;
-        private float mSecondStartBlank;
-
-        private int mFirstChildHeight = -1;
-        private int mSecondChildHeight = -1;
-
-        private int mFirstPos;
-        private int mSecondPos;
-        private int srcPos;
+        private float mLastFrac;
 
         public RemoveAnimator(float smoothness, int duration) {
             super(smoothness, duration);
@@ -1587,11 +1505,7 @@ public class DragSortListView extends ListView {
 
         @Override
         public void onStart() {
-            mFirstChildHeight = -1;
-            mSecondChildHeight = -1;
-            mFirstPos = mFirstExpPos;
-            mSecondPos = mSecondExpPos;
-            srcPos = mSrcPos;
+            mLastFrac = 1f;
             mDragState = REMOVING;
 
             mFloatLocX = mFloatLoc.x;
@@ -1615,11 +1529,6 @@ public class DragSortListView extends ListView {
         public void onUpdate(float frac, float smoothFrac) {
             float f = 1f - smoothFrac;
 
-            final int firstVis = getFirstVisiblePosition();
-            View item = getChildAt(mFirstPos - firstVis);
-            ViewGroup.LayoutParams lp;
-            int blank;
-
             if (mUseRemoveVelocity) {
                 float dt = (float) (SystemClock.uptimeMillis() - mStartTime) / 1000;
                 if (dt == 0)
@@ -1631,46 +1540,47 @@ public class DragSortListView extends ListView {
                 mFloatLoc.x = (int) mFloatLocX;
                 if (mFloatLocX < w && mFloatLocX > -w) {
                     mStartTime = SystemClock.uptimeMillis();
-                    doDragFloatView(true);
+                    updateShuffle2();
+                    invalidate();
                     return;
                 }
             }
 
-            if (item != null) {
-                if (mFirstChildHeight == -1) {
-                    mFirstChildHeight = getChildHeight(mFirstPos, item, false);
-                    mFirstStartBlank = (float) (item.getHeight() - mFirstChildHeight);
-                }
-                blank = Math.max((int) (f * mFirstStartBlank), 1);
-                lp = item.getLayoutParams();
-                lp.height = mFirstChildHeight + blank;
-                item.setLayoutParams(lp);
+            for (Gap gap : mGaps.values()) {
+                gap.height = (int) (gap.height * (f / mLastFrac));
             }
-            if (mSecondPos != mFirstPos) {
-                item = getChildAt(mSecondPos - firstVis);
-                if (item != null) {
-                    if (mSecondChildHeight == -1) {
-                        mSecondChildHeight = getChildHeight(mSecondPos, item, false);
-                        mSecondStartBlank = (float) (item.getHeight() - mSecondChildHeight);
-                    }
-                    blank = Math.max((int) (f * mSecondStartBlank), 1);
-                    lp = item.getLayoutParams();
-                    lp.height = mSecondChildHeight + blank;
-                    item.setLayoutParams(lp);
-                }
-            }
+
+            mLastFrac = f;
+            requestLayout();
         }
 
         @Override
         public void onStop() {
+            removeGaps();
             doRemoveItem();
         }
     }
 
     public void removeItem(int which) {
-
         mUseRemoveVelocity = false;
         removeItem(which, 0);
+    }
+
+    private void hideItem(int position, int gapFlags) {
+
+        final int height = getItemHeight(position) + getDividerHeight();
+        if (position == 0) {
+            insertGapAbove(0, height, gapFlags);
+            mAnchorPos = 0;
+            mAnchorTop = getItemTop(1);
+        } else {
+            insertGapBelow(position - 1, height, gapFlags);
+            mAnchorPos = position - 1;
+            mAnchorTop = getItemTop(mAnchorPos);
+        }
+
+        mHideAdapter.hide(position);
+        layoutChildren();
     }
 
     /**
@@ -1685,14 +1595,9 @@ public class DragSortListView extends ListView {
 
             if (mDragState == IDLE) {
                 // called from outside drag-sort
-                mSrcPos = getHeaderViewsCount() + which;
-                mFirstExpPos = mSrcPos;
-                mSecondExpPos = mSrcPos;
-                mFloatPos = mSrcPos;
-                View v = getChildAt(mSrcPos - getFirstVisiblePosition());
-                if (v != null) {
-                    v.setVisibility(View.INVISIBLE);
-                }
+                mSrcSlot = getHeaderViewsCount() + which;
+                mDropSlot = mSrcSlot;
+                hideItem(mSrcSlot, 0);
             }
 
             mDragState = REMOVING;
@@ -1743,8 +1648,9 @@ public class DragSortListView extends ListView {
         if (mDragState == DRAGGING) {
             mDragScroller.stopScrolling(true);
             destroyFloatView();
-            clearPositions();
-            adjustAllItems();
+            clearSlots();
+            removeGaps();
+            requestLayout();
 
             if (mInTouchEvent) {
                 mDragState = STOPPED;
@@ -1754,11 +1660,9 @@ public class DragSortListView extends ListView {
         }
     }
 
-    private void clearPositions() {
-        mSrcPos = -1;
-        mFirstExpPos = -1;
-        mSecondExpPos = -1;
-        mFloatPos = -1;
+    private void clearSlots() {
+        mSrcSlot = -1;
+        mDropSlot = -1;
     }
 
     private void dropFloatView() {
@@ -1766,16 +1670,18 @@ public class DragSortListView extends ListView {
         // DataSetObserver
         mDragState = DROPPING;
 
-        if (mDropListener != null && mFloatPos >= 0 && mFloatPos < getCount()) {
+        if (mDropListener != null) {
             final int numHeaders = getHeaderViewsCount();
-            mDropListener.drop(mSrcPos - numHeaders, mFloatPos - numHeaders);
+            mDropListener.drop(mSrcSlot - numHeaders, mDropSlot - numHeaders);
         }
+
+        mHideAdapter.reveal();
+        removeGaps();
 
         destroyFloatView();
 
-        adjustOnReorder();
-        clearPositions();
-        adjustAllItems();
+        //adjustOnReorder();
+        clearSlots();
 
         // now the drag is done
         if (mInTouchEvent) {
@@ -1786,7 +1692,7 @@ public class DragSortListView extends ListView {
     }
 
     private void doRemoveItem() {
-        doRemoveItem(mSrcPos - getHeaderViewsCount());
+        doRemoveItem(mSrcSlot - getHeaderViewsCount());
     }
 
     /**
@@ -1802,10 +1708,11 @@ public class DragSortListView extends ListView {
             mRemoveListener.remove(which);
         }
 
-        destroyFloatView();
+        mHideAdapter.reveal();
+        removeGaps();
 
-        adjustOnReorder();
-        clearPositions();
+        destroyFloatView();
+        clearSlots();
 
         // now the drag is done
         if (mInTouchEvent) {
@@ -1817,8 +1724,8 @@ public class DragSortListView extends ListView {
 
     private void adjustOnReorder() {
         final int firstPos = getFirstVisiblePosition();
-        // Log.d("mobeta", "first="+firstPos+" src="+mSrcPos);
-        if (mSrcPos < firstPos) {
+        // Log.d("mobeta", "first="+firstPos+" src="+mSrcSlot);
+        if (mSrcSlot < firstPos) {
             // collapsed src item is off screen;
             // adjust the scroll after item heights have been fixed
             View v = getChildAt(0);
@@ -1858,7 +1765,7 @@ public class DragSortListView extends ListView {
             mDragScroller.stopScrolling(true);
 
             if (remove) {
-                removeItem(mSrcPos - getHeaderViewsCount(), velocityX);
+                removeItem(mSrcSlot - getHeaderViewsCount(), velocityX);
             } else {
                 if (mDropAnimator != null) {
                     mDropAnimator.start();
@@ -1937,7 +1844,7 @@ public class DragSortListView extends ListView {
             mDragState = IDLE;
         }
         mCurrFloatAlpha = mFloatAlpha;
-        mChildHeightCache.clear();
+        mItemHeightCache.clear();
     }
 
     private void saveTouchCoords(MotionEvent ev) {
@@ -1952,6 +1859,7 @@ public class DragSortListView extends ListView {
             mLastX = mX;
             mLastY = mY;
         }
+        //Log.d("mobeta", "saving touch x="+mX+" y="+mY);
         mOffsetX = (int) ev.getRawX() - mX;
         mOffsetY = (int) ev.getRawY() - mY;
     }
@@ -2054,10 +1962,15 @@ public class DragSortListView extends ListView {
         mFloatLoc.x = x - mDragDeltaX;
         mFloatLoc.y = y - mDragDeltaY;
 
-        doDragFloatView(true);
+        // Set the new float view position
+        updateFloatView();
 
-        int minY = Math.min(y, mFloatViewMid + mFloatViewHeightHalf);
-        int maxY = Math.max(y, mFloatViewMid - mFloatViewHeightHalf);
+        // Move the items around
+        updateShuffle2();
+
+        // Now check for drag-scrolls.
+        int minY = Math.min(y, mDragY + mFloatViewHeightHalf);
+        int maxY = Math.max(y, mDragY - mFloatViewHeightHalf);
 
         // get the current scroll direction
         int currentScrollDir = mDragScroller.getScrollDir();
@@ -2115,244 +2028,12 @@ public class DragSortListView extends ListView {
         updateScrollStarts();
     }
 
-    private void adjustAllItems() {
-        final int first = getFirstVisiblePosition();
-        final int last = getLastVisiblePosition();
-
-        int begin = Math.max(0, getHeaderViewsCount() - first);
-        int end = Math.min(last - first, getCount() - 1 - getFooterViewsCount() - first);
-
-        for (int i = begin; i <= end; ++i) {
-            View v = getChildAt(i);
-            if (v != null) {
-                adjustItem(first + i, v, false);
-            }
-        }
-    }
-
-    private void adjustItem(int position) {
-        View v = getChildAt(position - getFirstVisiblePosition());
-
-        if (v != null) {
-            adjustItem(position, v, false);
-        }
-    }
-
-    /**
-     * Sets layout param height, gravity, and visibility  on
-     * wrapped item.
-     */
-    private void adjustItem(int position, View v, boolean invalidChildHeight) {
-
-        // Adjust item height
-        ViewGroup.LayoutParams lp = v.getLayoutParams();
-        int height;
-        if (position != mSrcPos && position != mFirstExpPos && position != mSecondExpPos) {
-            height = ViewGroup.LayoutParams.WRAP_CONTENT;
-        } else {
-            height = calcItemHeight(position, v, invalidChildHeight);
-        }
-
-        if (height != lp.height) {
-            lp.height = height;
-            v.setLayoutParams(lp);
-        }
-
-        // Adjust item gravity
-        if (position == mFirstExpPos || position == mSecondExpPos) {
-            if (position < mSrcPos) {
-                ((DragSortItemView) v).setGravity(Gravity.BOTTOM);
-            } else if (position > mSrcPos) {
-                ((DragSortItemView) v).setGravity(Gravity.TOP);
-            }
-        }
-
-        // Finally adjust item visibility
-
-        int oldVis = v.getVisibility();
-        int vis = View.VISIBLE;
-
-        if (position == mSrcPos && mFloatView != null) {
-            vis = View.INVISIBLE;
-        }
-
-        if (vis != oldVis) {
-            v.setVisibility(vis);
-        }
-    }
-
-    private int getChildHeight(int position) {
-        if (position == mSrcPos) {
-            return 0;
-        }
-
-        View v = getChildAt(position - getFirstVisiblePosition());
-
-        if (v != null) {
-            // item is onscreen, therefore child height is valid,
-            // hence the "true"
-            return getChildHeight(position, v, false);
-        } else {
-            // item is offscreen
-            // first check cache for child height at this position
-            int childHeight = mChildHeightCache.get(position);
-            if (childHeight != -1) {
-                // Log.d("mobeta", "found child height in cache!");
-                return childHeight;
-            }
-
-            final ListAdapter adapter = getAdapter();
-            int type = adapter.getItemViewType(position);
-
-            // There might be a better place for checking for the following
-            final int typeCount = adapter.getViewTypeCount();
-            if (typeCount != mSampleViewTypes.length) {
-                mSampleViewTypes = new View[typeCount];
-            }
-
-            if (type >= 0) {
-                if (mSampleViewTypes[type] == null) {
-                    v = adapter.getView(position, null, this);
-                    mSampleViewTypes[type] = v;
-                } else {
-                    v = adapter.getView(position, mSampleViewTypes[type], this);
-                }
-            } else {
-                // type is HEADER_OR_FOOTER or IGNORE
-                v = adapter.getView(position, null, this);
-            }
-
-            // current child height is invalid, hence "true" below
-            childHeight = getChildHeight(position, v, true);
-
-            // cache it because this could have been expensive
-            mChildHeightCache.add(position, childHeight);
-
-            return childHeight;
-        }
-    }
-
-    private int getChildHeight(int position, View item, boolean invalidChildHeight) {
-        if (position == mSrcPos) {
-            return 0;
-        }
-
-        View child;
-        if (position < getHeaderViewsCount() || position >= getCount() - getFooterViewsCount()) {
-            child = item;
-        } else {
-            child = ((ViewGroup) item).getChildAt(0);
-        }
-
-        ViewGroup.LayoutParams lp = child.getLayoutParams();
-
-        if (lp != null) {
-            if (lp.height > 0) {
-                return lp.height;
-            }
-        }
-
-        int childHeight = child.getHeight();
-
-        if (childHeight == 0 || invalidChildHeight) {
-            measureItem(child);
-            childHeight = child.getMeasuredHeight();
-        }
-
-        return childHeight;
-    }
-
-    private int calcItemHeight(int position, View item, boolean invalidChildHeight) {
-        return calcItemHeight(position, getChildHeight(position, item, invalidChildHeight));
-    }
-
-    private int calcItemHeight(int position, int childHeight) {
-
-        int divHeight = getDividerHeight();
-
-        boolean isSliding = mAnimate && mFirstExpPos != mSecondExpPos;
-        int maxNonSrcBlankHeight = mFloatViewHeight - mItemHeightCollapsed;
-        int slideHeight = (int) (mSlideFrac * maxNonSrcBlankHeight);
-
-        int height;
-
-        if (position == mSrcPos) {
-            if (mSrcPos == mFirstExpPos) {
-                if (isSliding) {
-                    height = slideHeight + mItemHeightCollapsed;
-                } else {
-                    height = mFloatViewHeight;
-                }
-            } else if (mSrcPos == mSecondExpPos) {
-                // if gets here, we know an item is sliding
-                height = mFloatViewHeight - slideHeight;
-            } else {
-                height = mItemHeightCollapsed;
-            }
-        } else if (position == mFirstExpPos) {
-            if (isSliding) {
-                height = childHeight + slideHeight;
-            } else {
-                height = childHeight + maxNonSrcBlankHeight;
-            }
-        } else if (position == mSecondExpPos) {
-            // we know an item is sliding (b/c 2ndPos != 1stPos)
-            height = childHeight + maxNonSrcBlankHeight - slideHeight;
-        } else {
-            height = childHeight;
-        }
-
-        return height;
-    }
 
     @Override
     public void requestLayout() {
         if (!mBlockLayoutRequests) {
             super.requestLayout();
         }
-    }
-
-    private int adjustScroll(int movePos, View moveItem, int oldFirstExpPos, int oldSecondExpPos) {
-        int adjust = 0;
-
-        final int childHeight = getChildHeight(movePos);
-
-        int moveHeightBefore = moveItem.getHeight();
-        int moveHeightAfter = calcItemHeight(movePos, childHeight);
-
-        int moveBlankBefore = moveHeightBefore;
-        int moveBlankAfter = moveHeightAfter;
-        if (movePos != mSrcPos) {
-            moveBlankBefore -= childHeight;
-            moveBlankAfter -= childHeight;
-        }
-
-        int maxBlank = mFloatViewHeight;
-        if (mSrcPos != mFirstExpPos && mSrcPos != mSecondExpPos) {
-            maxBlank -= mItemHeightCollapsed;
-        }
-
-        if (movePos <= oldFirstExpPos) {
-            if (movePos > mFirstExpPos) {
-                adjust += maxBlank - moveBlankAfter;
-            }
-        } else if (movePos == oldSecondExpPos) {
-            if (movePos <= mFirstExpPos) {
-                adjust += moveBlankBefore - maxBlank;
-            } else if (movePos == mSecondExpPos) {
-                adjust += moveHeightBefore - moveHeightAfter;
-            } else {
-                adjust += moveBlankBefore;
-            }
-        } else {
-            if (movePos <= mFirstExpPos) {
-                adjust -= maxBlank;
-            } else if (movePos == mSecondExpPos) {
-                adjust -= moveBlankAfter;
-            }
-        }
-
-        return adjust;
     }
 
     private void measureItem(View item) {
@@ -2393,11 +2074,88 @@ public class DragSortListView extends ListView {
         mWidthMeasureSpec = widthMeasureSpec;
     }
 
+    private int mAnchorPos = INVALID_POSITION;
+    private int mAnchorTop = 0;
+    private static final int INVALID_POSITION = AdapterView.INVALID_POSITION;
+
     @Override
     protected void layoutChildren() {
+        //Log.d("mobeta", "layout children, t="+SystemClock.uptimeMillis());
+        if (mGaps.size() != 0) {
+            if (mAnchorPos == INVALID_POSITION) {
+                final int first = getFirstVisiblePosition();
+                mAnchorPos = first + getChildCount() / 2;
+                mAnchorTop = getChildAt(mAnchorPos - first).getTop();
+            }
+            //Log.d("mobeta", "  want anchor pos="+mAnchorPos+" top="+mAnchorTop);
+
+            mBlockLayoutRequests = true;
+            setSelectionFromTop(mAnchorPos, mAnchorTop - getPaddingTop());
+            mBlockLayoutRequests = false;
+        }
+
         super.layoutChildren();
 
+        if (mGaps.size() != 0) {
+            final int first = getFirstVisiblePosition();
+            final int last = getLastVisiblePosition();
+
+            // setSelectionFromTop() may not have taken (if we
+            // are scrolled to the bottom for example).
+            int shiftAll = 0;
+            final View anchor = getChildAt(mAnchorPos - first);
+            if (anchor != null) {
+                final int anchorTop = anchor.getTop();
+                if (anchorTop != mAnchorTop) {
+                    shiftAll = mAnchorTop - anchorTop;
+                    anchor.offsetTopAndBottom(shiftAll);
+                }
+                //Log.d("mobeta", "  got anchor pos="+mAnchorPos+" top="+anchorTop+". shift all by "+shiftAll);
+            }
+
+            int shift = shiftAll;
+            // first go down from move position
+            for (int position = mAnchorPos + 1; position <= last; ++position) {
+                final Gap gap = getGapAbove(position);
+                if (gap != null) {
+                    shift += gap.height;
+                }
+
+                if (shift != 0) {
+                    final View child = getChildAt(position - first);
+                    if (child != null) {
+                        child.offsetTopAndBottom(shift);
+                    }
+                }
+            }
+
+            shift = shiftAll;
+            // go up from move position
+            for (int position = mAnchorPos - 1; position >= first; --position) {
+                final Gap gap = getGapBelow(position);
+                if (gap != null) {
+                    shift -= gap.height;
+                }
+
+                if (shift != 0) {
+                    final View child = getChildAt(position - first);
+                    if (child != null) {
+                        child.offsetTopAndBottom(shift);
+                    }
+                }
+            }
+
+            if (mFloatView != null) {
+                updateShuffle2();
+            }
+
+            mAnchorPos = INVALID_POSITION;
+            mBlockLayoutRequests = false;
+        }
+
         if (mFloatView != null) {
+            updateFloatView();
+
             if (mFloatView.isLayoutRequested() && !mFloatViewOnMeasured) {
                 // Have to measure here when usual android measure
                 // pass is skipped. This happens during a drag-sort
@@ -2512,10 +2270,8 @@ public class DragSortListView extends ListView {
         }
 
         int pos = position + getHeaderViewsCount();
-        mFirstExpPos = pos;
-        mSecondExpPos = pos;
-        mSrcPos = pos;
-        mFloatPos = pos;
+        mSrcSlot = pos;
+        mDropSlot = pos;
 
         // mDragState = dragType;
         mDragState = DRAGGING;
@@ -2532,13 +2288,10 @@ public class DragSortListView extends ListView {
         // updateFloatView(mX - mDragDeltaX, mY - mDragDeltaY);
         mFloatLoc.x = mX - mDragDeltaX;
         mFloatLoc.y = mY - mDragDeltaY;
+        updateFloatView();
 
-        // set src item invisible
-        final View srcItem = getChildAt(mSrcPos - getFirstVisiblePosition());
-
-        if (srcItem != null) {
-            srcItem.setVisibility(View.INVISIBLE);
-        }
+        // set gap
+        hideItem(position, GAP_FLAG_DROP | GAP_FLAG_SOURCE);
 
         if (mTrackDragSort) {
             mDragSortTracker.startTracking();
@@ -2555,8 +2308,6 @@ public class DragSortListView extends ListView {
                 break;
         }
 
-        requestLayout();
-
         if (mLiftAnimator != null) {
             mLiftAnimator.start();
         }
@@ -2564,42 +2315,6 @@ public class DragSortListView extends ListView {
         return true;
     }
 
-    private void doDragFloatView(boolean forceInvalidate) {
-        int movePos = getFirstVisiblePosition() + getChildCount() / 2;
-        View moveItem = getChildAt(getChildCount() / 2);
-
-        if (moveItem == null) {
-            return;
-        }
-
-        doDragFloatView(movePos, moveItem, forceInvalidate);
-    }
-
-    private void doDragFloatView(int movePos, View moveItem, boolean forceInvalidate) {
-        mBlockLayoutRequests = true;
-
-        updateFloatView();
-
-        int oldFirstExpPos = mFirstExpPos;
-        int oldSecondExpPos = mSecondExpPos;
-
-        boolean updated = updatePositions();
-
-        if (updated) {
-            adjustAllItems();
-            int scroll = adjustScroll(movePos, moveItem, oldFirstExpPos, oldSecondExpPos);
-            // Log.d("mobeta", "  adjust scroll="+scroll);
-
-            setSelectionFromTop(movePos, moveItem.getTop() + scroll - getPaddingTop());
-            layoutChildren();
-        }
-
-        if (updated || forceInvalidate) {
-            invalidate();
-        }
-
-        mBlockLayoutRequests = false;
-    }
 
     /**
      * Sets float View location based on suggested values and
@@ -2636,19 +2351,21 @@ public class DragSortListView extends ListView {
             topLimit = getChildAt(numHeaders - firstPos - 1).getBottom();
         }
         if ((mDragFlags & DRAG_NEG_Y) == 0) {
-            if (firstPos <= mSrcPos) {
-                topLimit = Math.max(getChildAt(mSrcPos - firstPos).getTop(), topLimit);
+            if (firstPos <= mSrcSlot) {
+                topLimit = Math.max(getChildAt(mSrcSlot - firstPos).getTop(), topLimit);
             }
         }
         // bottom limit is top of first footer View or
         // bottom of last item in list
+        final int divHeight = getDividerHeight();
+        final int lastNonFooter = getCount() - 1 - numFooters;
         int bottomLimit = getHeight() - getPaddingBottom();
-        if (lastPos >= getCount() - numFooters - 1) {
-            bottomLimit = getChildAt(getCount() - numFooters - 1 - firstPos).getBottom();
+        if (lastPos > lastNonFooter) {
+            bottomLimit = getChildAt(lastNonFooter + 1 - firstPos).getTop() - divHeight;
         }
         if ((mDragFlags & DRAG_POS_Y) == 0) {
-            if (lastPos >= mSrcPos) {
-                bottomLimit = Math.min(getChildAt(mSrcPos - firstPos).getBottom(), bottomLimit);
+            if (lastPos >= mSrcSlot) {
+                bottomLimit = Math.min(getChildAt(mSrcSlot - firstPos).getBottom(), bottomLimit);
             }
         }
 
@@ -2663,7 +2380,7 @@ public class DragSortListView extends ListView {
         }
 
         // get y-midpoint of floating view (constrained to ListView bounds)
-        mFloatViewMid = mFloatLoc.y + mFloatViewHeightHalf;
+        mDragY = mFloatLoc.y + mFloatViewHeightHalf;
     }
 
     private void destroyFloatView() {
@@ -3135,8 +2852,8 @@ public class DragSortListView extends ListView {
             final int padTop = getPaddingTop();
             final int listHeight = getHeight() - padTop - getPaddingBottom();
 
-            int minY = Math.min(mY, mFloatViewMid + mFloatViewHeightHalf);
-            int maxY = Math.max(mY, mFloatViewMid - mFloatViewHeightHalf);
+            int minY = Math.min(mY, mDragY + mFloatViewHeightHalf);
+            int maxY = Math.max(mY, mDragY - mFloatViewHeightHalf);
 
             if (scrollDir == UP) {
                 View v = getChildAt(0);
@@ -3144,11 +2861,9 @@ public class DragSortListView extends ListView {
                 if (v == null) {
                     mScrolling = false;
                     return;
-                } else {
-                    if (first == 0 && v.getTop() == padTop) {
-                        mScrolling = false;
-                        return;
-                    }
+                } else if (first == 0 && v.getTop() - getGapHeightAbove(0) == padTop) {
+                    mScrolling = false;
+                    return;
                 }
                 mScrollSpeed = mScrollProfile.getSpeed((mUpScrollStartYF - maxY)
                         / mDragUpScrollHeight, mPrevTime);
@@ -3157,11 +2872,10 @@ public class DragSortListView extends ListView {
                 if (v == null) {
                     mScrolling = false;
                     return;
-                } else {
-                    if (last == count - 1 && v.getBottom() <= listHeight + padTop) {
-                        mScrolling = false;
-                        return;
-                    }
+                } else if (last == count - 1 &&
+                        (v.getBottom() + getGapHeightBelow(last) <= listHeight + padTop)) {
+                    mScrolling = false;
+                    return;
                 }
                 mScrollSpeed = -mScrollProfile.getSpeed((minY - mDownScrollStartYF)
                         / mDragDownScrollHeight, mPrevTime);
@@ -3175,38 +2889,36 @@ public class DragSortListView extends ListView {
             // remember
             // y=0 is at top of View).
             dy = (int) Math.round(mScrollSpeed * dt);
+            //Log.d("mobeta", "scrolling speed="+mScrollSpeed+" dt="+dt+" dy="+dy);
 
-            int movePos;
             if (dy >= 0) {
                 dy = Math.min(listHeight, dy);
-                movePos = first;
+                mAnchorPos = first;
             } else {
                 dy = Math.max(-listHeight, dy);
-                movePos = last;
+                mAnchorPos = last;
+            }
+            //Log.d("mobeta", "scrolling mod-dy="+dy+" padtop="+padTop);
+
+            final View anchor = getChildAt(mAnchorPos - first);
+            mAnchorTop = anchor.getTop() + dy;
+            //Log.d("mobeta", "scroll: top="+anchor.getTop()+" newtop="+mAnchorTop);
+
+            if (mAnchorPos == 0) {
+                final int gapHeight = getGapHeightAbove(0);
+                if (mAnchorTop - gapHeight > padTop) {
+                    mAnchorTop = gapHeight + padTop;
+                }
+            } else if (mAnchorPos == count - 1) {
+                final int gapHeight = getGapHeightBelow(count - 1);
+                if (anchor.getBottom() + gapHeight < listHeight) {
+                    mAnchorTop = padTop + listHeight - gapHeight - anchor.getHeight();
+                }
             }
 
-            final View moveItem = getChildAt(movePos - first);
-            int top = moveItem.getTop() + dy;
-
-            if (movePos == 0 && top > padTop) {
-                top = padTop;
-            }
-
-            // always do scroll
-            mBlockLayoutRequests = true;
-
-            setSelectionFromTop(movePos, top - padTop);
-            DragSortListView.this.layoutChildren();
-            invalidate();
-
-            mBlockLayoutRequests = false;
-
-            // scroll means relative float View movement
-            doDragFloatView(movePos, moveItem, false);
-
+            layoutChildren();
             mPrevTime = mCurrTime;
             // Log.d("mobeta", "  updated prevTime="+mPrevTime);
-
             post(this);
         }
     }
@@ -3268,26 +2980,12 @@ public class DragSortListView extends ListView {
             }
             mBuilder.append("</Bottoms>\n");
 
-            mBuilder.append("    <FirstExpPos>").append(mFirstExpPos).append("</FirstExpPos>\n");
-            mBuilder.append("    <FirstExpBlankHeight>")
-                    .append(getItemHeight(mFirstExpPos) - getChildHeight(mFirstExpPos))
-                    .append("</FirstExpBlankHeight>\n");
-            mBuilder.append("    <SecondExpPos>").append(mSecondExpPos).append("</SecondExpPos>\n");
-            mBuilder.append("    <SecondExpBlankHeight>")
-                    .append(getItemHeight(mSecondExpPos) - getChildHeight(mSecondExpPos))
-                    .append("</SecondExpBlankHeight>\n");
-            mBuilder.append("    <SrcPos>").append(mSrcPos).append("</SrcPos>\n");
+            mBuilder.append("    <SrcPos>").append(mSrcSlot).append("</SrcPos>\n");
             mBuilder.append("    <SrcHeight>").append(mFloatViewHeight + getDividerHeight())
                     .append("</SrcHeight>\n");
             mBuilder.append("    <ViewHeight>").append(getHeight()).append("</ViewHeight>\n");
             mBuilder.append("    <LastY>").append(mLastY).append("</LastY>\n");
-            mBuilder.append("    <FloatY>").append(mFloatViewMid).append("</FloatY>\n");
-            mBuilder.append("    <ShuffleEdges>");
-            for (int i = 0; i < children; ++i) {
-                mBuilder.append(getShuffleEdge(first + i, getChildAt(i).getTop())).append(",");
-            }
-            mBuilder.append("</ShuffleEdges>\n");
-
+            mBuilder.append("    <FloatY>").append(mDragY).append("</FloatY>\n");
             mBuilder.append("</DSLVState>\n");
             mNumInBuffer++;
 
