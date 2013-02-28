@@ -50,6 +50,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Iterator;
 
 /**
  * ListView subclass that mediates drag and drop resorting of items.
@@ -906,7 +908,7 @@ public class DragSortListView extends ListView {
     private static class Gap {
         int index;
         int height;
-        int flags;
+        int minHeight;
 
         boolean isAbove(int position) {
             return position >= index;
@@ -945,7 +947,7 @@ public class DragSortListView extends ListView {
         }
     }
 
-    private Gap insertGap(int index, int height, int flags) {
+    private Gap insertGap(int index, int height, int minHeight) {
         Gap gap = mGaps.get(index);
         if (gap == null) {
             gap = obtainGap();
@@ -953,18 +955,18 @@ public class DragSortListView extends ListView {
         }
         gap.index = index;
         gap.height = height;
-        gap.flags = flags;
+        gap.minHeight = minHeight;
         return gap;
     }
 
-    private Gap insertGapBelow(int position, int height, int flags) {
+    private Gap insertGapBelow(int position, int height, int minHeight) {
         final int index = position + 1;
-        return insertGap(index, height, flags);
+        return insertGap(index, height, minHeight);
     }
 
-    private Gap insertGapAbove(int position, int height, int flags) {
+    private Gap insertGapAbove(int position, int height, int minHeight) {
         final int index = position;
-        return insertGap(index, height, flags);
+        return insertGap(index, height, minHeight);
     }
 
     private Gap getGapAbove(int position) {
@@ -985,13 +987,8 @@ public class DragSortListView extends ListView {
         return gap == null ? 0 : gap.height;
     }
 
-    private Gap findGap(int flags) {
-        for (Gap gap : mGaps.values()) {
-            if ((gap.flags & flags) == flags) {
-                return gap;
-            }
-        }
-        return null;
+    private Gap findGapByIndex(int index) {
+        return mGaps.get(index);
     }
 
     private void removeGaps() {
@@ -1006,12 +1003,60 @@ public class DragSortListView extends ListView {
         recycleGap(gap);
     }
 
+    private int minimizeGaps(int position, int where) {
+        Iterator<Map.Entry<Integer, Gap>> iter = mGaps.entrySet().iterator();
+        Gap gap;
+        int heightRemoved = 0;
+        while (iter.hasNext()) {
+            gap = iter.next().getValue();
+            if ((where == ABOVE && gap.isAbove(position)) || (where == BELOW && gap.isBelow(position))) {
+                if (gap.minHeight > 0) {
+                    heightRemoved += gap.height - gap.minHeight;
+                    gap.height = gap.minHeight;
+                } else {
+                    heightRemoved += gap.height;
+                    recycleGap(gap);
+                    iter.remove();
+                }
+            }
+        }
+        return heightRemoved;
+    }
+
+    private int minimizeGapsBelow(int position) {
+        return minimizeGaps(position, BELOW);
+    }
+
+    private int minimizeGapsAbove(int position) {
+        return minimizeGaps(position, ABOVE);
+    }
+
+    private void extendGapBelowBy(int position, int height) {
+        Gap gap = getGapBelow(position);
+        if (gap == null) {
+            insertGapBelow(position, height, 0);
+        } else {
+            gap.height += height;
+        }
+    }
+
+    private void extendGapAboveBy(int position, int height) {
+        Gap gap = getGapAbove(position);
+        if (gap == null) {
+            insertGapAbove(position, height, 0);
+        } else {
+            gap.height += height;
+        }
+    }
+
     private ArrayList<Gap> mGapRemovals = new ArrayList<Gap>(3);
 
     private final static int NOWHERE = -1;
     private final static int ABOVE = 0;
     private final static int BELOW = 1;
     private final static int ON = 2;
+
+    private int mSlidePos = INVALID_POSITION;
 
     /**
      * Call this when drag point has moved relative to the list.
@@ -1026,6 +1071,7 @@ public class DragSortListView extends ListView {
         final int first = getFirstVisiblePosition();
         final int last = getLastVisiblePosition();
 
+/*
         if (false) {
             Log.d("mobeta", "update shuffle. mDragY="+mDragY+" mY="+mY+" listH="+getHeight()+". gaps:");
             for (Gap gap : mGaps.values()) {
@@ -1044,38 +1090,31 @@ public class DragSortListView extends ListView {
                 }
             }
         }
+*/
 
         // Where to start?
-        int position = INVALID_POSITION;
-        for (Gap gap : mGaps.values()) {
-            if ((gap.flags & GAP_FLAG_ABOVE_SLIDE) == GAP_FLAG_ABOVE_SLIDE) {
-                position = gap.getPositionBelow();
-            } else if ((gap.flags & GAP_FLAG_BELOW_SLIDE) == GAP_FLAG_BELOW_SLIDE) {
-                position = gap.getPositionAbove();
-            } else if ((gap.flags & GAP_FLAG_DROP) == GAP_FLAG_DROP) {
-                final int above = gap.getPositionAbove();
-                final int below = gap.getPositionBelow();
-                if (below <= first) {
-                    position = first;
-                } else if (above >= last) {
-                    position = last;
+        int position;
+        if (mSlidePos != INVALID_POSITION) {
+            position = mSlidePos;
+        } else {
+            final int above = mDropSlot - 1;
+            final int below = mDropSlot;
+            if (below <= first) {
+                position = first;
+            } else if (above >= last) {
+                position = last;
+            } else {
+                // Get middle of drop gap. If
+                // drag point is below, start with position below
+                // drop gap, b/c it might move up. Otherwise
+                // choose position above.
+                final int top = getChildAt(above - first).getBottom();
+                final int bottom = getChildAt(below - first).getTop();
+                if (mDragY >= (top + bottom) / 2) {
+                    position = below;
                 } else {
-                    // Get middle of drop gap. If
-                    // drag point is below, start with position below
-                    // drop gap, b/c it might move up. Otherwise
-                    // choose position above.
-                    final int top = getChildAt(above - first).getBottom();
-                    final int bottom = getChildAt(below - first).getTop();
-                    if (mDragY >= (top + bottom) / 2) {
-                        position = below;
-                    } else {
-                        position = above;
-                    }
+                    position = above;
                 }
-            }
-
-            if (position != INVALID_POSITION) {
-                break;
             }
         }
 
@@ -1129,7 +1168,7 @@ public class DragSortListView extends ListView {
             topLimit = top;
             bottomLimit = top + height;
             for (Gap gap : mGaps.values()) {
-                final int shift = gap.height - ((gap.flags & GAP_FLAG_SOURCE) == GAP_FLAG_SOURCE ? mItemHeightCollapsed : 0);
+                final int shift = gap.height - gap.minHeight;
                 if (gap.isAbove(position)) {
                     topLimit -= shift;
                 } else {
@@ -1151,47 +1190,17 @@ public class DragSortListView extends ListView {
                     mDropSlot = position + 1;
                     break;
                 }
-                // Item at position needs to slide up
+                // Item at position needs to slide up as far as it can.
                 offset = topLimit - top;
 
-                //if (offset == 0) {
-                //    // Item cannot slide up any farther, so
-                //    // the shuffle is done
-                //    mDropSlot = position + 1;
-                //    break;
-                //}
-
                 // Remove/Update gaps above
-                for (Gap gap : mGaps.values()) {
-                    if (gap.isAbove(position)) {
-                        if ((gap.flags & GAP_FLAG_SOURCE) == GAP_FLAG_SOURCE) {
-                            gap.height = mItemHeightCollapsed;
-                            gap.flags = GAP_FLAG_SOURCE;
-                        } else {
-                            mGapRemovals.add(gap);
-                        }
-                    }
-                }
-                for (Gap gap : mGapRemovals) {
-                    removeGap(gap);
-                }
-                mGapRemovals.clear();
-
+                final int removedHeight = minimizeGapsAbove(position);
                 // Add/Update gap below
-                Gap gapBelow = getGapBelow(position);
-                if (gapBelow == null) {
-                    gapBelow = insertGapBelow(position, 0, 0);
-                } else {
-                    gapBelow.flags &= (~GAP_FLAG_ABOVE_SLIDE & ~GAP_FLAG_BELOW_SLIDE);
-                }
-                gapBelow.flags |= GAP_FLAG_DROP;
-                gapBelow.height = bottomLimit - (topLimit + height);
-                if ((gapBelow.flags & GAP_FLAG_SOURCE) == GAP_FLAG_SOURCE) {
-                    gapBelow.height += mItemHeightCollapsed;
-                }
+                extendGapBelowBy(position, removedHeight);
 
                 // Offset child
                 child.offsetTopAndBottom(offset);
+                mSlidePos = INVALID_POSITION;
                 lastRegion = BELOW;
                 position++;
             } else if (mDragY < slideTop) {
@@ -1200,101 +1209,48 @@ public class DragSortListView extends ListView {
                     mDropSlot = position;
                     break;
                 }
+                // Item at position needs to slide down as far as it can.
                 offset = bottomLimit - height - top;
-                //Log.d("mobeta", "    offsetting by "+offset);
-                //if (offset == 0) {
-                //    mDropSlot = position;
-                //    break;
-                //}
 
-                // Remove/Update gaps below
-                for (Gap gap : mGaps.values()) {
-                    if (gap.isBelow(position)) {
-                        if ((gap.flags & GAP_FLAG_SOURCE) == GAP_FLAG_SOURCE) {
-                            gap.height = mItemHeightCollapsed;
-                            gap.flags = GAP_FLAG_SOURCE;
-                        } else {
-                            mGapRemovals.add(gap);
-                        }
-                    }
-                }
-                for (Gap gap : mGapRemovals) {
-                    removeGap(gap);
-                }
-                mGapRemovals.clear();
+                // Adjust gaps
+                final int removedHeight = minimizeGapsBelow(position);
+                extendGapAboveBy(position, removedHeight);
 
-                // Add/Update gap above
-                Gap gapAbove = getGapAbove(position);
-                if (gapAbove == null) {
-                    gapAbove = insertGapAbove(position, 0, 0);
-                } else {
-                    gapAbove.flags &= (~GAP_FLAG_ABOVE_SLIDE & ~GAP_FLAG_BELOW_SLIDE);
-                }
-                gapAbove.flags |= GAP_FLAG_DROP;
-                gapAbove.height = bottomLimit - height - topLimit;
-                if ((gapAbove.flags & GAP_FLAG_SOURCE) == GAP_FLAG_SOURCE) {
-                    gapAbove.height += mItemHeightCollapsed;
-                }
-
+                // Offset the View.
                 child.offsetTopAndBottom(offset);
+
+                mSlidePos = INVALID_POSITION;
                 lastRegion = ABOVE;
                 position--;
             } else {
                 final float frac = ((float) (slideBottom - mDragY)) / ((float) slideHeight);
                 //Log.d("mobeta", "    in slide region, frac="+frac);
                 offset = topLimit + (int) (frac * (bottomLimit - height - topLimit)) - top;
+                final int gapHeightAbove = top + offset - topLimit;
+                final int gapHeightBelow = bottomLimit - (top + offset + height);
 
                 // Remove/Update gaps if they are not immediately
                 // above/below the current position.
-                for (Gap gap : mGaps.values()) {
-                    if (gap.getPositionBelow() != position && gap.getPositionAbove() != position) {
-                        if ((gap.flags & GAP_FLAG_SOURCE) == GAP_FLAG_SOURCE) {
-                            gap.height = mItemHeightCollapsed;
-                            gap.flags = GAP_FLAG_SOURCE;
-                        } else {
-                            mGapRemovals.add(gap);
-                        }
-                    }
-                }
-                for (Gap gap : mGapRemovals) {
-                    removeGap(gap);
-                }
-                mGapRemovals.clear();
+                minimizeGapsAbove(position - 1);
+                minimizeGapsBelow(position + 1);
 
-                // Set gap above sliding position
-                Gap gapAbove = getGapAbove(position);
-                if (gapAbove == null) {
-                    gapAbove = insertGapAbove(position, 0, 0);
-                }
-                gapAbove.height = top + offset - topLimit;
-                if ((gapAbove.flags & GAP_FLAG_SOURCE) == GAP_FLAG_SOURCE) {
-                    gapAbove.height += mItemHeightCollapsed;
-                }
-                gapAbove.flags |= GAP_FLAG_ABOVE_SLIDE;
-                if (mDragY < mid) {
-                    gapAbove.flags |= GAP_FLAG_DROP;
+                // Set the gaps above/below the sliding position.
+                Gap gap = getGapAbove(position);
+                if (gap == null) {
+                    insertGapAbove(position, gapHeightAbove, 0);
                 } else {
-                    gapAbove.flags &= ~GAP_FLAG_DROP;
+                    gap.height = gap.minHeight + gapHeightAbove;
                 }
-
-                // Set gap below sliding position
-                Gap gapBelow = getGapBelow(position);
-                if (gapBelow == null) {
-                    gapBelow = insertGapBelow(position, 0, 0);
-                }
-                gapBelow.height = bottomLimit - (top + offset + height);
-                if ((gapBelow.flags & GAP_FLAG_SOURCE) == GAP_FLAG_SOURCE) {
-                    gapBelow.height += mItemHeightCollapsed;
-                }
-                gapBelow.flags |= GAP_FLAG_BELOW_SLIDE;
-                if (mDragY >= mid) {
-                    gapBelow.flags |= GAP_FLAG_DROP;
+                gap = getGapBelow(position);
+                if (gap == null) {
+                    insertGapBelow(position, gapHeightBelow, 0);
                 } else {
-                    gapBelow.flags &= ~GAP_FLAG_DROP;
+                    gap.height = gap.minHeight + gapHeightBelow;
                 }
 
                 child.offsetTopAndBottom(offset);
                 mDropSlot = mDragY >= mid ? position + 1 : position;
+                mSlidePos = position;
                 break;
             }
 
@@ -1452,7 +1408,7 @@ public class DragSortListView extends ListView {
 
         @Override
         public void onStart() {
-            mDropGap = findGap(GAP_FLAG_DROP);
+            mDropGap = findGapByIndex(mDropSlot);
             mDragState = DROPPING;
             mInitDeltaY = mFloatLoc.y - getTargetY();
             mInitDeltaX = mFloatLoc.x - getPaddingLeft();
@@ -1566,15 +1522,15 @@ public class DragSortListView extends ListView {
         removeItem(which, 0);
     }
 
-    private void hideItem(int position, int gapFlags) {
+    private void hideItem(int position, int minHeight) {
 
         final int height = getItemHeight(position) + getDividerHeight();
         if (position == 0) {
-            insertGapAbove(0, height, gapFlags);
+            insertGapAbove(0, height, minHeight);
             mAnchorPos = 0;
             mAnchorTop = getItemTop(1);
         } else {
-            insertGapBelow(position - 1, height, gapFlags);
+            insertGapBelow(position - 1, height, minHeight);
             mAnchorPos = position - 1;
             mAnchorTop = getItemTop(mAnchorPos);
         }
@@ -2291,7 +2247,7 @@ public class DragSortListView extends ListView {
         updateFloatView();
 
         // set gap
-        hideItem(position, GAP_FLAG_DROP | GAP_FLAG_SOURCE);
+        hideItem(position, mItemHeightCollapsed);
 
         if (mTrackDragSort) {
             mDragSortTracker.startTracking();
