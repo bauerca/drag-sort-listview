@@ -602,9 +602,8 @@ public class DragSortListView extends ListView {
      */
     @Override
     public void setAdapter(ListAdapter adapter) {
-        mAdapterWrapper = new AdapterWrapper(adapter);
-
         if (adapter != null) {
+            mAdapterWrapper = new AdapterWrapper(adapter);
             adapter.registerDataSetObserver(mObserver);
 
             if (adapter instanceof DropListener) {
@@ -616,6 +615,8 @@ public class DragSortListView extends ListView {
             if (adapter instanceof RemoveListener) {
                 setRemoveListener((RemoveListener) adapter);
             }
+        } else {
+            mAdapterWrapper = null;
         }
 
         super.setAdapter(mAdapterWrapper);
@@ -719,7 +720,7 @@ public class DragSortListView extends ListView {
                 if (child != oldChild) {
                     // shouldn't get here if user is reusing convertViews
                     // properly
-                        v.removeViewAt(0);
+                    v.removeViewAt(0);
                     v.addView(child);
                 }
             } else {

@@ -6,6 +6,7 @@ Changelog
 
 * Fix #77: OnClickListener in list item crashes
 DragSortController.
+* Fix #81: Enabling FastScroller causes crash.
 
 0.6.0
 -----
