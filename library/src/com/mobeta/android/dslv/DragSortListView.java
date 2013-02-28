@@ -40,7 +40,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
-import android.widget.HeaderViewListAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -637,17 +636,73 @@ public class DragSortListView extends ListView {
         }
     }
 
-    private class AdapterWrapper extends HeaderViewListAdapter {
+    private class AdapterWrapper extends BaseAdapter {
         private ListAdapter mAdapter;
 
         public AdapterWrapper(ListAdapter adapter) {
-            super(null, null, adapter);
+            super();
             mAdapter = adapter;
+            
+            mAdapter.registerDataSetObserver(new DataSetObserver() {
+                public void onChanged() {
+                    notifyDataSetChanged();
+                }
+
+                public void onInvalidated() {
+                    notifyDataSetInvalidated();
+                }
+            });
         }
 
         public ListAdapter getAdapter() {
             return mAdapter;
         }
+
+        @Override
+        public long getItemId(int position) {
+            return mAdapter.getItemId(position);
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return mAdapter.getItem(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mAdapter.getCount();
+        }
+
+        @Override
+        public boolean areAllItemsEnabled() {
+            return mAdapter.areAllItemsEnabled();
+        }
+
+        @Override
+        public boolean isEnabled(int position) {
+            return mAdapter.isEnabled(position);
+        }
+        
+        @Override
+        public int getItemViewType(int position) {
+            return mAdapter.getItemViewType(position);
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return mAdapter.getViewTypeCount();
+        }
+        
+        @Override
+        public boolean hasStableIds() {
+            return mAdapter.hasStableIds();
+        }
+        
+        @Override
+        public boolean isEmpty() {
+            return mAdapter.isEmpty();
+        }
+
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -664,7 +719,7 @@ public class DragSortListView extends ListView {
                 if (child != oldChild) {
                     // shouldn't get here if user is reusing convertViews
                     // properly
-                    v.removeViewAt(0);
+                        v.removeViewAt(0);
                     v.addView(child);
                 }
             } else {
