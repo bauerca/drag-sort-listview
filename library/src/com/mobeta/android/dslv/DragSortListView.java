@@ -721,7 +721,9 @@ public class DragSortListView extends ListView {
                 if (child != oldChild) {
                     // shouldn't get here if user is reusing convertViews
                     // properly
-                    v.removeViewAt(0);
+                    if (oldChild != null) {
+                        v.removeViewAt(0);
+                    }
                     v.addView(child);
                 }
             } else {
