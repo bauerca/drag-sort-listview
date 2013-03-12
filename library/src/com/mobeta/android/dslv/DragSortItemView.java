@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.Checkable;
 import android.util.Log;
 
 /**
@@ -24,7 +23,7 @@ import android.util.Log;
  * The purpose of this class is to optimize slide
  * shuffle animations.
  */
-public class DragSortItemView extends ViewGroup implements Checkable {
+public class DragSortItemView extends ViewGroup {
 
     private int mGravity = Gravity.TOP;
 
@@ -98,26 +97,4 @@ public class DragSortItemView extends ViewGroup implements Checkable {
         setMeasuredDimension(width, height);
     }
 
-    @Override
-    public boolean isChecked() {
-        View child = getChildAt(0);
-        if (child instanceof Checkable)
-            return ((Checkable) child).isChecked();
-        else
-            return false;
-    }
-
-    @Override
-    public void setChecked(boolean checked) {
-        View child = getChildAt(0);
-        if (child instanceof Checkable)
-            ((Checkable) child).setChecked(checked);
-    }
-
-    @Override
-    public void toggle() {
-        View child = getChildAt(0);
-        if (child instanceof Checkable)
-            ((Checkable) child).toggle();
-    }
 }

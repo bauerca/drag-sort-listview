@@ -40,6 +40,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.Checkable;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -716,7 +717,7 @@ public class DragSortListView extends ListView {
                 v = (DragSortItemView) convertView;
                 View oldChild = v.getChildAt(0);
 
-                child = mAdapter.getView(position, oldChild, v);
+                child = mAdapter.getView(position, oldChild, DragSortListView.this);
                 if (child != oldChild) {
                     // shouldn't get here if user is reusing convertViews
                     // properly
@@ -724,11 +725,15 @@ public class DragSortListView extends ListView {
                     v.addView(child);
                 }
             } else {
-                v = new DragSortItemView(getContext());
+                child = mAdapter.getView(position, null, DragSortListView.this);
+                if (child instanceof Checkable) {
+                    v = new DragSortItemViewCheckable(getContext());
+                } else {
+                    v = new DragSortItemView(getContext());
+                }
                 v.setLayoutParams(new AbsListView.LayoutParams(
                         ViewGroup.LayoutParams.FILL_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
-                child = mAdapter.getView(position, null, v);
                 v.addView(child);
             }
 
