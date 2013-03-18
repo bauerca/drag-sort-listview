@@ -167,6 +167,7 @@ of 1 means items snap from position to position without animation.
   `remove_enabled="true"`, a fling that originates on this child
   View removes the containing item. This attr is used by
   DragSortController.
+* `fling_resistance`: (float, 1f) Resistance to the fling, multiplied by Android's [ViewConfiguration.getScaledTouchSlop()](https://developer.android.com/reference/android/view/ViewConfiguration.html#getScaledTouchSlop().
 
 ### Listeners
 

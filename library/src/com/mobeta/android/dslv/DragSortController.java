@@ -50,7 +50,7 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
 
     private GestureDetector mFlingRemoveDetector;
 
-    private int mTouchSlop;
+    private float mTouchSlop;
 
     public static final int MISS = -1;
 
@@ -98,7 +98,7 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
     }
 
     public DragSortController(DragSortListView dslv, int dragHandleId, int dragInitMode, int removeMode, int clickRemoveId) {
-        this(dslv, dragHandleId, dragInitMode, removeMode, clickRemoveId, 0);
+        this(dslv, dragHandleId, dragInitMode, removeMode, clickRemoveId, 0, 1f);
     }
 
     /**
@@ -109,13 +109,13 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
      * the drag handle in a list item.
      */
     public DragSortController(DragSortListView dslv, int dragHandleId, int dragInitMode,
-            int removeMode, int clickRemoveId, int flingHandleId) {
+            int removeMode, int clickRemoveId, int flingHandleId, float flingResistance) {
         super(dslv);
         mDslv = dslv;
         mDetector = new GestureDetector(dslv.getContext(), this);
         mFlingRemoveDetector = new GestureDetector(dslv.getContext(), mFlingRemoveListener);
         mFlingRemoveDetector.setIsLongpressEnabled(false);
-        mTouchSlop = ViewConfiguration.get(dslv.getContext()).getScaledTouchSlop();
+        mTouchSlop = ViewConfiguration.get(dslv.getContext()).getScaledTouchSlop() * flingResistance;
         mDragHandleId = dragHandleId;
         mClickRemoveId = clickRemoveId;
         mFlingHandleId = flingHandleId;
