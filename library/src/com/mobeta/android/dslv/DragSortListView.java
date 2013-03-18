@@ -21,6 +21,11 @@
 
 package com.mobeta.android.dslv;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
@@ -43,11 +48,6 @@ import android.widget.BaseAdapter;
 import android.widget.Checkable;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * ListView subclass that mediates drag and drop resorting of items.
