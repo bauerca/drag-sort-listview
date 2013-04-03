@@ -4,6 +4,9 @@ DragSortListView
 News
 ----
 
+**April 2, 2013**: Hey all. If you want to send a pull request,
+please read the [Contributing](https://github.com/drag-sort-listview#contributing) section first. Thanks!
+
 **Feb. 9, 2013**: Version 0.6.0. Consolidated remove modes to
 `click_remove` and `fling_remove`. No more fling remove while
 dragging; fling anywhere on item to remove it.
@@ -387,6 +390,27 @@ Finally, to add the library to your application project, right-click your
 project in the Package Explorer and select Properties. Pick the "Android" page,
 and click "Add..." from the bottom half. You should see a list including the
 DSLV project as well as any others in your workspace.
+
+Contributing
+------------
+
+First of all, thank you! Many of your pull requests have added
+tremendous value to this project. Your efforts are truly appreciated!
+
+Now that the project is fairly mature, I would like to lay out
+some (loose) rules for future pull requests. So far I have
+only one (of course, you should help me add more). Here's the list:
+
+* Avoid pull requests that are small tweaks to default
+  DragSortController behavior. This class is merely a guide/helper
+  for creating more complex drag-sort interactions. For example,
+  if you don't
+  like the feel of the default fling-remove initiation for your
+  app, then you should not create a pull request that "fixes"
+  the behavior. Rather, try to modify or subclass DragSortController
+  for your particular needs. That said, if a "must-have" touch
+  pattern arises, I think there is some wiggle room in this rule.
+
 
 Debugging
 ---------
