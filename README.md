@@ -5,7 +5,7 @@ News
 ----
 
 **April 2, 2013**: Hey all. If you want to send a pull request,
-please read the [Contributing](https://github.com/drag-sort-listview#contributing) section first. Thanks!
+please read the [Contributing](https://github.com/bauerca/drag-sort-listview#contributing) section first. Thanks!
 
 **Feb. 9, 2013**: Version 0.6.0. Consolidated remove modes to
 `click_remove` and `fling_remove`. No more fling remove while
