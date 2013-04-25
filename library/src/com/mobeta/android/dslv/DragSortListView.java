@@ -739,6 +739,11 @@ public class DragSortListView extends ListView {
                 v.addView(child);
             }
 
+            // Set child clickable to false, to prevent style overriding
+            if (child.isClickable()){
+                child.setClickable(false);
+            }
+
             // Set the correct item height given drag state; passed
             // View needs to be measured if measurement is required.
             adjustItem(position + getHeaderViewsCount(), v, true);
