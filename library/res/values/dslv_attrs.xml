@@ -24,6 +24,7 @@
     </attr>
     <attr name="drag_handle_id" format="integer" />
     <attr name="fling_handle_id" format="integer" />
+    <attr name="fling_resistance" format="float" />
     <attr name="click_remove_id" format="integer" />
     <attr name="use_default_controller" format="boolean" />
   </declare-styleable>
