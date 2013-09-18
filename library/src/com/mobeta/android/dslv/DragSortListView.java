@@ -1936,6 +1936,7 @@ public class DragSortListView extends ListView {
         ViewGroup.LayoutParams lp = item.getLayoutParams();
         if (lp == null) {
             lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            item.setLayoutParams(lp);
         }
         int wspec = ViewGroup.getChildMeasureSpec(mWidthMeasureSpec, getListPaddingLeft() + getListPaddingRight(), lp.width);
         int hspec;
