@@ -10,13 +10,33 @@
 
 # generated files
 bin/
+libs/libray/bin/
 gen/
-target/
+libs/library/gen/
+build/
 
 # Local configuration file (sdk path, etc)
 local.properties
-.gitattributes
 
-# Eclipse project files
-.classpath
-.project
+*.DS_Store
+
+# IDE
+
+## eclipse
+*.metadata
+*.settings
+project.properties
+
+## idea
+*.idea
+*.iml
+/.idea
+/out
+/proguard_logs/dump.txt
+
+#project properties
+project.properties
+
+/.apt_generated
+/google-play-services
+/project.properties
