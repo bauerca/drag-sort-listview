@@ -1,5 +1,9 @@
 DragSortListView
 ================
+使用方法
+http://blog.chengyunfeng.com/?p=473#
+
+================
 
 # NOTICE: No longer maintained.
 
