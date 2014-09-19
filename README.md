@@ -1,10 +1,7 @@
 DragSortListView
 ================
 
-# NOTICE: No longer maintained.
-
-I do not have much time to devote to this project so I am
-dropping support for the time being. Sorry everybody!
+# NOTICE: maintained to serve the purposes of KeepSafe Software. Nevertheless, please contribute issues and we will gladly take a look at fixing them
 
 News
 ----
