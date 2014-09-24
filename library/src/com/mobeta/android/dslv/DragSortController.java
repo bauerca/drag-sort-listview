@@ -47,9 +47,12 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
     private boolean mIsRemoving = false;
 
     private GestureDetector mDetector;
-
+    private boolean mDetectorSawMotionEventDown;
+    
     private GestureDetector mFlingRemoveDetector;
+    private boolean mFlingDetectorSawMotionEventDown;
 
+    
     private int mTouchSlop;
 
     public static final int MISS = -1;
@@ -113,8 +116,12 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
         super(dslv);
         mDslv = dslv;
         mDetector = new GestureDetector(dslv.getContext(), this);
+        mDetectorSawMotionEventDown = false;
+
         mFlingRemoveDetector = new GestureDetector(dslv.getContext(), mFlingRemoveListener);
         mFlingRemoveDetector.setIsLongpressEnabled(false);
+        mFlingDetectorSawMotionEventDown = false;
+        
         mTouchSlop = ViewConfiguration.get(dslv.getContext()).getScaledTouchSlop();
         mDragHandleId = dragHandleId;
         mClickRemoveId = clickRemoveId;
@@ -235,17 +242,35 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
     }
 
     @Override
-    public boolean onTouch(View v, MotionEvent ev) {
-        if (!mDslv.isDragEnabled() || mDslv.listViewIntercepted()) {
+    public boolean onTouch(View v, MotionEvent ev) {    	
+    	if (!mDslv.isDragEnabled() || mDslv.listViewIntercepted()) {
             return false;
         }
-
-        mDetector.onTouchEvent(ev);
+    	
+    	int action = ev.getAction() & MotionEvent.ACTION_MASK;
+        
+        // If detected an ACTION_DOWN motion event, remember that
+        if (action == MotionEvent.ACTION_DOWN)
+        	mDetectorSawMotionEventDown = true;
+        
+        // Only propagate Touch events to the gesture detector if received at least one ACTION_DOWN
+        //  event. Otherwise, the GestureDetector will crash our control by calling our onScroll 
+        //  method with a null first MotionEvent.
+        if (mDetectorSawMotionEventDown)
+        	mDetector.onTouchEvent(ev);
+        
         if (mRemoveEnabled && mDragging && mRemoveMode == FLING_REMOVE) {
-            mFlingRemoveDetector.onTouchEvent(ev);
+            // If detected an ACTION_DOWN motion event, remember that
+            if (action == MotionEvent.ACTION_DOWN)
+            	mFlingDetectorSawMotionEventDown = true;
+
+            // Only propagate Touch events to the gesture detector if received at least one ACTION_DOWN
+            //  event. Otherwise, the GestureDetector will crash our control by calling our onScroll 
+            //  method with a null first MotionEvent.
+            if (mFlingDetectorSawMotionEventDown)        	
+            	mFlingRemoveDetector.onTouchEvent(ev);
         }
 
-        int action = ev.getAction() & MotionEvent.ACTION_MASK;
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 mCurrX = (int) ev.getX();
