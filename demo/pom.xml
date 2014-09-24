@@ -55,6 +55,9 @@ Copyright 2012 Andreas Schildbach
 			<plugin>
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 				<artifactId>android-maven-plugin</artifactId>
+        <configuration>
+          <sdk><platform>10</platform></sdk>
+        </configuration>
 			</plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
