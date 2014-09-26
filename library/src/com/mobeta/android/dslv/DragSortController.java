@@ -277,6 +277,11 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
                 mCurrY = (int) ev.getY();
                 break;
             case MotionEvent.ACTION_UP:
+            	
+            	// Make sure we won't be parsing gestures until a DOWN event is received
+            	mDetectorSawMotionEventDown = false;
+            	mFlingDetectorSawMotionEventDown = false;
+            	
                 if (mRemoveEnabled && mIsRemoving) {
                     int x = mPositionX >= 0 ? mPositionX : -mPositionX;
                     int removePoint = mDslv.getWidth() / 2;
