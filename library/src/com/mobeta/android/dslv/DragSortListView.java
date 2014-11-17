@@ -438,6 +438,8 @@ public class DragSortListView extends ListView {
     private boolean mUseRemoveVelocity;
     private float mRemoveVelocityX = 0;
 
+	private DragSortController controller;
+
     public DragSortListView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -520,7 +522,7 @@ public class DragSortListView extends ListView {
                         R.styleable.DragSortListView_float_background_color,
                         Color.BLACK);
 
-                DragSortController controller = new DragSortController(
+                controller = new DragSortController(
                         this, dragHandleId, dragInitMode, removeMode,
                         clickRemoveId, flingHandleId);
                 controller.setRemoveEnabled(removeEnabled);
@@ -2488,6 +2490,11 @@ public class DragSortListView extends ListView {
      */
     public void setDragEnabled(boolean enabled) {
         mDragEnabled = enabled;
+		
+		if(enabled)
+			setOnTouchListener(null);
+		else
+			setOnTouchListener(controller);
     }
 
     public boolean isDragEnabled() {
