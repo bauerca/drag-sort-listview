@@ -395,7 +395,7 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
                     mIsRemoving = true;
                     startDrag(mFlingHitPos, deltaX, deltaY);
                 }
-            } else if (mFlingHitPos != MISS) {
+            } else {
                 if (Math.abs(x2 - x1) > mTouchSlop && mRemoveEnabled) {
                     mIsRemoving = true;
                     startDrag(mFlingHitPos, deltaX, deltaY);
