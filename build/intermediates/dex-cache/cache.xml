@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/wseemann/Library/Android/sdk/extras/android/m2repository/com/android/support/support-v4/18.0.0/support-v4-18.0.0.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="44ec51e9d395a47aab135e5e1b556c0007442156">
+        <dex dex="/Users/wseemann/Desktop/dslv/demo/build/intermediates/pre-dexed/debug/support-v4-18.0.0-87ca650bf5bfee0e922f10b54829533cd6ab643c.jar" />
+    </item>
+    <item
+        jar="/Users/wseemann/Desktop/dslv/demo/build/intermediates/exploded-aar/dslv/library/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="4b4e6f17891dfaa40a0bf867f19d04ee0a71a480">
+        <dex dex="/Users/wseemann/Desktop/dslv/demo/build/intermediates/pre-dexed/debug/classes-c6e05150884dc3e2387e58ec34f887a288d216d1.jar" />
+    </item>
+
+</items>
