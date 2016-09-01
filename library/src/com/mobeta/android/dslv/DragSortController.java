@@ -451,11 +451,11 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
                         int w = mDslv.getWidth();
                         int minPos = w / 5;
                         if (velocityX > mFlingSpeed) {
-                            if (mPositionX > -minPos) {
+                            if (mPositionX > minPos) {
                                 mDslv.stopDragWithVelocity(true, velocityX);
                             }
                         } else if (velocityX < -mFlingSpeed) {
-                            if (mPositionX < minPos) {
+                            if (mPositionX < -minPos) {
                                 mDslv.stopDragWithVelocity(true, velocityX);
                             }
                         }
