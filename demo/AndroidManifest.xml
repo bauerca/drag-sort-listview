@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.mobeta.android.demodslv"
-      android:versionCode="1"
-      android:versionName="1.0">
-    <uses-sdk android:minSdkVersion="4" />
+      android:versionCode="4"
+      android:versionName="0.6.1">
+    <uses-sdk android:minSdkVersion="7"
+      android:targetSdkVersion="14" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <application android:label="@string/app_name" >
+    <application android:label="@string/app_name"
+            android:icon="@drawable/dslv_launcher" >
         <activity android:name="Launcher"
+                  android:icon="@drawable/dslv_launcher"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="BasicDSLV"
-                  android:label="Basic DSLV" />
-        <activity android:name="ShortListDSLV"
-                  android:label="Short List DSLV" />
-        <activity android:name="WarpDSLV"
-                  android:label="Warp DSLV" />
-        <activity android:name="HeadFootDSLV"
-                  android:label="Header/Footer DSLV" />
+        <activity android:name="TestBedDSLV"
+                  android:label="Basic usage" />
         <activity android:name="ArbItemSizeDSLV"
-                  android:label="Arbitrary Item Size DSLV" />
-        <activity android:name="Fling"
-            	  android:label="Fling to remove DSLV" />
-        <activity android:name="ClickHandler"
-            	  android:label="Handle item clicks" />
+                  android:label="Arbitrary item heights" />
+        <activity android:name="WarpDSLV"
+                  android:label="Warp" />
+        <activity android:name="BGHandle"
+                  android:label="Background handle" />
+        <activity android:name="Sections"
+                  android:label="Sections" />
+        <activity android:name="CursorDSLV"
+                  android:label="Cursor-backed" />
+        <activity android:name="MultipleChoiceListView"
+                  android:label="Multi-select list" />
+        <activity android:name="SingleChoiceListView"
+                  android:label="Single-choice list" />
     </application>
 </manifest> 

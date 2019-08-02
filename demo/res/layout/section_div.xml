@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/section_div"
+    android:id="@+id/section_div"
+    android:layout_width="fill_parent"
+    android:layout_height="@dimen/section_div_height" />
